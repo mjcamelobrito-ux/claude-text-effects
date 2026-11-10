@@ -1,0 +1,114 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    #cr1 { position: absolute; inset: 0; overflow: hidden; }
+    #cr1 .rings { position: absolute; left: 540px; top: 720px; width: 0; height: 0; }
+    #cr1 .ring { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+    #cr1 .ch { position: absolute; left: 0; top: 0; transform-origin: 0 0; white-space: pre; line-height: 1; opacity: 0;
+      text-shadow: 0 4px 14px rgba(0,0,0,.45); }
+    #cr1 .sans { font-family: Inter, sans-serif; font-weight: 900; letter-spacing: .01em; color: var(--c1, #ffffff); }
+    #cr1 .serif { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; color: var(--c3, #9fe0ff); }
+    #cr1 .acc { color: var(--c2, #c8ff3c); }
+    #cr1-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #cr1-copy { display: none; }
+  </style>
+  <div id="cr1" data-composition-id="cr1" data-width="1080" data-height="1920">
+    <!-- One line per ring, innermost first. data-font = sans | serif, data-size = font size in px (rings grow outward).
+         Wrap the accent word of each ring in <b>. A ring that does not fit over the head shrinks automatically. -->
+    <div id="cr1-copy">
+      <p data-font="sans"  data-size="40">LOREM <b>IPSUM</b> DOLOR SIT AMET</p>
+      <p data-font="serif" data-size="58">consectetur <b>adipiscing</b> elit sed do</p>
+      <p data-font="sans"  data-size="72">EIUSMOD <b>TEMPOR</b> INCIDIDUNT</p>
+      <p data-font="serif" data-size="98">ut labore et <b>dolore</b></p>
+      <p data-font="sans"  data-size="120">MAGNA <b>ALIQUA</b></p>
+      <p data-font="serif" data-size="156">minim <b>veniam</b></p>
+    </div>
+    <div class="rings" data-layout-allow-overlap data-layout-allow-overflow></div>
+    <!-- the subject cut-out sits over the rings, so the words wrap tightly round the head -->
+    <img id="cr1-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Rings are concentric arcs centred on the head (.rings is placed at the head centre in the CSS). Each ring is a line of letters
+    // on its own baseline radius, reading left to right over the top of the head. Radii stack outward from R0
+    // by each ring's letter height, so the rings nest like contour lines.
+    const R0 = 205, GAP = 18, EDGE = 505, TOP = 690;   // TOP: the outer ring's letter tops stay inside the frame (px above the head centre)            // first baseline radius, gap between rings, max half-width on screen
+    const MAXSPAN = 100 * Math.PI / 180;               // rings reach at most 100° either side of straight up
+    const holder = document.querySelector("#cr1 .rings");
+    let RINGS = [];                                    // [{el, letters:[{el, th}], r}]
+    const st = { t: 0 };
+    const ease = x => 1 - Math.pow(1 - x, 3), clamp = x => Math.max(0, Math.min(1, x));
+    function build() {
+      // lay the stack out; if the outer ring would leave the frame, scale every ring down together and redo it
+      let g = 1;
+      for (let it = 0; it < 6; it++) { const top = layout(g); if (top <= TOP) break; g *= (TOP - R0) / (top - R0); }
+      place();
+    }
+    function layout(g) {
+      holder.replaceChildren(); RINGS = []; let top = 0;
+      let r = R0;
+      const P = [...document.querySelectorAll("#cr1-copy p")];
+      P.forEach((p, ri) => {
+        const font = p.dataset.font === "serif" ? "serif" : "sans";
+        let fs = (+p.dataset.size || 60) * g;
+        const ring = document.createElement("div"); ring.className = "ring"; holder.appendChild(ring);
+        const chars = [];                              // [char, accent]
+        p.childNodes.forEach(n => { const acc = n.nodeName === "B"; for (const c of n.textContent) chars.push([c, acc]); });
+        const probe = document.createElement("span"); probe.className = "ch " + font; probe.style.fontSize = fs + "px"; ring.appendChild(probe);
+        const w0 = chars.map(([c]) => { probe.textContent = c; return probe.offsetWidth; });
+        probe.remove();
+        const W0 = w0.reduce((a, b) => a + b, 0);
+        const span = r > EDGE ? Math.min(MAXSPAN, Math.asin(EDGE / r)) : MAXSPAN;
+        const k = Math.min(1, (2 * span * r * 0.96) / W0);   // too long for the arc: shrink this ring's letters
+        fs *= k;
+        const kk = fs / ((+p.dataset.size || 60) * g);
+        const W = W0 * kk; let s = -W / 2;
+        const letters = [];
+        chars.forEach(([c, acc], i) => {
+          const w = w0[i] * kk, th = (s + w / 2) / r; s += w;
+          if (c === " ") return;
+          const e = document.createElement("span"); e.className = "ch " + font + (acc ? " acc" : "");
+          e.textContent = c; e.style.fontSize = fs.toFixed(1) + "px"; ring.appendChild(e);
+          letters.push({ el: e, th });
+        });
+        RINGS.push({ el: ring, letters, r, font, ri });
+        top = r + fs * (font === "serif" ? 0.74 : 0.78);
+        const nx = P[ri + 1], nDesc = nx && nx.dataset.font === "serif" ? 0.2 * g * (+nx.dataset.size || 60) : 0.05 * g * (+(nx && nx.dataset.size) || 60);
+        r += fs * (font === "serif" ? 0.74 : 0.78) + GAP + nDesc;   // next ring clears this one's letter tops plus its own descenders
+      });
+      return top;
+    }
+    // Per-ring timing: build inner -> outer, exit outer -> inner.
+    const BUILD0 = 0.15, BUILD_STEP = 0.42, BUILD_DUR = 0.95, EXIT0 = 4.55, EXIT_STEP = 0.12, EXIT_DUR = 0.7;
+    function place() {
+      const n = RINGS.length;
+      RINGS.forEach((R, i) => {
+        const b0 = BUILD0 + i * BUILD_STEP, x0 = EXIT0 + (n - 1 - i) * EXIT_STEP;
+        // gentle counter-rotation once built: odd and even rings drift opposite ways
+        const sway = (i % 2 ? 1 : -1) * 2.4 * Math.sin((st.t - b0) * 1.1) * clamp((st.t - b0) / 1.2);
+        R.el.style.transform = `rotate(${sway.toFixed(3)}deg)`;
+        const L = R.letters.length;
+        R.letters.forEach((l, j) => {
+          const order = j / Math.max(1, L - 1);
+          // BUILD: a wave runs left to right along the arc; each letter swings in from further back on the arc,
+          // a little further out and smaller, then settles on its baseline
+          const pb = ease(clamp((st.t - b0 - order * BUILD_DUR * 0.55) / (BUILD_DUR * 0.45)));
+          // EXIT: the ring unwinds, letters keep travelling clockwise along the arc and fade, right end first
+          const pe = clamp((st.t - x0 - (1 - order) * EXIT_DUR * 0.4) / (EXIT_DUR * 0.6));
+          const pe2 = pe * pe;
+          const th = l.th - (1 - pb) * 0.32 + pe2 * 0.45;
+          const rr = R.r + (1 - pb) * 70 + pe2 * 60;
+          const sc = 0.55 + 0.45 * pb;
+          l.el.style.transform = `rotate(${th.toFixed(4)}rad) translate(0px, ${(-rr).toFixed(1)}px) scale(${sc.toFixed(3)}) translate(-50%, -80%)`;
+          l.el.style.opacity = (pb * (1 - pe)).toFixed(3);
+        });
+      });
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["cr1"] = Promise.all([
+      document.fonts.load("900 60px Inter"), document.fonts.load('italic 400 60px "Instrument Serif"')
+    ]).then(build);
+    tl.fromTo(st, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: place }, 0);
+    window.__timelines["cr1"] = tl;
+  </script>
+</template>

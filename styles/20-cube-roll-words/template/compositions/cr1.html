@@ -1,0 +1,35 @@
+<template>
+  <style>
+    #cr1 { position: absolute; inset: 0; overflow: hidden; perspective: 1500px; }
+    /* a long 3D bar (cube) hanging in the lower third; one word per side face */
+    #cr1-cube { position: absolute; left: 90px; top: 1060px; width: 900px; height: 220px; transform-style: preserve-3d; }
+    #cr1 .face { position: absolute; left: 0; top: 0; width: 900px; height: 220px; display: flex; align-items: center; justify-content: center;
+      font: 900 150px Inter, sans-serif; letter-spacing: -0.06em; backface-visibility: hidden; border-radius: 6px; }
+    #cr1-f0 { background: var(--c1, #c8ff3c); color: #0e0b1f; transform: translateZ(110px); }
+    #cr1-f1 { background: var(--c2, #2f55ff); color: #fff; transform: rotateX(-90deg) translateZ(110px); }
+    #cr1-f2 { background: var(--c3, #ff5fc8); color: #0e0b1f; transform: rotateX(-180deg) translateZ(110px); }
+    #cr1-f3 { background: #f4efe4; color: #0e0b1f; transform: rotateX(90deg) translateZ(110px); }
+    #cr1-shadow { position: absolute; left: 140px; top: 1330px; width: 800px; height: 60px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.45), transparent 70%); }
+  </style>
+  <div id="cr1" data-composition-id="cr1" data-width="1080" data-height="1920">
+    <div id="cr1-shadow"></div>
+    <!-- Edit one word per face, in roll order: f0 → f1 → f2 → f3 -->
+    <div id="cr1-cube" data-layout-allow-overlap data-layout-allow-overflow>
+      <div id="cr1-f0" class="face">lorem</div>
+      <div id="cr1-f1" class="face">ipsum</div>
+      <div id="cr1-f2" class="face">dolor</div>
+      <div id="cr1-f3" class="face">sitamet</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // the bar tumbles in from above, then rolls forward one face per beat (90° with an overshoot), then tumbles away
+    tl.fromTo("#cr1-cube", { y: -900, rotationX: 200, rotationY: -28 }, { y: 0, rotationX: 0, rotationY: -16, duration: 0.7, ease: "power3.out" }, 0);
+    tl.fromTo("#cr1-shadow", { opacity: 0, scaleX: 0.3 }, { opacity: 1, scaleX: 1, duration: 0.6, ease: "power2.out" }, 0.1);
+    [1, 2, 3].forEach((k, i) => tl.to("#cr1-cube", { rotationX: 90 * k, duration: 0.5, ease: "back.out(1.8)" }, 1.0 + i * 0.85));
+    tl.to("#cr1-cube", { rotationY: 14, duration: 3.2, ease: "sine.inOut" }, 0.7);             // slow camera drift around it
+    tl.to("#cr1-cube", { y: 1000, rotationX: 450, duration: 0.5, ease: "power3.in" }, 3.95);
+    tl.to("#cr1-shadow", { opacity: 0, duration: 0.3 }, 4.0);
+    window.__timelines["cr1"] = tl;
+  </script>
+</template>

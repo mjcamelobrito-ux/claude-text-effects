@@ -1,0 +1,143 @@
+<template>
+  <style>
+    #tc1 { position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(ellipse 85% 60% at 50% 48%, var(--stageLight, #fbf8f1) 0%, var(--stageDeep, #e6dfcf) 100%); }
+    #tc1 .cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+    #tc1 .w { position: absolute; left: 0; top: 0; white-space: pre; line-height: 1; opacity: 0;
+      font-family: "Archivo Black", sans-serif; font-weight: 400; letter-spacing: -0.03em; color: var(--c1, #0e0b1f); }
+    #tc1 .acc { color: var(--c2, #2f55ff); }
+    #tc1 .acc2 { color: var(--c3, #e0219b); }
+    #tc1-copy { display: none; }
+  </style>
+  <div id="tc1" data-composition-id="tc1" data-width="1080" data-height="1920">
+    <!-- The lockup, as nested blocks (all edges flush, every row justified):
+         <p>            a row of words, scaled to fill the width
+         <div class="row"><i>word</i><div class="col">…</div></div>
+                        a word turned on its side next to a column; it grows to the column's full height.
+                        <i> first = on the left, reading upward; <i> last = on the right, reading downward.
+         <b> = accent word, <b class="acc2"> = second accent. Words arrive in the order they are written. -->
+    <div id="tc1-copy">
+      <div class="col">
+        <p>lorem <b>ipsum</b></p>
+        <div class="row"><i>amet</i><div class="col">
+          <p>dolor sit</p>
+          <p><b>elit</b> sed</p>
+          <p>eiusmod</p>
+        </div></div>
+        <div class="row"><div class="col">
+          <p>tempor</p>
+          <p>ut <b class="acc2">labore</b></p>
+          <p>et dolore</p>
+        </div><i>magna</i></div>
+        <p><b>aliqua</b></p>
+      </div>
+    </div>
+    <div class="cam" data-layout-allow-overlap data-layout-allow-overflow></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const BW0 = 860, MAXH = 1300, GAP = 0.035, WGAP = 0.16;   // block width; gap between blocks (x width); gap between words (x font size)
+    const FIRST = 0.3, STEP = 0.3, SIDE = 0.95, FLY = 0.5, EXIT = 6.45;   // word timing (s): a sideways word gets SIDE s so the turned camera can hold on it
+    const FONT = '400 100px "Archivo Black"';
+    const cam = document.querySelector("#tc1 .cam");
+    const ctx = document.createElement("canvas").getContext("2d");
+    let WORDS = [], KEYS = [], BW = BW0, BH = 0, FM = null;
+    const st = { t: 0 };
+    const clamp = x => Math.max(0, Math.min(1, x)), lerp = (a, b, k) => a + (b - a) * k;
+    const easeOut = x => 1 - Math.pow(1 - x, 3), inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const backOut = x => { const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+    // Ink metrics at 100px (canvas measureText): words are packed by their real letter shapes, not line boxes
+    const ink = t => { const m = ctx.measureText(t); return { l: m.actualBoundingBoxLeft, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight, a: m.actualBoundingBoxAscent, d: m.actualBoundingBoxDescent }; };
+    const wordsOf = p => { const out = []; p.childNodes.forEach(n => n.textContent.trim().split(/\s+/).filter(Boolean).forEach(t =>
+      out.push({ t, cls: n.nodeName === "B" ? (n.classList.contains("acc2") ? "acc2" : "acc") : "" }))); return out; };
+    // Lay out a node at (x, y) with width W; returns its height. place=false is a dry run (measuring only).
+    function lay(node, x, y, W, place) {
+      if (node.tagName === "P") {
+        const ws = wordsOf(node).map(o => ({ ...o, m: ink(o.t) }));
+        const nat = ws.reduce((s, o) => s + o.m.w, 0) + WGAP * 100 * (ws.length - 1), k = W / nat;
+        const A = Math.max(...ws.map(o => o.m.a)) * k, D = Math.max(...ws.map(o => o.m.d)) * k;
+        if (place) { let cx = x; ws.forEach(o => { const w = o.m.w * k; add(o, k, cx + w / 2, y + A - o.m.a * k + (o.m.a + o.m.d) * k / 2, 0); cx += w + WGAP * 100 * k; }); }
+        return A + D;
+      }
+      if (node.classList.contains("row")) {
+        const kids = [...node.children], vi = kids.findIndex(e => e.tagName === "I"), col = kids[vi === 0 ? 1 : 0];
+        const v = { t: node.querySelector("i").textContent.trim(), cls: "" }; v.m = ink(v.t);
+        let th = W * 0.15, colW = 0, colH = 0, k = 1;
+        for (let it = 0; it < 8; it++) {              // the side word's thickness depends on the column height and vice versa
+          colW = W - th - GAP * BW; colH = lay(col, 0, 0, colW, false);
+          k = colH / v.m.w; th = (v.m.a + v.m.d) * k;
+        }
+        if (place) {
+          const left = vi === 0, vx = left ? x : x + colW + GAP * BW, cx0 = left ? x + th + GAP * BW : x;
+          if (left) add(v, k, vx + th / 2, y + colH / 2, -90);
+          lay(col, cx0, y, colW, true);
+          if (!left) add(v, k, vx + th / 2, y + colH / 2, 90);
+        }
+        return colH;
+      }
+      let h = 0; [...node.children].forEach((c, i) => { if (i) h += GAP * BW; h += lay(c, x, y + h, W, place); });
+      return h;
+    }
+    // Create one word, rotated `ang` about its ink centre (cx, cy)
+    function add(o, k, cx, cy, ang) {
+      const e = document.createElement("span"); e.className = "w " + o.cls; e.textContent = o.t;
+      const fs = 100 * k; e.style.fontSize = fs.toFixed(2) + "px"; cam.appendChild(e);
+      const base = ((100 - (FM.a + FM.d)) / 2 + FM.a) * k;        // baseline from the top of a line-height:1 box
+      const lx = -o.m.l * k + o.m.w * k / 2, ly = base - o.m.a * k + (o.m.a + o.m.d) * k / 2;   // ink centre in the span
+      e.style.left = (cx - lx).toFixed(2) + "px"; e.style.top = (cy - ly).toFixed(2) + "px";
+      e.style.transformOrigin = `${lx.toFixed(2)}px ${ly.toFixed(2)}px`;
+      WORDS.push({ el: e, cx, cy, ang, len: o.m.w * k, th: (o.m.a + o.m.d) * k, n: WORDS.length });
+    }
+    function layout(bw) { cam.replaceChildren(); WORDS = []; BW = bw; const root = document.querySelector("#tc1-copy > .col");
+      const h = lay(root, 0, 0, bw, false); lay(root, 0, 0, bw, true); return h; }
+    function build() {
+      ctx.font = FONT; ctx.letterSpacing = "-3px";   // matches letter-spacing: -0.03em at 100px
+      const fm = ctx.measureText("Hg"); FM = { a: fm.fontBoundingBoxAscent, d: fm.fontBoundingBoxDescent };
+      BH = layout(BW0); if (BH > MAXH) BH = layout(BW0 * MAXH / BH);
+      // CAMERA: frames each word as it lands and TURNS so that word reads level on screen (a sideways word turns the
+      // whole lockup 90°). Each key is a little wider than the last; the final key shows the block with a slight tilt.
+      const N = WORDS.length; KEYS = [];
+      let tt = FIRST; WORDS.forEach(w => { w.t0 = tt; tt += w.ang ? SIDE : STEP; });
+      const full = { x: BW / 2, y: BH / 2, z: Math.min(1, 900 / BW), r: -4 };
+      WORDS.forEach((w, i) => {
+        const k = Math.pow(i / Math.max(1, N - 1), 1.6);
+        const zW = Math.min(2.6, Math.max(1.2, 680 / w.len));
+        const key = { t: w.t0 + FLY * 0.35, x: lerp(w.cx, full.x, k * 0.8), y: lerp(w.cy, full.y, k * 0.8), z: lerp(zW, 1.1, k), r: -w.ang };
+        KEYS.push(key);
+        if (w.ang) KEYS.push({ ...key, t: w.t0 + SIDE - 0.12, z: key.z * 0.92 });   // hold the turned view, easing back a touch
+      });
+      KEYS.unshift({ ...KEYS[0], t: 0, z: KEYS[0].z * 1.25, r: KEYS[0].r - 12 });
+      KEYS.push({ t: tt + FLY + 0.4, ...full });
+      place();
+    }
+    function camAt(t) {
+      if (t <= KEYS[0].t) return KEYS[0];
+      for (let i = 0; i < KEYS.length - 1; i++) { const a = KEYS[i], b = KEYS[i + 1];
+        if (t <= b.t) { const k = inOut((t - a.t) / (b.t - a.t)); return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), z: lerp(a.z, b.z, k), r: lerp(a.r, b.r, k) }; } }
+      return KEYS[KEYS.length - 1];
+    }
+    function place() {
+      if (!KEYS.length) return;
+      const t = st.t, c = camAt(t);
+      // EXIT: the camera keeps turning and pushes in while every word shoots off forward along its own reading line
+      const xe = clamp((t - EXIT) / 0.9), xc = xe * xe;
+      const z = c.z * (1 + 0.35 * xc), r = c.r - 28 * xc;
+      cam.style.transform = `translate(540px, 960px) rotate(${r.toFixed(3)}deg) scale(${z.toFixed(4)}) translate(${(-c.x).toFixed(2)}px, ${(-c.y).toFixed(2)}px)`;
+      WORDS.forEach(w => {
+        const p = clamp((t - w.t0) / FLY), e = easeOut(p), b = backOut(p), q = 1 - e;
+        // entrance alternates: slide in along the reading line from behind, or drop in from above the line
+        const along = w.n % 2 === 0;
+        const dx = along ? -420 * q : 0, dy = along ? 0 : -260 * q, s = along ? 1 : 0.7 + 0.3 * b;
+        const pe = clamp((t - EXIT - (WORDS.length - 1 - w.n) * 0.025) / 0.5), pe2 = pe * pe;
+        w.el.style.transform = `rotate(${w.ang}deg) translate(${(dx + 900 * pe2).toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s.toFixed(3)})`;
+        w.el.style.opacity = (clamp(p * 2.5) * (1 - pe)).toFixed(3);
+        const blur = (along ? 16 : 9) * q * q + 18 * pe2;          // motion blur along the move
+        w.el.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : "none";
+      });
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["tc1"] = document.fonts.load(FONT).then(build);
+    tl.fromTo(st, { t: 0 }, { t: 7.5, duration: 7.5, ease: "none", onUpdate: place }, 0);
+    window.__timelines["tc1"] = tl;
+  </script>
+</template>

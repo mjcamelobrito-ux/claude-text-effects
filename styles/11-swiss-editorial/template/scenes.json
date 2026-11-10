@@ -1,0 +1,15 @@
+{
+  "id": "swiss-editorial",
+  "title": "11 Swiss Editorial",
+  "background": "#d9d7d4",
+  "variables": [
+    {"id": "signal", "type": "color", "label": "Signal red", "default": "#d4141c"},
+    {"id": "poster", "type": "color", "label": "Poster grey", "default": "#d9d7d4"}
+  ],
+  "scenes": [
+    {"id": "sw1", "duration": 2.8},
+    {"id": "sw2", "duration": 2.0},
+    {"id": "sw3", "duration": 2.0},
+    {"id": "sw4", "duration": 2.6}
+  ]
+}

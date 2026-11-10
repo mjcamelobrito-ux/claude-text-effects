@@ -1,0 +1,35 @@
+<template>
+  <style>
+    #kc2 { position: absolute; inset: 0; overflow: hidden; background: var(--accent, #1f6e50); font-family: Poppins, sans-serif; }
+    #kc2-shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,.12), rgba(0,0,0,.35) 85%); }
+    #kc2-small { position: absolute; left: 0; right: 0; top: 700px; text-align: center; color: #f4f4f4; font-weight: 700; font-size: 72px; line-height: .9; letter-spacing: -0.03em; }
+    #kc2-big { position: absolute; left: 0; right: 0; top: 820px; text-align: center; color: #fff; font-weight: 700; font-size: 170px; letter-spacing: -0.05em; }
+    #kc2-slash { position: absolute; left: 120px; top: 960px; width: 840px; height: 8px; background: #fff; transform-origin: 0 50%; }
+    .kc2-obj { position: absolute; width: 300px; height: 300px; }
+    #kc2-o1 { left: 70px; top: 330px; }
+    #kc2-o2 { left: 700px; top: 1250px; width: 240px; height: 240px; }
+    #kc2-o3 { left: 120px; top: 1330px; width: 200px; height: 200px; }
+  </style>
+  <div id="kc2" data-composition-id="kc2" data-width="1080" data-height="1920">
+    <div id="kc2-shade"></div>
+    <div id="kc2-small">lorem ipsum dolor</div>
+    <div id="kc2-big">sitamet</div>
+    <div id="kc2-slash"></div>
+    <img id="kc2-o1" class="kc2-obj" src="assets/object-sphere.png" alt="" />
+    <img id="kc2-o2" class="kc2-obj" src="assets/object-sphere.png" alt="" />
+    <img id="kc2-o3" class="kc2-obj" src="assets/object-sphere.png" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // whip-in from the right (continues kc1's whip direction)
+    tl.fromTo("#kc2", { x: 1080 }, { x: 0, duration: 0.25, ease: "power4.out" }, 0);
+    tl.fromTo("#kc2-small", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.15);
+    tl.fromTo("#kc2-big", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.2)" }, 0.4);
+    // strike-through line draws across the key word ("not perfect")
+    tl.fromTo("#kc2-slash", { scaleX: 0, rotation: -6 }, { scaleX: 1, rotation: -14, duration: 0.3, ease: "expo.out" }, 0.9);
+    // props tumble in with stagger, then drift
+    tl.fromTo(".kc2-obj", { y: -900, rotation: -60 }, { y: 0, rotation: 0, duration: 0.6, ease: "bounce.out", stagger: 0.12 }, 1.1);
+    tl.to(".kc2-obj", { y: "-=30", duration: 0.6, ease: "sine.inOut" }, 1.8);
+    window.__timelines["kc2"] = tl;
+  </script>
+</template>

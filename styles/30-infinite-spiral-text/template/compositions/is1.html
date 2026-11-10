@@ -1,0 +1,73 @@
+<template>
+  <style>
+    #is1 { position: absolute; inset: 0; overflow: hidden; }
+    #is1-dim { position: absolute; inset: 0; background: rgba(8,6,20,.55); }            /* knocks the footage back so the spiral reads */
+    #is1-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #is1-cv { width: 1080px; height: 1920px; display: block; }
+    /* the centre of a self-similar spiral turns to noise; a soft dark well hides it */
+    #is1-well { position: absolute; left: 540px; top: 700px; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(8,6,20,1) 25%, rgba(8,6,20,0) 70%); }
+    #is1-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #is1-copy { display: none; }
+  </style>
+  <div id="is1" data-composition-id="is1" data-width="1080" data-height="1920">
+    <div id="is1-dim"></div>
+    <div id="is1-wrap"><canvas id="is1-cv" width="1080" height="1920"></canvas><div id="is1-well"></div></div>
+    <!-- Edit the phrase here; it repeats endlessly along the spiral. Words take colours c1, c2, c3 in turn. -->
+    <span id="is1-copy">LOREM IPSUM DOLOR SIT AMET · CONSECTETUR ELIT · </span>
+    <!-- subject cut-out above the spiral, so the spiral is the background -->
+    <img id="is1-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // ---- logarithmic spiral r = e^(Bθ) (θ in radians, centred on CX,CY) ----
+    // Letter size is proportional to r, so every turn is the same picture scaled: the spiral is self-similar.
+    // Each character then takes a CONSTANT slice of θ, and sliding the phrase along θ = an endless zoom-out flow.
+    const CX = 540, CY = 700, GROW = 1.38;                    // each turn is 1.38× the one inside it
+    const B = Math.log(GROW) / (2 * Math.PI), SIZE = (GROW - 1) * 0.8, K = Math.sqrt(1 + B * B);
+    const R_MIN = 4, R_MAX = 2300, SPEED = 1.7;               // drawn radius range (px); flow in radians per second
+    const cv = document.getElementById("is1-cv"), g = cv.getContext("2d");
+    const root = document.getElementById("is1"), css = getComputedStyle(root);
+    const col = [["--c1", "#ffffff"], ["--c2", "#c8ff3c"], ["--c3", "#ff5fc8"]].map(([n, d]) => (css.getPropertyValue(n) || "").trim() || d);
+    let CH = null, CYCLE = 0;                                 // per character: [char, θ offset in the phrase, θ width, colour]
+    const st = { t: 0, fade: 0, spin: 0 };
+    function build() {
+      const text = document.getElementById("is1-copy").textContent;
+      g.font = "900 100px Inter, sans-serif";
+      CH = []; let th = 0, word = 0;
+      for (const c of text) {
+        const w = g.measureText(c).width / 100 * SIZE / K;    // arc width / (r·√(1+B²)) — independent of r
+        CH.push([c, th, w, col[word % 3]]); th += w;
+        if (c === " " || c === "·") word += c === " " ? 1 : 0;
+      }
+      CYCLE = th;
+    }
+    function draw() {
+      if (!CH) return;
+      g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, 1080, 1920);
+      g.globalAlpha = st.fade; g.textAlign = "center"; g.textBaseline = "alphabetic";
+      const phase = SPEED * st.t, lo = Math.log(R_MIN) / B, hi = Math.log(R_MAX) / B;
+      // walk the repeating phrase across the visible θ window
+      for (let k = Math.floor((lo - phase) / CYCLE) - 1; phase + k * CYCLE < hi; k++) {
+        for (const [c, off, w, colr] of CH) {
+          const th = phase + k * CYCLE + off + w / 2;
+          if (th < lo || th > hi || c === " ") continue;
+          const r = Math.exp(B * th), a = th + st.spin, f = SIZE * r;
+          g.setTransform(1, 0, 0, 1, CX + r * Math.cos(a), CY + r * Math.sin(a));
+          g.rotate(a + Math.PI / 2);                          // baseline along the tangent
+          g.font = `900 ${f.toFixed(2)}px Inter, sans-serif`; g.fillStyle = colr;
+          g.fillText(c, 0, f * 0.36);
+        }
+      }
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["is1"] = document.fonts.load("900 100px Inter").then(() => { build(); draw(); });
+    // the flow runs the whole time (seamless, no loop point); a slow counter-turn keeps it alive
+    tl.fromTo(st, { t: 0, spin: 0 }, { t: 6, spin: -0.6, duration: 6, ease: "none", onUpdate: draw }, 0);
+    tl.fromTo(st, { fade: 0 }, { fade: 1, duration: 0.6, ease: "power2.out", onUpdate: draw }, 0);
+    // intro: the whole spiral pours out of the centre; outro: it zooms past the camera
+    tl.fromTo("#is1-wrap", { scale: 0.35, transformOrigin: "540px 700px" }, { scale: 1, duration: 1.2, ease: "expo.out" }, 0);
+    tl.to("#is1-wrap", { scale: 3.2, opacity: 0, duration: 0.7, ease: "power3.in" }, 5.3);
+    window.__timelines["is1"] = tl;
+  </script>
+</template>

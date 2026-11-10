@@ -1,0 +1,64 @@
+<template>
+  <style>
+    #cu1 { position: absolute; inset: 0; overflow: hidden; perspective: 1700px;
+      background: radial-gradient(ellipse 80% 60% at 50% 46%, var(--stageLight, #2a1f6e) 0%, var(--stageDeep, #07051a) 100%); }
+    /* the cube is built as a NET: every face hangs off a neighbour on a shared edge (a hinge).
+       Folded = each hinge at 90°; unfolded = every hinge at 0° → a flat cross. */
+    #cu1-rig { position: absolute; left: 390px; top: 790px; width: 300px; height: 300px; transform-style: preserve-3d; }
+    #cu1 .f { position: absolute; left: 0; top: 0; width: 300px; height: 300px; transform-style: preserve-3d; }
+    #cu1 .skin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 10px;
+      font: 900 74px Inter, sans-serif; letter-spacing: -0.05em; box-shadow: inset 0 0 0 4px rgba(255,255,255,.18); backface-visibility: hidden; }
+    #cu1 .A .skin { background: var(--c2, #2f55ff); color: #fff; }
+    #cu1 .B .skin { background: var(--c3, #ff5fc8); color: #0e0b1f; }
+    #cu1-front > .skin { background: var(--c1, #c8ff3c); color: #0e0b1f; font-size: 84px; }
+    #cu1-top    { top: -300px; transform-origin: 50% 100%; }   /* hinge: front's top edge */
+    #cu1-bottom { top: 300px;  transform-origin: 50% 0%; }     /* hinge: front's bottom edge */
+    #cu1-left   { left: -300px; transform-origin: 100% 50%; }  /* hinge: front's left edge */
+    #cu1-right  { left: 300px; transform-origin: 0% 50%; }     /* hinge: front's right edge */
+    #cu1-back   { top: 300px; transform-origin: 50% 0%; }      /* hinge: bottom's far edge */
+    #cu1-shadow { position: absolute; left: 240px; top: 1430px; width: 600px; height: 80px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.5), transparent 70%); }
+  </style>
+  <div id="cu1" data-composition-id="cu1" data-width="1080" data-height="1920">
+    <div id="cu1-shadow"></div>
+    <!-- One word per face. Unfolded, they read as a cross: TOP / LEFT FRONT RIGHT / BOTTOM / BACK -->
+    <div id="cu1-rig" data-layout-allow-overlap data-layout-allow-overflow data-layout-allow-occlusion>
+      <div id="cu1-front" class="f" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>DOLOR</div>
+        <div id="cu1-top" class="f A" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>LOREM</div></div>
+        <div id="cu1-left" class="f B" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>IPSUM</div></div>
+        <div id="cu1-right" class="f B" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>SIT</div></div>
+        <div id="cu1-bottom" class="f A" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>AMET</div>
+          <div id="cu1-back" class="f B" data-layout-allow-occlusion><div class="skin" data-layout-allow-occlusion>ELIT</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // folded hinge angles (each face swings back, away from camera, onto the cube)
+    const FOLD = { "#cu1-top": { rotationX: 90 }, "#cu1-bottom": { rotationX: -90 }, "#cu1-left": { rotationY: -90 }, "#cu1-right": { rotationY: 90 }, "#cu1-back": { rotationX: -90 } };
+    const OPEN = { rotationX: 0, rotationY: 0 };
+    Object.entries(FOLD).forEach(([s, v]) => tl.set(s, v, 0));
+    // the cube's centre is 150 px behind the front face: spin the rig around that point
+    tl.set("#cu1-rig", { transformOrigin: "50% 50% -150px" }, 0);
+    // DROP IN + SPIN: the closed cube falls in tumbling and turns so we see several faces
+    tl.fromTo("#cu1-rig", { y: -1100, rotationX: -40, rotationY: 200, scale: 0.8 }, { y: 0, rotationX: -22, rotationY: 30, scale: 1, duration: 0.8, ease: "power3.out" }, 0);
+    tl.to("#cu1-rig", { rotationY: -330, rotationX: -18, duration: 1.0, ease: "power2.inOut" }, 0.8);
+    tl.fromTo("#cu1-shadow", { opacity: 0, scaleX: 0.3 }, { opacity: 1, scaleX: 1, duration: 0.6 }, 0.2);
+    // UNFOLD: square up to camera, then the hinges open in order — sides, top, bottom, and the back last (it rides on the bottom)
+    tl.to("#cu1-rig", { rotationY: -360, rotationX: 0, duration: 0.35, ease: "power2.out" }, 1.8);
+    tl.to("#cu1-left", { ...OPEN, duration: 0.45, ease: "back.out(1.6)" }, 2.1);
+    tl.to("#cu1-right", { ...OPEN, duration: 0.45, ease: "back.out(1.6)" }, 2.18);
+    tl.to("#cu1-top", { ...OPEN, duration: 0.45, ease: "back.out(1.6)" }, 2.26);
+    tl.to("#cu1-bottom", { ...OPEN, duration: 0.45, ease: "back.out(1.6)" }, 2.34);
+    tl.to("#cu1-back", { ...OPEN, duration: 0.45, ease: "back.out(1.6)" }, 2.5);
+    // HOLD: the flat cross floats with a gentle tilt so it still reads as paper-thin 3D
+    tl.to("#cu1-rig", { y: -150, duration: 0.4, ease: "power2.out" }, 2.3);
+    tl.to("#cu1-rig", { rotationX: 10, rotationY: -368, duration: 1.0, ease: "sine.inOut" }, 2.7);
+    // REFOLD + EXIT: it snaps shut and spins away
+    Object.entries(FOLD).reverse().forEach(([s, v], i) => tl.to(s, { ...v, duration: 0.28, ease: "power3.in" }, 3.7 + i * 0.04));
+    tl.to("#cu1-rig", { y: 0, rotationX: -30, duration: 0.3, ease: "power2.inOut" }, 3.7);
+    tl.to("#cu1-rig", { rotationY: -720, y: -1300, scale: 0.6, duration: 0.55, ease: "power3.in" }, 4.0);
+    tl.to("#cu1-shadow", { opacity: 0, duration: 0.3 }, 4.0);
+    window.__timelines["cu1"] = tl;
+  </script>
+</template>

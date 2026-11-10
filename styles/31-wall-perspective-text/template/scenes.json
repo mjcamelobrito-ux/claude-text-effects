@@ -1,0 +1,14 @@
+{
+  "id": "wall-perspective-text",
+  "title": "31 Wall Perspective Text",
+  "background": "#14101e",
+  "footage": {"src": "assets/room-corridor.mp4", "id": "footage"},
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Big wall words (lime)", "default": "#c8ff3c"},
+    {"id": "c2", "type": "color", "label": "Second big word (white)", "default": "#ffffff"},
+    {"id": "c3", "type": "color", "label": "Small serif lines (pink)", "default": "#ff5fc8"}
+  ],
+  "scenes": [
+    {"id": "wl1", "duration": 5.0}
+  ]
+}

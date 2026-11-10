@@ -1,0 +1,37 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif.woff2") format("woff2"); }
+    @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); }
+    @font-face { font-family: "Yellowtail"; src: url("assets/fonts/yellowtail.woff2") format("woff2"); }
+    #ak4 { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; }
+    .kw { position: absolute; white-space: nowrap; text-shadow: 0 0 18px rgba(255,255,255,.2), 0 8px 24px rgba(0,0,0,.45); }
+    /* words placed at odd orientations around the subject: rotated 90° and upside-down */
+    #ak4-in { left: 700px; top: 400px; font: 800 110px Poppins, sans-serif; color: var(--c1, #ffd23f); }
+    #ak4-plain { left: 760px; top: 640px; font-family: "Instrument Serif", serif; font-size: 120px; color: #fff; }
+    #ak4-words { left: 600px; top: 960px; font: 800 110px Poppins, sans-serif; color: var(--c1, #ffd23f); }
+    #ak4-cm { left: 0; right: 0; top: 1000px; text-align: center; font-family: Anton, sans-serif; font-size: 120px; color: var(--c1, #ffd23f); }
+    #ak4-kw { left: 0; right: 0; top: 1140px; text-align: center; font-family: "Yellowtail", cursive; font-size: 110px; color: #fff; }
+    #ak4-free { left: 0; right: 0; top: 1280px; text-align: center; font: 900 90px Poppins, sans-serif; letter-spacing: -0.03em; color: #fff; }
+    #ak4-free span { color: var(--c2, #3ff2d6); }
+  </style>
+  <div id="ak4" data-composition-id="ak4" data-width="1080" data-height="1920">
+    <div id="ak4-in" class="kw">lo</div>
+    <div id="ak4-plain" class="kw">rem</div>
+    <div id="ak4-words" class="kw">ipsum</div>
+    <div id="ak4-cm" class="kw">LOREMIP</div>
+    <div id="ak4-kw" class="kw">"ipsum"</div>
+    <div id="ak4-free" class="kw">dol <span>OR SIT AMET</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#ak4-in", { scale: 0, rotation: -30 }, { scale: 1, rotation: -8, duration: 0.3, ease: "back.out(2.4)" }, 0.05);
+    tl.fromTo("#ak4-plain", { rotation: 0, opacity: 0, x: 200 }, { rotation: 90, opacity: 1, x: 0, duration: 0.4, ease: "expo.out" }, 0.3);
+    tl.fromTo("#ak4-words", { rotation: 0, opacity: 0, y: 150 }, { rotation: 180, opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 0.55);
+    tl.to(["#ak4-in", "#ak4-plain", "#ak4-words"], { opacity: 0, scale: 0.6, duration: 0.2, ease: "power3.in" }, 1.25);
+    // CTA stack: three fonts, three colours, each from a different axis
+    tl.fromTo("#ak4-cm", { rotationX: -90, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 0.35, ease: "back.out(2)" }, 1.4);
+    tl.fromTo("#ak4-kw", { scale: 2, opacity: 0 }, { scale: 1, rotation: -4, opacity: 1, duration: 0.3, ease: "expo.out" }, 1.65);
+    tl.fromTo("#ak4-free", { rotationY: 90, opacity: 0 }, { rotationY: 0, opacity: 1, duration: 0.35, ease: "back.out(2)" }, 1.9);
+    window.__timelines["ak4"] = tl;
+  </script>
+</template>

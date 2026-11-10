@@ -1,0 +1,83 @@
+<template>
+  <style>
+    #eo1 { position: absolute; inset: 0; overflow: hidden; perspective: 1600px;
+      background: radial-gradient(ellipse 80% 55% at 50% 42%, var(--stageLight, #4b34f0) 0%, var(--stageDeep, #120a4a) 100%); }
+    #eo1-title { position: absolute; left: 0; top: 640px; width: 1080px; height: 520px; transform-style: preserve-3d; }
+    #eo1 .line { position: absolute; left: 0; width: 1080px; height: 250px; transform-style: preserve-3d; }
+    #eo1-line0 { top: 0; } #eo1-line1 { top: 250px; }
+    #eo1 .line div { position: absolute; left: 0; top: 0; width: 1080px; text-align: center; font: 400 250px/250px "Archivo Black", sans-serif; letter-spacing: -0.04em; }
+    /* the face is lime; 22 layers behind it step from mid to deep green = a solid extruded block */
+    #eo1 .face { color: var(--c1, #c8ff3c); text-shadow: 0 0 1px rgba(255,255,255,.4); }
+    #eo1-glare { position: absolute; left: -400px; top: 600px; width: 300px; height: 620px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent); transform: skewX(-18deg); }
+    #eo1-floor { position: absolute; left: 140px; top: 1200px; width: 800px; height: 80px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.5), transparent 70%); }
+  </style>
+  <div id="eo1" data-composition-id="eo1" data-width="1080" data-height="1920">
+    <div id="eo1-floor"></div>
+    <!-- Edit the two title lines: put the same text in every .lay and the .face of a line -->
+    <div id="eo1-title" data-layout-allow-overlap data-layout-allow-overflow>
+      <div id="eo1-line0" class="line">
+        <div class="lay" data-layout-ignore style="transform:translateZ(-6.0px);color:hsl(150,75%,44.0%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-12.0px);color:hsl(150,74%,42.7%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-18.0px);color:hsl(150,73%,41.4%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-24.0px);color:hsl(150,72%,40.1%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-30.0px);color:hsl(150,71%,38.8%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-36.0px);color:hsl(150,70%,37.5%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-42.0px);color:hsl(150,69%,36.2%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-48.0px);color:hsl(150,68%,34.9%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-54.0px);color:hsl(150,67%,33.6%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-60.0px);color:hsl(150,66%,32.3%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-66.0px);color:hsl(150,65%,31.0%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-72.0px);color:hsl(150,64%,29.7%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-78.0px);color:hsl(150,63%,28.4%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-84.0px);color:hsl(150,62%,27.1%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-90.0px);color:hsl(150,61%,25.8%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-96.0px);color:hsl(150,60%,24.5%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-102.0px);color:hsl(150,59%,23.2%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-108.0px);color:hsl(150,58%,21.9%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-114.0px);color:hsl(150,57%,20.6%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-120.0px);color:hsl(150,56%,19.3%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-126.0px);color:hsl(150,55%,18.0%)">LOREM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-132.0px);color:hsl(150,54%,16.7%)">LOREM</div>
+        <div class="face">LOREM</div>
+      </div>
+      <div id="eo1-line1" class="line">
+        <div class="lay" data-layout-ignore style="transform:translateZ(-6.0px);color:hsl(150,75%,44.0%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-12.0px);color:hsl(150,74%,42.7%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-18.0px);color:hsl(150,73%,41.4%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-24.0px);color:hsl(150,72%,40.1%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-30.0px);color:hsl(150,71%,38.8%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-36.0px);color:hsl(150,70%,37.5%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-42.0px);color:hsl(150,69%,36.2%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-48.0px);color:hsl(150,68%,34.9%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-54.0px);color:hsl(150,67%,33.6%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-60.0px);color:hsl(150,66%,32.3%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-66.0px);color:hsl(150,65%,31.0%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-72.0px);color:hsl(150,64%,29.7%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-78.0px);color:hsl(150,63%,28.4%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-84.0px);color:hsl(150,62%,27.1%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-90.0px);color:hsl(150,61%,25.8%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-96.0px);color:hsl(150,60%,24.5%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-102.0px);color:hsl(150,59%,23.2%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-108.0px);color:hsl(150,58%,21.9%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-114.0px);color:hsl(150,57%,20.6%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-120.0px);color:hsl(150,56%,19.3%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-126.0px);color:hsl(150,55%,18.0%)">IPSUM</div>
+        <div class="lay" data-layout-ignore style="transform:translateZ(-132.0px);color:hsl(150,54%,16.7%)">IPSUM</div>
+        <div class="face">IPSUM</div>
+      </div>
+    </div>
+    <div id="eo1-glare" data-layout-allow-overflow></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // the block rises out of the floor edge-on, then the camera orbits round it so the thickness shows,
+    // swings back to face-on with a punch-in, and a light glare sweeps across the face
+    tl.fromTo("#eo1-title", { rotationY: -80, rotationX: 30, y: 300, scale: 0.7, opacity: 1 }, { rotationY: -40, rotationX: 18, y: 0, scale: 0.9, opacity: 1, duration: 0.7, ease: "expo.out" }, 0);
+    tl.to("#eo1-title", { rotationY: 48, rotationX: -16, duration: 1.7, ease: "sine.inOut" }, 0.7);
+    tl.to("#eo1-title", { rotationY: 0, rotationX: 0, scale: 1.05, duration: 0.45, ease: "back.out(2)" }, 2.4);
+    tl.fromTo("#eo1-glare", { x: 0, opacity: 1 }, { x: 1700, duration: 0.6, ease: "power2.inOut" }, 2.7);
+    tl.fromTo("#eo1-floor", { scaleX: 0.5, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.6 }, 0.1);
+    tl.to("#eo1-title", { rotationX: 85, y: 200, opacity: 0, duration: 0.4, ease: "power3.in" }, 3.55);
+    window.__timelines["eo1"] = tl;
+  </script>
+</template>

@@ -1,0 +1,15 @@
+{
+  "id": "camera-lockup-type",
+  "title": "39 Camera Lockup Type",
+  "background": "#0e0b1f",
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Block words (cream)", "default": "#f4efe4"},
+    {"id": "c2", "type": "color", "label": "Accent words (lime)", "default": "#c8ff3c"},
+    {"id": "c3", "type": "color", "label": "Serif rows (pink)", "default": "#ff5fc8"},
+    {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#2a2160"},
+    {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#0e0b1f"}
+  ],
+  "scenes": [
+    {"id": "lk1", "duration": 6.0}
+  ]
+}

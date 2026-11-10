@@ -1,0 +1,25 @@
+{
+  "id": "domino-letters",
+  "title": "22 Domino Letters",
+  "background": "#f4efe4",
+  "variables": [
+    {
+      "id": "ink",
+      "type": "color",
+      "label": "Letter face colour",
+      "default": "#4a6bff"
+    },
+    {
+      "id": "studio",
+      "type": "color",
+      "label": "Studio background",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "dl1",
+      "duration": 3.4
+    }
+  ]
+}

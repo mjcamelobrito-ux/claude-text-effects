@@ -1,0 +1,62 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    #dt2 { position: absolute; inset: 0; overflow: hidden; perspective: 1200px; color: var(--ink, #fff); }
+    #dt2 .dt-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #dt2 .dt-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #dt2 .w { position: absolute; white-space: nowrap; text-shadow: 0 8px 30px rgba(0,0,0,.35); }
+    #dt2 .sans { font-family: Inter, sans-serif; font-weight: 900; letter-spacing: -0.055em; }
+    #dt2 .sans7 { font-family: Inter, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+    #dt2 .serif { font-family: "Instrument Serif", serif; font-style: italic; letter-spacing: -0.01em; color: var(--accent, #ff7a59); }
+    #dt2 .hw { position: absolute; left: 0; top: 0; font-size: 70px; line-height: 1; }
+  </style>
+  <div id="dt2" data-composition-id="dt2" data-width="1080" data-height="1920">
+    <div id="dt2-back" class="dt-layer">
+      <div id="dt2-b0" class="w sans7 hw">lorem</div>
+      <div id="dt2-b1" class="w sans7 hw">ipsum</div>
+      <div id="dt2-b2" class="w sans7 hw">dolor</div>
+      <div id="dt2-b3" class="w sans7 hw">sit</div>
+      <div id="dt2-b4" class="w sans7 hw">amet</div>
+      <div id="dt2-b5" class="w sans7 hw">elit</div>
+      <div id="dt2-b6" class="w sans7 hw">sed</div>
+      <div id="dt2-b7" class="w sans7 hw">do</div>
+      <div id="dt2-b8" class="w sans7 hw">tempor</div>
+    </div>
+    <!-- subject cut-out sits between the back and front text layers: this is what puts words "behind" the person -->
+    <img id="dt2-cut" class="dt-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+    <div id="dt2-front" class="dt-layer">
+      <div id="dt2-f0" class="w sans7 hw">lorem</div>
+      <div id="dt2-f1" class="w sans7 hw">ipsum</div>
+      <div id="dt2-f2" class="w sans7 hw">dolor</div>
+      <div id="dt2-f3" class="w sans7 hw">sit</div>
+      <div id="dt2-f4" class="w sans7 hw">amet</div>
+      <div id="dt2-f5" class="w sans7 hw">elit</div>
+      <div id="dt2-f6" class="w sans7 hw">sed</div>
+      <div id="dt2-f7" class="w sans7 hw">do</div>
+      <div id="dt2-f8" class="w sans7 hw">tempor</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // a helix around the body: word i sits 80° further round and 95 px higher than word i-1.
+    // The whole spiral turns and climbs; each word exists in the back layer and the front layer, and only the copy on the
+    // correct side of the subject shows (front = cos(angle) > 0). Depth also scales and dims the far side.
+    const N = 9, R = 330, CX = 540, Y0 = 1500, STEP = 95;
+    const F = [...Array(N).keys()].map(i => document.getElementById("dt2-f" + i));
+    const B = [...Array(N).keys()].map(i => document.getElementById("dt2-b" + i));
+    const st = { spin: 0, rise: 0, show: 0 };
+    function place() {
+      for (let i = 0; i < N; i++) {
+        const a = (st.spin + i * 80) * Math.PI / 180, c = Math.cos(a), x = CX + R * Math.sin(a), y = Y0 - i * STEP - st.rise;
+        const s = 0.8 + 0.3 * (c + 1) / 2, vis = Math.max(0, Math.min(1, (st.show * N - i)));   // words appear bottom-up
+        const tf = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${s})`;
+        F[i].style.transform = tf; B[i].style.transform = tf;
+        F[i].style.opacity = c > 0 ? vis : 0; B[i].style.opacity = c > 0 ? 0 : vis * 0.7;
+      }
+    }
+    tl.fromTo(st, { spin: 0, rise: 0, show: 0 }, { spin: 300, rise: 420, show: 1.25, duration: 2.8, ease: "none", onUpdate: place }, 0);
+    tl.to(["#dt2-back", "#dt2-front"], { opacity: 0, duration: 0.25 }, 2.55);
+    place();
+    window.__timelines["dt2"] = tl;
+  </script>
+</template>

@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #bf1 { position: absolute; inset: 0; overflow: hidden; perspective: 1300px;
+      background: radial-gradient(ellipse 80% 60% at 50% 45%, var(--stageLight, #3a2cf0) 0%, var(--stageDeep, #0e0b1f) 100%); }
+    #bf1 .word { position: absolute; left: 0; top: 750px; width: 1080px; height: 420px; transform-style: preserve-3d; }
+    /* each word is cut into horizontal strips (venetian blinds); every strip is a window onto its slice of the word */
+    #bf1 .strip { position: absolute; left: 0; width: 1080px; height: 70px; overflow: hidden; }
+    #bf1 .txt { position: absolute; left: 0; width: 1080px; height: 420px; text-align: center; font: 900 290px/420px Inter, sans-serif; letter-spacing: -0.07em; }
+    #bf1 .a .txt { color: var(--c1, #c8ff3c); }
+    #bf1 .b .txt { color: #fff; }
+    #bf1 .c .txt { color: var(--c2, #ff7a59); }
+    #bf1 .odd { }
+  </style>
+  <div id="bf1" data-composition-id="bf1" data-width="1080" data-height="1920">
+    <!-- three words; edit the word inside every strip of a group (all 6 strips show the same word) -->
+    <div id="bf1-A" class="word" data-layout-allow-overlap>
+      <div id="bf1-a0" class="strip a" style="top:0px"><div class="txt" data-layout-allow-overflow style="top:0px">LOREM</div></div>
+      <div id="bf1-a1" class="strip a" style="top:70px"><div class="txt" data-layout-allow-overflow style="top:-70px">LOREM</div></div>
+      <div id="bf1-a2" class="strip a" style="top:140px"><div class="txt" data-layout-allow-overflow style="top:-140px">LOREM</div></div>
+      <div id="bf1-a3" class="strip a" style="top:210px"><div class="txt" data-layout-allow-overflow style="top:-210px">LOREM</div></div>
+      <div id="bf1-a4" class="strip a" style="top:280px"><div class="txt" data-layout-allow-overflow style="top:-280px">LOREM</div></div>
+      <div id="bf1-a5" class="strip a" style="top:350px"><div class="txt" data-layout-allow-overflow style="top:-350px">LOREM</div></div>
+    </div>
+    <div id="bf1-B" class="word" data-layout-allow-overlap>
+      <div id="bf1-b0" class="strip b" style="top:0px"><div class="txt" data-layout-allow-overflow style="top:0px">IPSUM</div></div>
+      <div id="bf1-b1" class="strip b" style="top:70px"><div class="txt" data-layout-allow-overflow style="top:-70px">IPSUM</div></div>
+      <div id="bf1-b2" class="strip b" style="top:140px"><div class="txt" data-layout-allow-overflow style="top:-140px">IPSUM</div></div>
+      <div id="bf1-b3" class="strip b" style="top:210px"><div class="txt" data-layout-allow-overflow style="top:-210px">IPSUM</div></div>
+      <div id="bf1-b4" class="strip b" style="top:280px"><div class="txt" data-layout-allow-overflow style="top:-280px">IPSUM</div></div>
+      <div id="bf1-b5" class="strip b" style="top:350px"><div class="txt" data-layout-allow-overflow style="top:-350px">IPSUM</div></div>
+    </div>
+    <div id="bf1-C" class="word" data-layout-allow-overlap>
+      <div id="bf1-c0" class="strip c" style="top:0px"><div class="txt" data-layout-allow-overflow style="top:0px">DOLOR</div></div>
+      <div id="bf1-c1" class="strip c" style="top:70px"><div class="txt" data-layout-allow-overflow style="top:-70px">DOLOR</div></div>
+      <div id="bf1-c2" class="strip c" style="top:140px"><div class="txt" data-layout-allow-overflow style="top:-140px">DOLOR</div></div>
+      <div id="bf1-c3" class="strip c" style="top:210px"><div class="txt" data-layout-allow-overflow style="top:-210px">DOLOR</div></div>
+      <div id="bf1-c4" class="strip c" style="top:280px"><div class="txt" data-layout-allow-overflow style="top:-280px">DOLOR</div></div>
+      <div id="bf1-c5" class="strip c" style="top:350px"><div class="txt" data-layout-allow-overflow style="top:-350px">DOLOR</div></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const N = 6;
+    // OPEN: strips swing from edge-on (90°) to flat, top to bottom; alternate hinges make it fold like an accordion
+    function open(g, t) {
+      for (let i = 0; i < N; i++) tl.fromTo(`#bf1-${g}${i}`, { rotationX: i % 2 ? -70 : 70, transformOrigin: i % 2 ? "50% 0%" : "50% 100%", opacity: 1 },
+        { rotationX: 0, duration: 0.42, ease: "back.out(1.6)" }, t + i * 0.05);
+    }
+    // CLOSE: strips turn edge-on again, bottom to top, then vanish
+    function close(g, t) {
+      for (let i = 0; i < N; i++) tl.to(`#bf1-${g}${i}`, { rotationX: i % 2 ? 90 : -90, duration: 0.24, ease: "power3.in" }, t + (N - 1 - i) * 0.035);
+      tl.set(`#bf1-${g} .strip`, { opacity: 0 }, t + 0.24 + N * 0.035);
+    }
+    ["a", "b", "c"].forEach(g => tl.set(`#bf1-${g.toUpperCase()} .strip`, { opacity: 0 }, 0));
+    open("a", 0.0); close("a", 1.15);
+    open("b", 1.35); close("b", 2.45);
+    open("c", 2.65);
+    tl.fromTo("#bf1 .word", { rotationY: -10 }, { rotationY: 10, duration: 3.8, ease: "sine.inOut" }, 0);   // slow parallax turn
+    close("c", 3.6);
+    window.__timelines["bf1"] = tl;
+  </script>
+</template>

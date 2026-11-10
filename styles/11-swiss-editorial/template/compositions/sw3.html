@@ -1,0 +1,32 @@
+<template>
+  <style>
+    #sw3 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #f6f4f2, #cfccc8 90%); font-family: Inter, sans-serif; color: #111; }
+    #sw3-block { position: absolute; left: 420px; top: 900px; width: 520px; height: 1100px; background: #0e0e0e; box-shadow: -40px 0 80px rgba(0,0,0,.25); }
+    #sw3-top { position: absolute; left: 420px; top: 870px; width: 520px; height: 30px; background: #2b2b2b; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
+    #sw3-fig { position: absolute; left: 560px; top: 640px; width: 120px; height: 240px; }
+    #sw3-line { position: absolute; left: 300px; top: 470px; font-size: 56px; font-weight: 600; letter-spacing: -0.03em; white-space: nowrap; }
+    #sw3-line span { color: #9a9a9a; }
+    .sw3-meta { position: absolute; font-size: 22px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    #sw3-frame { position: absolute; left: 50px; top: 160px; width: 980px; height: 1600px; border: 2px solid rgba(0,0,0,.2); }
+  </style>
+  <div id="sw3" data-composition-id="sw3" data-width="1080" data-height="1920">
+    <div id="sw3-frame"></div>
+    <div id="sw3-top"></div>
+    <div id="sw3-block"></div>
+    <svg id="sw3-fig" viewBox="0 0 60 120"><circle cx="30" cy="12" r="10" fill="#111"/><path d="M18 26 H42 L44 70 H38 L36 118 H24 L22 70 H16 Z" fill="#111"/></svg>
+    <div id="sw3-line">lorem ip <span id="sw3-you">sum dolo</span></div>
+    <div class="sw3-meta" style="left:90px;top:1060px">Fig. 03 — Loremipsu</div>
+    <div class="sw3-meta" style="left:90px;top:1100px">Lorem 1:100</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#sw3-frame", { opacity: 0, scale: 1.05 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+    tl.fromTo(["#sw3-block", "#sw3-top"], { y: 800 }, { y: 0, duration: 0.6, ease: "expo.out" }, 0);
+    tl.fromTo("#sw3-fig", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.5);
+    tl.fromTo("#sw3-line", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "steps(17)" }, 0.6);
+    tl.fromTo(".sw3-meta", { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.1 }, 0.8);
+    // slow camera rise = the "zoom out to scale" reveal
+    tl.fromTo("#sw3", { scale: 1.12 }, { scale: 1, duration: 2, ease: "power1.out" }, 0);
+    window.__timelines["sw3"] = tl;
+  </script>
+</template>

@@ -1,0 +1,21 @@
+<template>
+  <style>
+    #pm4 { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(155deg, #f1eef0, #d9d6d8); font-family: Poppins, sans-serif; }
+    #pm4-light { position: absolute; left: -400px; top: 0; width: 1900px; height: 1920px; background: repeating-linear-gradient(120deg, rgba(255,255,255,.55) 0 80px, rgba(255,255,255,0) 80px 260px); filter: blur(40px); }
+    .pm4-item { position: absolute; left: 0; right: 0; text-align: center; font-style: italic; font-weight: 600; font-size: 72px; line-height: .95; color: #555; letter-spacing: -0.02em; }
+    #pm4-a { top: 620px; } #pm4-b { top: 860px; } #pm4-c { top: 1100px; }
+  </style>
+  <div id="pm4" data-composition-id="pm4" data-width="1080" data-height="1920">
+    <div id="pm4-light" data-layout-ignore></div>
+    <div id="pm4-a" class="pm4-item">lorem ipsum<br/>dolor</div>
+    <div id="pm4-b" class="pm4-item">sit<br/>amet</div>
+    <div id="pm4-c" class="pm4-item">consectetur<br/>elit</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#pm4-light", { x: -300 }, { x: 200, duration: 2.6, ease: "none" }, 0);
+    // list builds one item per beat with soft blur-in (calm pacing = the message)
+    tl.fromTo(".pm4-item", { opacity: 0, filter: "blur(14px)", y: 30 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.4, ease: "power2.out", stagger: 0.6 }, 0.1);
+    window.__timelines["pm4"] = tl;
+  </script>
+</template>

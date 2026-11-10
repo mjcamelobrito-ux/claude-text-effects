@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "gold", "type": "color", "label": "Offer gold", "default": "#f3c86b"}, {"id": "cta", "type": "color", "label": "CTA button", "default": "#6b3fd4"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>13 Animated Story Ad</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #2a1a12; }
+      #bg { position: absolute; inset: 0; background: #2a1a12; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="13" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="sa1" data-composition-id="sa1" data-composition-src="compositions/sa1.html"
+        data-start="0" data-duration="4.8" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+      <div id="sa2" data-composition-id="sa2" data-composition-src="compositions/sa2.html"
+        data-start="4.8" data-duration="4.8" data-track-index="3" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:11"></div>
+      <div id="sa3" data-composition-id="sa3" data-composition-src="compositions/sa3.html"
+        data-start="9.6" data-duration="3.4" data-track-index="4" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:12"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

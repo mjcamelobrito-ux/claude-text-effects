@@ -1,0 +1,79 @@
+<template>
+  <style>
+    #ho2 { position: absolute; inset: 0; overflow: hidden; perspective: 2600px; perspective-origin: 540px 1120px; }   /* camera level with the ring and far back = even, upright letters */
+    #ho2 .layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+    /* the ring: a horizontal circle around the body at chest height, seen from slightly above */
+    /* camera tilt lives on its own wrapper so it never turns with the spin (that would tip the ring edge-on) */
+    #ho2 .tilt { position: absolute; left: 540px; top: 1120px; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(-16deg); }
+    #ho2 .ring { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+    #ho2 .ch { position: absolute; left: 0; top: 0; transform-origin: 0 0; font: 900 104px/1 Inter, sans-serif; letter-spacing: 0; white-space: pre;
+      text-shadow: 0 6px 18px rgba(0,0,0,.35); }
+    #ho2-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #ho2-copy { display: none; }
+  </style>
+  <div id="ho2" data-composition-id="ho2" data-width="1080" data-height="1920">
+    <!-- Edit the phrase; it is repeated to wrap the whole ring. Words alternate colours c1 / c2. -->
+    <span id="ho2-copy">LOREM IPSUM · DOLOR SIT AMET · </span>
+    <div id="ho2-back" class="layer"><div class="tilt"><div id="ho2-rb" class="ring" data-layout-allow-overlap data-layout-allow-overflow></div></div></div>
+    <!-- the subject cut-out sits between the two copies of the ring -->
+    <img id="ho2-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+    <div id="ho2-front" class="layer"><div class="tilt"><div id="ho2-rf" class="ring" data-layout-allow-overlap data-layout-allow-overflow></div></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Letters stand upright on a horizontal circle of radius R, each facing outward (rotateY(a) translateZ(R)).
+    // The ring turns on its vertical axis. Each letter exists twice: the FRONT copy (over the person) shows while
+    // the letter is on the near half; the BACK copy (under the person) shows on the far half, reversed and dimmer.
+    const R = 470, REPS_MIN = 1;                       // camera tilt: .tilt rotateX in the CSS
+    const root = document.getElementById("ho2"), css = getComputedStyle(root);
+    const COL = [(css.getPropertyValue("--c1") || "").trim() || "#c8ff3c", (css.getPropertyValue("--c2") || "").trim() || "#ffffff"];
+    const rf = document.getElementById("ho2-rf"), rb = document.getElementById("ho2-rb");
+    let A = [], F = [], B = [];                          // angle (deg) of each letter, front and back elements
+    const st = { spin: 0, fade: 0 };   // fade is applied per letter: opacity on the 3D ring itself would flatten it
+    function layout() {
+      rf.replaceChildren(); rb.replaceChildren(); A = []; F = []; B = [];   // idempotent: never stack a second ring if setup runs again
+      const phrase = document.getElementById("ho2-copy").textContent;
+      const probe = document.createElement("span"); probe.className = "ch"; probe.style.visibility = "hidden"; rf.appendChild(probe);
+      const width = c => { probe.textContent = c; return probe.offsetWidth; };   // layout width: unaffected by the ring's transforms
+      const circ = 2 * Math.PI * R; let text = phrase, total = [...phrase].reduce((s, c) => s + width(c), 0);
+      const reps = Math.max(REPS_MIN, Math.round(circ / total)); text = phrase.repeat(reps); total *= reps;
+      const scale = circ / total;                        // the phrase must close the loop exactly:
+      const fontK = Math.min(1, scale);                  // if it has to squeeze, the LETTERS shrink (never overlap); if it has room, the gaps grow
+      let pos = 0, word = 0, k = 0;
+      const plen = [...phrase].length;
+      for (const c of text) {
+        if (k++ % plen === 0) word = 0;                  // every repeat of the phrase uses the same colours
+        const w = width(c) * scale, ang = (pos + w / 2) / circ * 360; pos += w;
+        if (c === " ") { word++; continue; }
+        const color = c === "·" ? COL[0] : COL[word % 2];
+        [rf, rb].forEach((ring, k) => {
+          const e = document.createElement("span"); e.className = "ch"; e.textContent = c; e.style.color = color;
+          if (fontK < 1) e.style.fontSize = (104 * fontK).toFixed(1) + "px";
+          ring.appendChild(e); (k ? B : F).push(e);
+        });
+        A.push(ang);
+      }
+      probe.remove(); place();
+    }
+    // Each letter sits at its spot on the ring but always faces the camera (no plane intersections between
+    // neighbours), and is narrowed by |cos| of its angle so it still turns with the curve. Far-side letters are mirrored.
+    function place() {
+      for (let i = 0; i < A.length; i++) {
+        const rel = A[i] + st.spin, a = rel * Math.PI / 180, c = Math.cos(a), near = c > 0;
+        const k = Math.max(0.08, Math.abs(c)) * (near ? 1 : -1);
+        const tf = `rotateY(${A[i]}deg) translateZ(${R}px) rotateY(${-rel}deg) scaleX(${k.toFixed(3)}) translate(-50%, -50%)`;
+        F[i].style.transform = tf; B[i].style.transform = tf;
+        F[i].style.opacity = near ? st.fade : 0; B[i].style.opacity = near ? 0 : 0.5 * st.fade;
+      }
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["ho2"] = document.fonts.load("900 104px Inter").then(layout);
+    const rings = ["#ho2-rf", "#ho2-rb"];
+    // ORBIT: the ring turns continuously (letters run right-to-left across the front, like a carousel)
+    tl.fromTo(st, { spin: 0 }, { spin: -560, duration: 6, ease: "none", onUpdate: () => { place(); gsap.set(rings, { rotationY: st.spin }); } }, 0);
+    // only the orbit: the ring fades up in place already circling the body, and fades out in place at the end
+    tl.fromTo(st, { fade: 0 }, { fade: 1, duration: 0.45, ease: "power2.out", onUpdate: place }, 0);
+    tl.to(st, { fade: 0, duration: 0.45, ease: "power2.in", onUpdate: place }, 5.55);
+    window.__timelines["ho2"] = tl;
+  </script>
+</template>

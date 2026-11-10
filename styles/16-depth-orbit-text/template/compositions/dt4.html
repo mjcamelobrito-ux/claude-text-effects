@@ -1,0 +1,60 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    #dt4 { position: absolute; inset: 0; overflow: hidden; perspective: 1200px; color: var(--ink, #fff); }
+    #dt4 .dt-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #dt4 .dt-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #dt4 .w { position: absolute; white-space: nowrap; text-shadow: 0 8px 30px rgba(0,0,0,.35); }
+    #dt4 .sans { font-family: Inter, sans-serif; font-weight: 900; letter-spacing: -0.055em; }
+    #dt4 .sans7 { font-family: Inter, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+    #dt4 .serif { font-family: "Instrument Serif", serif; font-style: italic; letter-spacing: -0.01em; color: var(--accent, #ff7a59); }
+    #dt4 .tw { left: 0; width: 1080px; text-align: center; top: 640px; line-height: 1; }
+    #dt4-w1, #dt4-w3 { font-size: 170px; } #dt4-w2, #dt4-w4 { font-size: 190px; }
+    #dt4-cap { position: absolute; left: 0; width: 1080px; top: 1250px; text-align: center; font-size: 44px; word-spacing: 10px; }
+    #dt4-bar { position: absolute; left: 0; top: 1312px; height: 8px; border-radius: 4px; background: var(--hi, #c8ff3c); width: 0; }
+  </style>
+  <div id="dt4" data-composition-id="dt4" data-width="1080" data-height="1920">
+    <div id="dt4-back" class="dt-layer">
+
+    </div>
+    <!-- subject cut-out sits between the back and front text layers: this is what puts words "behind" the person -->
+    <img id="dt4-cut" class="dt-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+    <div id="dt4-front" class="dt-layer">
+      <div id="dt4-w1" class="w tw serif">ut</div>
+      <div id="dt4-w2" class="w tw sans">enimad</div>
+      <div id="dt4-w3" class="w tw serif">ut</div>
+      <div id="dt4-w4" class="w tw sans">minim</div>
+      <div id="dt4-cap" class="w sans7"><span id="dt4-k0">Lorem</span> <span id="dt4-k1">ipsum</span> <span id="dt4-k2">dolor</span> <span id="dt4-k3">sit</span> <span id="dt4-k4">amet</span> <span id="dt4-k5">elit</span></div>
+      <div id="dt4-bar"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // each word starts tiny and far down the tunnel, rushes at the lens and blows past it (big + blurred + gone);
+    // the last word stops at the screen plane and holds
+    ["#dt4-w1", "#dt4-w2", "#dt4-w3"].forEach((s, i) => {
+      const t = 0.0 + i * 0.32;
+      tl.fromTo(s, { z: -2600, opacity: 0, filter: "blur(0px)" }, { z: 0, opacity: 1, duration: 0.3, ease: "power2.in" }, t);
+      tl.to(s, { z: 900, opacity: 0, filter: "blur(22px)", duration: 0.22, ease: "power2.in" }, t + 0.3);
+    });
+    tl.fromTo("#dt4-w4", { z: -2600, opacity: 0 }, { z: 0, opacity: 1, duration: 0.55, ease: "expo.out" }, 0.96);
+    tl.fromTo("#dt4-cap", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.9);
+    // underline slides from word to word as each is spoken (position read from the layout, so edits keep working)
+    const bar = document.getElementById("dt4-bar"), ks = [...Array(6).keys()].map(i => document.getElementById("dt4-k" + i));
+    const u = { t: 0 }; let POS = null;                       // [left, width] of each caption word, measured once fonts are in
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["dt4"] = document.fonts.load('700 44px Inter').then(() => {
+      const cap = document.getElementById("dt4-cap"); POS = ks.map(k => [cap.offsetLeft + k.offsetLeft, k.offsetWidth]); under();
+    });
+    function under() {
+      if (!POS) return;
+      const T0 = 1.0, STEP = 0.25, f = Math.max(0, Math.min(5, (u.t - T0) / STEP)), i = Math.floor(f), k = Math.min(1, (f - i) / 0.4);
+      const e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      const A = POS[i], Bp = POS[Math.min(5, i + 1)], m = i < 5 ? e : 0;
+      bar.style.transform = `translateX(${A[0] + (Bp[0] - A[0]) * m}px)`; bar.style.width = (u.t < T0 ? 0 : A[1] + (Bp[1] - A[1]) * m) + "px";
+    }
+    tl.fromTo(u, { t: 0 }, { t: 2.8, duration: 2.8, ease: "none", onUpdate: under }, 0);
+    tl.to(["#dt4-w4", "#dt4-cap", "#dt4-bar"], { opacity: 0, filter: "blur(14px)", duration: 0.2 }, 2.55);
+    window.__timelines["dt4"] = tl;
+  </script>
+</template>

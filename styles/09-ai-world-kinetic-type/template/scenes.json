@@ -1,0 +1,18 @@
+{
+  "id": "ai-world-kinetic-type",
+  "title": "09 AI-World Kinetic Type",
+  "background": "#111",
+  "footage": {"src": "assets/speaker-warm.mp4", "id": "footage"},
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Word colour 1 (yellow)", "default": "#ffd23f"},
+    {"id": "c2", "type": "color", "label": "Word colour 2 (cyan)", "default": "#3ff2d6"},
+    {"id": "c3", "type": "color", "label": "Word colour 3 (red)", "default": "#ff3b3b"},
+    {"id": "c4", "type": "color", "label": "Word colour 4 (violet)", "default": "#c86bff"}
+  ],
+  "scenes": [
+    {"id": "ak1", "duration": 2.4},
+    {"id": "ak2", "duration": 1.8},
+    {"id": "ak3", "duration": 2.8},
+    {"id": "ak4", "duration": 3.2}
+  ]
+}

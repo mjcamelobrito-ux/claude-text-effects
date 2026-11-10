@@ -1,0 +1,22 @@
+<template>
+  <style>
+    #pm3 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #3a0612, #0b0204 75%); font-family: Poppins, sans-serif; }
+    #pm3-word { position: absolute; left: 0; right: 0; top: 880px; text-align: center; font-weight: 700; font-size: 110px; letter-spacing: -0.03em; color: var(--accent, #e5195e); }
+    .pm3-star { position: absolute; width: 220px; height: 220px; }
+    #pm3-s1 { left: 840px; top: 1500px; }
+    #pm3-s2 { left: -60px; top: 160px; width: 160px; height: 160px; }
+  </style>
+  <div id="pm3" data-composition-id="pm3" data-width="1080" data-height="1920">
+    <div id="pm3-word">lorem ipsum</div>
+    <svg id="pm3-s1" class="pm3-star" viewBox="0 0 100 100"><path d="M50 0 C54 38 62 46 100 50 C62 54 54 62 50 100 C46 62 38 54 0 50 C38 46 46 38 50 0Z" style="fill:var(--accent,#e5195e)"/></svg>
+    <svg id="pm3-s2" class="pm3-star" viewBox="0 0 100 100"><path d="M50 0 C54 38 62 46 100 50 C62 54 54 62 50 100 C46 62 38 54 0 50 C38 46 46 38 50 0Z" style="fill:var(--accent,#e5195e)"/></svg>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // hard cut to dark: a contrast beat. Word slams, stars spin in.
+    tl.fromTo("#pm3-word", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.out" }, 0);
+    tl.fromTo(".pm3-star", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2)", stagger: 0.08 }, 0.1);
+    tl.to("#pm3-word", { scale: 1.05, duration: 1, ease: "none" }, 0.18);
+    window.__timelines["pm3"] = tl;
+  </script>
+</template>

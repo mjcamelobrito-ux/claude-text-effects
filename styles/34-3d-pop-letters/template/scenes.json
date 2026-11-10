@@ -1,0 +1,25 @@
+{
+  "id": "3d-pop-letters",
+  "title": "34 3D Pop Letters",
+  "background": "#0a0820",
+  "variables": [
+    {
+      "id": "stageLight",
+      "type": "color",
+      "label": "Stage centre",
+      "default": "#2c2a8a"
+    },
+    {
+      "id": "stageDeep",
+      "type": "color",
+      "label": "Stage edge",
+      "default": "#0a0820"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "pl1",
+      "duration": 5.1
+    }
+  ]
+}

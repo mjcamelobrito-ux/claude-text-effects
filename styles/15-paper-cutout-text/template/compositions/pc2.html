@@ -1,0 +1,183 @@
+<template>
+  <style>
+    @font-face { font-family: "Luckiest Guy"; src: url("assets/fonts/luckiest-guy.woff2") format("woff2"); }
+    @font-face { font-family: "Lora"; src: url("assets/fonts/lora-bold.woff2") format("woff2"); font-weight: 700; }
+    #pc2 { position: absolute; inset: 0; overflow: hidden; }
+    #pc2-stage { position: absolute; inset: 0; perspective: 1600px; }
+    #pc2 .pc-card { position: absolute; perspective: 1600px; filter: drop-shadow(0 14px 16px rgba(0,0,0,.35)); }
+    #pc2 .pc-card > svg, #pc2 .pc-shard { position: absolute; left: 0; top: 0; overflow: visible; }
+    #pc2 .pc-shard svg { display: block; overflow: visible; }
+    #pc2 .pc-word { display: none; }
+    #pc2 .pc-cap { position: absolute; left: 0; width: 1080px; text-align: center; font: 700 38px Lora, serif; color: var(--caption, #fff);
+      text-shadow: 0 2px 10px rgba(0,0,0,.55); opacity: 0; }
+  </style>
+  <div id="pc2" data-composition-id="pc2" data-width="1080" data-height="1920">
+    <!-- TEAR IN: two torn halves slide in and seal along the seam; TEAR OUT rips them apart (data-shards="2"). -->
+    <div id="pc2-stage">
+    <div id="pc2-card" class="pc-card" style="left:540px;top:560px" data-seed="21" data-size="180"
+      data-ink="#bccaff" data-ink-dark="#2340ea" data-paper="#ffe24a" data-shards="2"><svg></svg><span class="pc-word">TEAR</span></div>
+    <div id="pc2-cap1" class="pc-cap" style="top:760px">lorem ipsum</div>
+    <div id="pc2-cap2" class="pc-cap" style="top:760px">dolor sit amet</div>
+    </div>
+  </div>
+  <script>
+    /* ---- paper cut-out lib: torn paper card + bubble-letter word ----
+       markup: <div class="pc-card" id=".." data-seed data-size data-ink data-ink-dark data-paper [data-shards="2" for a tear]>
+                 <svg></svg><span class="pc-word">WORD</span></div>
+       buildCard() makes the nodes at once (so the timeline can target them); layout() sizes them once fonts load. */
+    const FPS12 = 1 / 12;                                   // stop-motion: every change holds 2 video frames
+    function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    const NS = "http://www.w3.org/2000/svg";
+    function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+    function buildCard(card) {
+      const svg = card.querySelector("svg"), id = card.id, d = card.dataset, seed = +d.seed || 1;
+      const defs = el("defs", {}, svg);
+      const fp = el("filter", { id: id + "-paper", x: "-20%", y: "-20%", width: "140%", height: "140%" }, defs);
+      el("feTurbulence", { type: "fractalNoise", baseFrequency: "0.018", numOctaves: 4, seed: seed % 97, result: "n" }, fp);
+      const lit = el("feDiffuseLighting", { in: "n", surfaceScale: 3.5, diffuseConstant: 1.15, "lighting-color": "#fff", result: "l" }, fp);
+      el("feDistantLight", { azimuth: 225, elevation: 58 }, lit);
+      el("feComposite", { in: "l", in2: "SourceGraphic", operator: "arithmetic", k1: 1, k2: 0, k3: 0, k4: 0, result: "m" }, fp);
+      el("feComposite", { in: "m", in2: "SourceAlpha", operator: "in" }, fp);
+      const fc = el("filter", { id: id + "-crumple", x: "-40%", y: "-40%", width: "180%", height: "180%" }, defs);
+      el("feTurbulence", { type: "turbulence", baseFrequency: "0.022", numOctaves: 2, seed: seed % 89 + 3, result: "t" }, fc);
+      const disp = el("feDisplacementMap", { in: "SourceGraphic", in2: "t", scale: 0, xChannelSelector: "R", yChannelSelector: "G" }, fc);
+      const fw = el("filter", { id: id + "-wobble", x: "-10%", y: "-10%", width: "120%", height: "120%" }, defs);
+      el("feTurbulence", { type: "fractalNoise", baseFrequency: "0.035", numOctaves: 2, seed: 11, result: "w" }, fw);
+      el("feDisplacementMap", { in: "SourceGraphic", in2: "w", scale: 7, xChannelSelector: "R", yChannelSelector: "G" }, fw);
+      const art = el("g", { id: id + "-art", filter: `url(#${id}-crumple)` }, svg);
+      const sheet = el("g", { id: id + "-sheet", filter: `url(#${id}-paper)` }, art);
+      const path = el("path", { id: id + "-path", fill: d.paper || "#f6efdc" }, sheet);
+      const g = el("g", { filter: `url(#${id}-wobble)`, "data-layout-allow-overlap": "" }, sheet);   // outline + fill + shine are stacked on purpose
+      const outline = el("text", { fill: d.inkDark, stroke: d.inkDark, "stroke-linejoin": "round" }, g);
+      const fill = el("text", { fill: d.ink, stroke: "#fff", "paint-order": "stroke" }, g);
+      const shine = el("text", { fill: "none", stroke: "rgba(255,255,255,.75)" }, g);
+      const c = { card, svg, id, d, seed, disp, lit, path, texts: [outline, fill, shine], uses: [] };
+      // SHARDS: N torn pieces (2 = a tear), each a clipped copy of the art
+      const N = +d.shards || 0; c.shards = [];
+      for (let i = 0; i < N; i++) {
+        const sh = document.createElement("div"); sh.className = "pc-shard"; sh.id = id + "-sh" + i;
+        const s = el("svg", {}, sh); c.uses.push([s, el("use", { href: `#${id}-art` }, s), "full"]);
+        card.appendChild(sh); c.shards.push(sh);
+      }
+      return c;
+    }
+    function layout(c) {
+      const { svg, d, id } = c, size = +d.size || 150, R = rng(c.seed);
+      const word = c.card.querySelector(".pc-word").textContent.trim();
+      const probe = el("text", { "font-family": "Luckiest Guy", "font-size": size }, svg); probe.textContent = word;
+      const bb = probe.getBBox(); probe.remove();
+      const padX = size * 0.42, padY = size * 0.34, W = Math.ceil(bb.width + padX * 2), H = Math.ceil(size * 0.95 + padY * 2), M = 120;
+      const VB = `${-M} ${-M} ${W + 2 * M} ${H + 2 * M}`, FW = W + 2 * M, FH = H + 2 * M;
+      [svg, ...c.uses.map(u => u[0])].forEach(s => { s.setAttribute("viewBox", VB); s.setAttribute("width", FW); s.setAttribute("height", FH); });
+      Object.assign(c.card.style, { width: FW + "px", height: FH + "px", marginLeft: -FW / 2 + "px", marginTop: -FH / 2 + "px" });
+      // torn outline: a superellipse hugging the word, roughened, with a few scissor notches
+      const pts = [], n = 96;
+      for (let i = 0; i < n; i++) {
+        const a = i / n * Math.PI * 2, cs = Math.cos(a), sn = Math.sin(a);
+        const x = W / 2 + Math.sign(cs) * Math.pow(Math.abs(cs), 0.45) * W / 2, y = H / 2 + Math.sign(sn) * Math.pow(Math.abs(sn), 0.45) * H / 2;
+        const j = (R() - 0.5) * 12 + (R() < 0.08 ? -18 * R() : 0);
+        pts.push((x + cs * j).toFixed(1) + "," + (y + sn * j).toFixed(1));
+      }
+      c.path.setAttribute("d", "M" + pts.join("L") + "Z");
+      const base = { x: W / 2, y: H / 2 + size * 0.36, "text-anchor": "middle", "font-family": "Luckiest Guy", "font-size": size, "letter-spacing": size * 0.02 };
+      const extra = [{ "stroke-width": size * 0.13 }, { "stroke-width": size * 0.03 }, { x: W / 2 - size * 0.025, y: H / 2 + size * 0.33, "stroke-width": size * 0.012 }];
+      c.texts.forEach((t, i) => { for (const k in base) t.setAttribute(k, base[k]); for (const k in extra[i]) t.setAttribute(k, extra[i][k]); t.textContent = word; });
+      if (c.shards.length === 2) {
+        // TEAR: left/right halves split by a jagged, slightly diagonal seam
+        const seam = []; for (let i = 0; i <= 14; i++) { const y = i / 14 * FH; seam.push([FW / 2 + (R() - .5) * 46 + (y / FH - .5) * 40, y]); }
+        const L = [[0, 0], ...seam, [0, FH]], Rt = [[FW, 0], ...seam, [FW, FH]];
+        [L, Rt].forEach((poly, k) => Object.assign(c.shards[k].style, { width: FW + "px", height: FH + "px",
+          clipPath: `polygon(${poly.map(q => q[0].toFixed(0) + "px " + q[1].toFixed(0) + "px").join(",")})` }));
+      } else if (c.shards.length) {
+        // jittered 4x2 grid of shards across the card area
+        const cols = Math.ceil(c.shards.length / 2), xs = [], v = [];
+        for (let i = 0; i <= cols; i++) xs.push(M + W * i / cols);
+        for (let r = 0; r <= 2; r++) { v[r] = []; for (let i = 0; i <= cols; i++) {
+          const edge = i === 0 || i === cols, ye = M + H * r / 2;
+          v[r][i] = [edge ? (i === 0 ? 0 : FW) : xs[i] + (R() - .5) * W / cols * 0.5, r === 0 ? 0 : r === 2 ? FH : ye + (R() - .5) * H * 0.3]; } }
+        c.shards.forEach((sh, k) => {
+          const r = k % 2, i = Math.floor(k / 2), p = [v[r][i], v[r][i + 1], v[r + 1][i + 1], v[r + 1][i]];
+          Object.assign(sh.style, { width: FW + "px", height: FH + "px", clipPath: `polygon(${p.map(q => q[0].toFixed(0) + "px " + q[1].toFixed(0) + "px").join(",")})` });
+        });
+      }
+      return c;
+    }
+    function ready(key, cards) {
+      window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady[key] = document.fonts.load('100px "Luckiest Guy"').then(() => cards.forEach(layout));
+    }
+    // FLUTTER IN: the card drops from above like a leaf, swinging side to side, and lands with a little squash (12 fps)
+    function flutterIn(tl, c, t0, frames, dropFrom) {
+      frames = frames || 10; dropFrom = dropFrom || 1000; const r = rng(c.seed + 3), side = r() < .5 ? -1 : 1;
+      tl.set(c.card, { opacity: 0 }, 0);
+      for (let k = 0; k <= frames; k++) {
+        const u = k / frames, fall = 1 - Math.pow(1 - u, 1.6), sw = Math.sin(u * Math.PI * 2.5) * (1 - u);
+        tl.set(c.card, { opacity: 1, y: -dropFrom * (1 - fall), x: side * 160 * sw, rotation: side * 32 * sw, rotationX: 50 * Math.abs(sw), scaleY: 1, scaleX: 1 }, t0 + k * FPS12);
+      }
+      const land = t0 + (frames + 1) * FPS12;
+      tl.set(c.card, { scaleY: 0.9, scaleX: 1.05, y: 8, rotationX: 0 }, land);
+      tl.set(c.card, { scaleY: 1, scaleX: 1, y: 0 }, land + FPS12);
+      return land + 2 * FPS12;
+    }
+    // TEAR IN: the two torn halves slide in from either side and seal along the seam with a jolt
+    function tearIn(tl, c, t0, frames) {
+      frames = frames || 6;
+      tl.set(c.svg, { opacity: 0 }, 0);
+      c.shards.forEach((sh, k) => {
+        const dir = k === 0 ? -1 : 1; tl.set(sh, { opacity: 0 }, 0);
+        for (let f = 0; f <= frames; f++) { const e = 1 - Math.pow(1 - f / frames, 2.4);
+          tl.set(sh, { opacity: 1, x: dir * 620 * (1 - e), y: (k ? -40 : 40) * (1 - e), rotation: dir * 14 * (1 - e) }, t0 + f * FPS12); }
+      });
+      const seal = t0 + (frames + 1) * FPS12;
+      tl.set(c.card, { scale: 1.06 }, seal); tl.set(c.card, { scale: 1 }, seal + FPS12);
+      tl.set(c.svg, { opacity: 1 }, seal); c.shards.forEach(sh => tl.set(sh, { opacity: 0 }, seal));
+      return seal + 2 * FPS12;
+    }
+    // TEAR OUT: rip it apart again, halves pulled up and away
+    function tearOut(tl, c, t0, frames) {
+      frames = frames || 5; tl.set(c.svg, { opacity: 0 }, t0);
+      c.shards.forEach((sh, k) => { const dir = k === 0 ? -1 : 1;
+        for (let f = 0; f <= frames; f++) { const e = Math.pow(f / frames, 1.7);
+          tl.set(sh, { opacity: f === frames ? 0 : 1, x: dir * 700 * e, y: (k ? 260 : -260) * e, rotation: dir * 35 * e }, t0 + f * FPS12); } });
+      return t0 + (frames + 1) * FPS12;
+    }
+    // STAMP IN: slams down from above the lens in 3 frames; wrinkles pop deep on impact, then relax
+    function stampIn(tl, c, t0) {
+      tl.set(c.card, { opacity: 0 }, 0);
+      [[2.6, 0.25, -8], [1.7, 0.6, -4], [1.0, 1, 0]].forEach(([s, o, r], k) => tl.set(c.card, { opacity: o, scale: s, rotation: r }, t0 + k * FPS12));
+      const hit = t0 + 2 * FPS12;
+      tl.set(c.lit, { attr: { surfaceScale: 12 } }, hit); tl.set(c.lit, { attr: { surfaceScale: 7 } }, hit + FPS12); tl.set(c.lit, { attr: { surfaceScale: 3.5 } }, hit + 2 * FPS12);
+      tl.set(c.card, { scaleX: 1.08, scaleY: 0.9 }, hit + FPS12); tl.set(c.card, { scaleX: 1, scaleY: 1 }, hit + 2 * FPS12);
+      return hit + 3 * FPS12;
+    }
+    // WIND OUT: a gust takes it off frame to the right, tumbling, accelerating (12 fps)
+    function windOut(tl, c, t0, frames) {
+      frames = frames || 6; const r = rng(c.seed + 9);
+      for (let f = 1; f <= frames; f++) { const e = Math.pow(f / frames, 2);
+        tl.set(c.card, { x: 1150 * e, y: -220 * e + (r() - .5) * 20, rotation: 70 * e, rotationY: 60 * e }, t0 + f * FPS12); }
+      tl.set(c.card, { opacity: 0 }, t0 + (frames + 1) * FPS12);
+      return t0 + (frames + 1) * FPS12;
+    }
+    // SHAKE: hand-held jolt of a container on impact
+    function shake(tl, target, t0) {
+      [[14, -8], [-10, 6], [6, -3], [0, 0]].forEach(([x, y], k) => tl.set(target, { x, y }, t0 + k / 30));
+    }
+    // BOIL: held paper twitches a hair every 2 stop-motion frames, as if re-placed by hand
+    function boil(tl, target, t0, t1, seed) {
+      const r = rng(seed || 5);
+      for (let t = t0; t < t1 - 1e-6; t += FPS12 * 2) tl.set(target, { x: (r() - .5) * 6, y: (r() - .5) * 6, rotation: (r() - .5) * 1.6 }, t);
+    }
+
+    const tl = gsap.timeline({ paused: true });
+    const c = buildCard(document.getElementById("pc2-card"));
+    ready("pc2", [c]);
+    const t = tearIn(tl, c, 0.1);
+    boil(tl, c.card, t, 2.15, 21);
+    tearOut(tl, c, 2.15);
+    // small serif caption under the card, hard cut between two lines
+    tl.set("#pc2-cap1", { opacity: 1 }, 0); tl.set("#pc2-cap1", { opacity: 0 }, 1.2);
+    tl.set("#pc2-cap2", { opacity: 1 }, 1.2); tl.set("#pc2-cap2", { opacity: 0 }, 2.6);
+    window.__timelines["pc2"] = tl;
+  </script>
+</template>

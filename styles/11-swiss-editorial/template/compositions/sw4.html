@@ -1,0 +1,32 @@
+<template>
+  <style>
+    #sw4 { position: absolute; inset: 0; overflow: hidden; background: #060606; font-family: Inter, sans-serif; }
+    .sw4-giant { position: absolute; left: 0; font-size: 360px; font-weight: 900; letter-spacing: -0.06em; color: #333; line-height: .85; white-space: nowrap; }
+    #sw4-g1 { top: 1060px; } #sw4-g2 { top: 1360px; color: #262626; }
+    #sw4-fig { position: absolute; left: -120px; top: 700px; width: 700px; height: 933px; filter: grayscale(1) brightness(1.4) contrast(1.1); }
+    #sw4-a { position: absolute; left: 560px; top: 640px; font-size: 40px; font-weight: 500; color: #fff; }
+    #sw4-b { position: absolute; left: 550px; top: 680px; font-size: 120px; font-weight: 800; color: #fff; letter-spacing: -0.05em; }
+    #sw4-dot { position: absolute; left: 930px; top: 200px; width: 60px; height: 60px; border-radius: 50%; background: #eaeaea; }
+    #sw4-meta { position: absolute; left: 560px; top: 200px; font-size: 22px; font-weight: 600; color: #888; letter-spacing: .06em; text-transform: uppercase; line-height: 1.4; }
+  </style>
+  <div id="sw4" data-composition-id="sw4" data-width="1080" data-height="1920">
+    <div id="sw4-g1" class="sw4-giant" data-layout-ignore>loremipsu loremipsu</div>
+    <div id="sw4-g2" class="sw4-giant" data-layout-ignore>loremipsu loremipsu</div>
+    <img id="sw4-fig" src="assets/subject-cutout.png" alt="" />
+    <div id="sw4-dot"></div>
+    <div id="sw4-meta">Lorem<br/>Ipsum Dol</div>
+    <div id="sw4-a">lorem ipsu</div>
+    <div id="sw4-b">dolor</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // two marquee rows run opposite directions behind the subject
+    tl.fromTo("#sw4-g1", { x: 0 }, { x: -900, duration: 2.6, ease: "none" }, 0);
+    tl.fromTo("#sw4-g2", { x: -900 }, { x: 0, duration: 2.6, ease: "none" }, 0);
+    tl.fromTo("#sw4-fig", { x: -200, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 0);
+    tl.fromTo("#sw4-a", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.4);
+    tl.fromTo("#sw4-b", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 0.6);
+    tl.fromTo(["#sw4-dot", "#sw4-meta"], { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.1 }, 0.3);
+    window.__timelines["sw4"] = tl;
+  </script>
+</template>

@@ -1,0 +1,16 @@
+{
+  "id": "glass-saas-explainer",
+  "title": "08 Glass SaaS Explainer",
+  "background": "#0a1e4a",
+  "variables": [
+    {"id": "studio", "type": "color", "label": "Studio blue", "default": "#1a4fb0"},
+    {"id": "lime", "type": "color", "label": "Lime scene / highlight", "default": "#b8d86a"},
+    {"id": "alert", "type": "color", "label": "Alert red", "default": "#ff2a3a"}
+  ],
+  "scenes": [
+    {"id": "gs1", "duration": 2.2},
+    {"id": "gs2", "duration": 1.6},
+    {"id": "gs3", "duration": 2.8},
+    {"id": "gs4", "duration": 2.6}
+  ]
+}

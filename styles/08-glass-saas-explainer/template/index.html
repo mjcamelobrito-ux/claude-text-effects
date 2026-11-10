@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "studio", "type": "color", "label": "Studio blue", "default": "#1a4fb0"}, {"id": "lime", "type": "color", "label": "Lime scene / highlight", "default": "#b8d86a"}, {"id": "alert", "type": "color", "label": "Alert red", "default": "#ff2a3a"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>08 Glass SaaS Explainer</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a1e4a; }
+      #bg { position: absolute; inset: 0; background: #0a1e4a; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="9.2" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="gs1" data-composition-id="gs1" data-composition-src="compositions/gs1.html"
+        data-start="0" data-duration="2.2" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+      <div id="gs2" data-composition-id="gs2" data-composition-src="compositions/gs2.html"
+        data-start="2.2" data-duration="1.6" data-track-index="3" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:11"></div>
+      <div id="gs3" data-composition-id="gs3" data-composition-src="compositions/gs3.html"
+        data-start="3.8" data-duration="2.8" data-track-index="4" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:12"></div>
+      <div id="gs4" data-composition-id="gs4" data-composition-src="compositions/gs4.html"
+        data-start="6.6" data-duration="2.6" data-track-index="5" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:13"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

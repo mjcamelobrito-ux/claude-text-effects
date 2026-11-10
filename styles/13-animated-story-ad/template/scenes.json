@@ -1,0 +1,14 @@
+{
+  "id": "animated-story-ad",
+  "title": "13 Animated Story Ad",
+  "background": "#2a1a12",
+  "variables": [
+    {"id": "gold", "type": "color", "label": "Offer gold", "default": "#f3c86b"},
+    {"id": "cta", "type": "color", "label": "CTA button", "default": "#6b3fd4"}
+  ],
+  "scenes": [
+    {"id": "sa1", "duration": 4.8},
+    {"id": "sa2", "duration": 4.8},
+    {"id": "sa3", "duration": 3.4}
+  ]
+}

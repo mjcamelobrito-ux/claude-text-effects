@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "ink", "type": "color", "label": "Ink", "default": "#141414"}, {"id": "paperTone", "type": "color", "label": "Paper", "default": "#e3ded3"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>02 Editorial Halftone</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #e3ded3; }
+      #bg { position: absolute; inset: 0; background: #e3ded3; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="eh1" data-composition-id="eh1" data-composition-src="compositions/eh1.html"
+        data-start="0" data-duration="2.6" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+      <div id="eh2" data-composition-id="eh2" data-composition-src="compositions/eh2.html"
+        data-start="2.6" data-duration="2.6" data-track-index="3" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:11"></div>
+      <div id="eh3" data-composition-id="eh3" data-composition-src="compositions/eh3.html"
+        data-start="5.2" data-duration="1.6" data-track-index="4" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:12"></div>
+      <div id="eh4" data-composition-id="eh4" data-composition-src="compositions/eh4.html"
+        data-start="6.8" data-duration="3.2" data-track-index="5" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:13"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

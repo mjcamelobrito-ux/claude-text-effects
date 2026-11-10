@@ -1,0 +1,48 @@
+<template>
+  <style>
+    #sw1 { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg, #e6e4e1, var(--poster, #d9d7d4)); font-family: Inter, sans-serif; color: #111; }
+    /* construction lines: the grid is part of the look */
+    #sw1-arc { position: absolute; left: 60px; top: 1290px; width: 960px; height: 960px; border-radius: 50%; border: 2px solid rgba(0,0,0,.25); }
+    #sw1-vl { position: absolute; left: 540px; top: 0; width: 2px; height: 1920px; background: rgba(0,0,0,.12); }
+    #sw1-hl { position: absolute; left: 0; top: 1240px; width: 1080px; height: 2px; background: rgba(0,0,0,.18); }
+    #sw1-sq { position: absolute; left: 300px; top: 470px; width: 480px; height: 560px; background: var(--signal, #d4141c); }
+    #sw1-frame { position: absolute; left: 280px; top: 450px; width: 520px; height: 600px; border: 3px solid var(--signal, #d4141c); }
+    #sw1-fig { position: absolute; left: 280px; top: 540px; width: 520px; height: 693px; filter: grayscale(1) contrast(1.2); }
+    .sw-meta { position: absolute; font-size: 22px; font-weight: 600; letter-spacing: .04em; line-height: 1.35; text-transform: uppercase; }
+    #sw1-m1 { left: 70px; top: 190px; width: 300px; }
+    #sw1-m2 { left: 760px; top: 190px; text-align: right; width: 250px; }
+    #sw1-m3 { left: 70px; top: 1180px; }
+    #sw1-bar { position: absolute; left: 860px; top: 1100px; width: 150px; height: 70px; background: repeating-linear-gradient(90deg, #111 0 3px, transparent 3px 6px, #111 6px 11px, transparent 11px 14px); }
+    #sw1-a { position: absolute; left: 340px; top: 760px; font-size: 64px; font-weight: 600; color: #fff; letter-spacing: -0.03em; }
+    #sw1-b { position: absolute; left: 330px; top: 820px; font-size: 120px; font-weight: 700; color: #fff; letter-spacing: -0.05em; text-shadow: 0 6px 20px rgba(0,0,0,.3); }
+    /* giant cropped word bleeding off the bottom */
+    #sw1-giant { position: absolute; left: -40px; top: 1560px; font-size: 420px; font-weight: 900; letter-spacing: -0.06em; color: #1b1b1b; line-height: 1; white-space: nowrap; }
+  </style>
+  <div id="sw1" data-composition-id="sw1" data-width="1080" data-height="1920">
+    <div id="sw1-vl"></div><div id="sw1-hl"></div><div id="sw1-arc" data-layout-ignore></div>
+    <div id="sw1-frame"></div>
+    <div id="sw1-sq"></div>
+    <img id="sw1-fig" src="assets/subject-cutout.png" alt="" />
+    <div id="sw1-m1" class="sw-meta">Lor. 02<br/>Lorem ipsum dol<br/>sit amet elit</div>
+    <div id="sw1-m2" class="sw-meta">Ipsum No. 7<br/>Dolor Sitam</div>
+    <div id="sw1-m3" class="sw-meta">Lorem / 2026 — Ipsum / Dolor / Sit</div>
+    <div id="sw1-bar"></div>
+    <div id="sw1-a">lorem ipsum do</div>
+    <div id="sw1-b">lor sit</div>
+    <div id="sw1-giant" data-layout-bleed="true" data-layout-ignore>LOREM LOREM</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // grid draws itself, then blocks snap into place: precise, linear, unhurried
+    tl.fromTo("#sw1-vl", { scaleY: 0, transformOrigin: "50% 0" }, { scaleY: 1, duration: 0.4, ease: "power2.inOut" }, 0);
+    tl.fromTo("#sw1-hl", { scaleX: 0, transformOrigin: "0 50%" }, { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, 0.1);
+    tl.fromTo("#sw1-sq", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "expo.out" }, 0.2);
+    tl.fromTo("#sw1-frame", { scale: 1.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 0.35);
+    tl.fromTo("#sw1-fig", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.4);
+    tl.fromTo(".sw-meta, #sw1-bar", { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.08 }, 0.5);
+    tl.fromTo("#sw1-a", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 0.9);
+    tl.fromTo("#sw1-b", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 1.1);
+    tl.fromTo("#sw1-giant", { x: 0 }, { x: -520, duration: 2.8, ease: "none" }, 0);
+    window.__timelines["sw1"] = tl;
+  </script>
+</template>

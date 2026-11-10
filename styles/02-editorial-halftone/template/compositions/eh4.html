@@ -1,0 +1,23 @@
+<template>
+  <style>
+    @font-face { font-family: "Mrs Saint Delafield"; src: url("assets/fonts/mrs-saint-delafield.woff2") format("woff2"); }
+    #eh4 { position: absolute; inset: 0; overflow: hidden; background: var(--paperTone, #e3ded3) url("assets/paper.jpg") center/cover; color: var(--ink, #141414); }
+    #eh4-line { position: absolute; left: 0; right: 0; top: 640px; text-align: center; font-family: "Mrs Saint Delafield", cursive; font-size: 160px; line-height: 1.1; }
+    #eh4-line span { display: inline-block; }
+    #eh4-mark { position: absolute; left: 470px; top: 1080px; width: 140px; height: 140px; }
+    #eh4-handle { position: absolute; left: 0; right: 0; top: 1250px; text-align: center; font: 600 32px Poppins, sans-serif; letter-spacing: .08em; color: #555; }
+  </style>
+  <div id="eh4" data-composition-id="eh4" data-width="1080" data-height="1920">
+    <div id="eh4-line">lorem ipsum dolor<br/>sit amet</div>
+    <svg id="eh4-mark" viewBox="0 0 140 140"><path d="M30 120 C 20 60, 60 10, 120 18 C 110 70, 80 110, 30 120 Z" fill="#2b2b2b"/><path d="M30 120 L 100 40" stroke="#e3ded3" stroke-width="5"/></svg>
+    <div id="eh4-handle">@yourhandle</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // handwritten line "writes" on with a left-to-right reveal
+    tl.fromTo("#eh4-line", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.1, ease: "power1.inOut" }, 0);
+    tl.fromTo("#eh4-mark", { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2)" }, 1.1);
+    tl.fromTo("#eh4-handle", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 1.4);
+    window.__timelines["eh4"] = tl;
+  </script>
+</template>

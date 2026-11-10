@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "footageSrc", "type": "string", "label": "Talking-head footage (path in assets/)", "default": "assets/speaker-warm.mp4"}, {"id": "c1", "type": "color", "label": "Word colour 1 (yellow)", "default": "#ffd23f"}, {"id": "c2", "type": "color", "label": "Word colour 2 (cyan)", "default": "#3ff2d6"}, {"id": "c3", "type": "color", "label": "Word colour 3 (red)", "default": "#ff3b3b"}, {"id": "c4", "type": "color", "label": "Word colour 4 (violet)", "default": "#c86bff"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>09 AI-World Kinetic Type</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #111; }
+      #bg { position: absolute; inset: 0; background: #111; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="10.2" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <video id="footage" class="clip" src="assets/speaker-warm.mp4" data-var-src="footageSrc" muted playsinline
+        data-start="0" data-duration="10.2" data-track-index="1"
+        style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1"></video>
+      <div id="ak1" data-composition-id="ak1" data-composition-src="compositions/ak1.html"
+        data-start="0" data-duration="2.4" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+      <div id="ak2" data-composition-id="ak2" data-composition-src="compositions/ak2.html"
+        data-start="2.4" data-duration="1.8" data-track-index="3" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:11"></div>
+      <div id="ak3" data-composition-id="ak3" data-composition-src="compositions/ak3.html"
+        data-start="4.2" data-duration="2.8" data-track-index="4" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:12"></div>
+      <div id="ak4" data-composition-id="ak4" data-composition-src="compositions/ak4.html"
+        data-start="7" data-duration="3.2" data-track-index="5" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:13"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+.hyperframes/
+renders/
+node_modules/
+*.log
+.DS_Store
+.preview.hf-transaction*/

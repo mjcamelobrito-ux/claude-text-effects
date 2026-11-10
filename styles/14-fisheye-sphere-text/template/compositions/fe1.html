@@ -1,0 +1,128 @@
+<template>
+  <style>
+    #fe1 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 75% 55% at 50% 46%, var(--bgLight, #4b34f0) 0%, var(--bgDeep, #120a4a) 100%); }
+    /* soft cloth folds: wide low-contrast light/dark bands that drift slowly */
+    #fe1-folds { position: absolute; left: -300px; top: -300px; width: 1680px; height: 2520px; opacity: .55;
+      background:
+        radial-gradient(ellipse 30% 60% at 22% 40%, rgba(255,255,255,.10), transparent 70%),
+        radial-gradient(ellipse 22% 70% at 70% 55%, rgba(0,0,0,.22), transparent 70%),
+        radial-gradient(ellipse 40% 25% at 55% 85%, rgba(255,255,255,.08), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 35% 15%, rgba(0,0,0,.18), transparent 70%); }
+    #fe1-wrap { position: absolute; left: 30px; top: 390px; width: 1020px; height: 1020px; }
+    #fe1-gl { width: 1020px; height: 1020px; display: block; }
+    .fe1-copy { display: none; }
+  </style>
+  <div id="fe1" data-composition-id="fe1" data-width="1080" data-height="1920">
+    <div id="fe1-folds" data-layout-allow-overflow></div>
+    <div id="fe1-wrap"><canvas id="fe1-gl" width="1020" height="1020"></canvas></div>
+    <!-- Edit the lines here; they are painted onto the sphere at build time. hero = accent line. -->
+    <span id="fe1-l1" class="fe1-copy">Lorem</span>
+    <span id="fe1-hero" class="fe1-copy">ipsum</span>
+    <span id="fe1-l3" class="fe1-copy">Dolor</span>
+    <span id="fe1-l4" class="fe1-copy">sit amet</span>
+  </div>
+  <script>
+    /* ---- sphere engine: text plate (equirectangular) -> orthographic sphere, motion-blurred ---- */
+    function makeSphere(opt) {
+      const PW = 4096, PH = 2048, PX = PW / 360;           // plate: 11.38 px per degree
+      const plate = document.createElement("canvas"); plate.width = PW; plate.height = PH;
+      const cv = opt.canvas, gl = cv.getContext("webgl", { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false });
+      const vs = "attribute vec2 p;varying vec2 uv;void main(){uv=p;gl_Position=vec4(p,0.,1.);}";
+      const fs = `precision highp float;varying vec2 uv;uniform sampler2D tex;uniform vec2 c0;uniform vec2 c1;
+        const int N=16;
+        vec4 smp(vec2 cam){
+          float r2=dot(uv,uv); if(r2>1.) return vec4(0.);
+          vec3 q=vec3(uv.x,uv.y,sqrt(1.-r2));
+          float cp=cos(cam.y),sp=sin(cam.y);                 // undo pitch (look up/down)
+          q=vec3(q.x,q.y*cp+q.z*sp,-q.y*sp+q.z*cp);
+          float lon=atan(q.x,q.z)+cam.x, lat=asin(clamp(q.y,-1.,1.));
+          vec2 t=vec2(fract(lon/6.2831853+.5),.5-lat/3.1415927);
+          return texture2D(tex,t)*smoothstep(0.,.22,sqrt(1.-r2));
+        }
+        void main(){vec4 a=vec4(0.);for(int i=0;i<N;i++){a+=smp(mix(c0,c1,(float(i)+.5)/float(N)));}gl_FragColor=a/float(N);}`;
+      function sh(type, src) { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+      const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+      const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      const u0 = gl.getUniformLocation(pr, "c0"), u1 = gl.getUniformLocation(pr, "c1");
+      const D = Math.PI / 180;
+      // paint words onto the plate. word: {el, lon, lat, size, weight, color, align}
+      function paint(words) {
+        const g = plate.getContext("2d"); g.clearRect(0, 0, PW, PH);
+        g.textBaseline = "alphabetic";
+        words.forEach(w => {
+          g.font = `${w.weight || 800} ${w.size * PX}px ${w.family || "Poppins"}, sans-serif`;
+          g.fillStyle = w.color; g.textAlign = w.align || "center";
+          const x = (w.lon + 180) * PX, y = (90 - w.lat) * PX;
+          g.save(); g.translate(x, y); g.scale(1, w.squash || 1); g.fillText(w.text, 0, 0); g.restore();
+        });
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, plate);
+      }
+      function measure(text, size, weight, family) {
+        const g = plate.getContext("2d"); g.font = `${weight || 800} ${size * PX}px ${family || "Poppins"}, sans-serif`;
+        return g.measureText(text).width / PX;               // width in degrees of longitude
+      }
+      // camera path: keys [[t, lon, lat], ...]; between keys an ease-in-out whip
+      function cam(t, keys) {
+        if (t <= keys[0][0]) return [keys[0][1], keys[0][2]];
+        for (let i = 0; i < keys.length - 1; i++) {
+          const a = keys[i], b = keys[i + 1];
+          if (t <= b[0]) { const k = (t - a[0]) / (b[0] - a[0]);
+            // "snap": lands past the target and settles back (back-out); default: smooth in-out
+            const e = b[3] === "snap" ? 1 + 2.7 * (k - 1) ** 3 + 1.7 * (k - 1) ** 2 : b[3] === "linear" ? k : (k < .5 ? 4 * k ** 3 : 1 - (-2 * k + 2) ** 3 / 2);
+            return [a[1] + (b[1] - a[1]) * e, a[2] + (b[2] - a[2]) * e]; }
+        }
+        const z = keys[keys.length - 1]; return [z[1], z[2]];
+      }
+      function draw(t, keys, shutter) {
+        const a = cam(Math.max(0, t - shutter), keys), c = cam(t, keys);
+        gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform2f(u0, a[0] * D, a[1] * D); gl.uniform2f(u1, c[0] * D, c[1] * D);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      return { paint, measure, draw };
+    }
+
+    const tl = gsap.timeline({ paused: true });
+    const root = document.getElementById("fe1");
+    const css = getComputedStyle(root);
+    const accent = (css.getPropertyValue("--accent") || "#c8ff3c").trim() || "#c8ff3c";
+    const ink = (css.getPropertyValue("--ink") || "#ffffff").trim() || "#ffffff";
+    const txt = s => document.getElementById("fe1-" + s).textContent.trim();
+    const sp = makeSphere({ canvas: document.getElementById("fe1-gl") });
+    let KEYS = [[0, 0, 0]];
+    const SHUTTER = 1 / 45;                                   // ~0.7 frame of motion blur, like AE's 180° shutter
+    const proxy = { t: 0 };
+    const render = () => sp.draw(proxy.t, KEYS, SHUTTER);
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["fe1"] = document.fonts.load("800 200px Poppins").then(() => {
+      // lines stacked by latitude (degrees); sizes in degrees of latitude; hero line in the accent colour
+      const rows = [["l1", 42, 19, ink], ["hero", 12, 30, accent], ["l3", -19, 19, ink], ["l4", -45, 18, ink]];
+      sp.paint(rows.map(([k, lat, size, color]) => ({ text: txt(k), lon: 0, lat: lat - size * 0.36, size, color })));
+      // camera rolls from above the first line down through each one, landing with a small overshoot ("snap"),
+      // drifting a few degrees sideways per line so the letters slide round the curve; then back up to the hero and spin out
+      KEYS = [
+        [0.00, -18, 74],
+        [0.55, -5, 42, "snap"], [1.25, -5, 42],
+        [1.70, 0, 12, "snap"], [2.65, 0, 12],
+        [3.10, 6, -19, "snap"], [3.85, 6, -19],
+        [4.30, -4, -45, "snap"], [5.20, -4, -45],
+        [5.80, 0, 12, "snap"], [6.45, 0, 12],
+        [7.20, 200, 12, "linear"]
+      ];
+      render();
+    });
+    tl.fromTo(proxy, { t: 0 }, { t: 7.2, duration: 7.2, ease: "none", onUpdate: render }, 0);
+    // lens pulse: the sphere swells a touch each time it lands on a line
+    tl.fromTo("#fe1-wrap", { scale: 0.7, opacity: 1 }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 0);
+    [0.55, 1.70, 3.10, 4.30, 5.80].forEach(t => tl.to("#fe1-wrap", { keyframes: [{ scale: 1.07, duration: 0.09, ease: "power2.out" }, { scale: 1, duration: 0.3, ease: "power2.inOut" }] }, t));
+    tl.to("#fe1-wrap", { scale: 0.15, opacity: 0, duration: 0.5, ease: "power3.in" }, 6.65);
+    tl.fromTo("#fe1-folds", { x: 0, y: 0, rotation: 0 }, { x: -120, y: 60, rotation: 4, duration: 7.2, ease: "sine.inOut" }, 0);
+    window.__timelines["fe1"] = tl;
+  </script>
+</template>

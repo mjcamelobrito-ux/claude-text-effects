@@ -1,0 +1,23 @@
+<template>
+  <style>
+    #st1 { position: absolute; inset: 0; overflow: hidden; }
+    /* one bold uppercase word at chest height; hard swaps on every stressed word */
+    .st1-w { position: absolute; left: 0; right: 0; top: 1040px; text-align: center; font: 800 80px Montserrat, sans-serif; letter-spacing: .01em; color: #fff; opacity: 0; text-shadow: 0 4px 20px rgba(0,0,0,.55); }
+  </style>
+  <div id="st1" data-composition-id="st1" data-width="1080" data-height="1920">
+    <div id="st1-w1" class="st1-w">LOREM</div>
+    <div id="st1-w2" class="st1-w">IPSUM</div>
+    <div id="st1-w3" class="st1-w">DOLOR</div>
+    <div id="st1-w4" class="st1-w">SIT AMET</div>
+    <div id="st1-w5" class="st1-w">CONSECTET</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    [["#st1-w1", 0, 0.45], ["#st1-w2", 0.45, 0.95], ["#st1-w3", 0.95, 1.45], ["#st1-w4", 1.45, 1.85], ["#st1-w5", 1.85, 2.35]].forEach(([s, a, b]) => {
+      tl.set(s, { opacity: 1 }, a);
+      tl.fromTo(s, { scale: 0.8 }, { scale: 1, duration: 0.12, ease: "back.out(3)" }, a);
+      tl.set(s, { opacity: 0 }, b);
+    });
+    window.__timelines["st1"] = tl;
+  </script>
+</template>

@@ -1,0 +1,25 @@
+{
+  "id": "horizon-crawl",
+  "title": "29 Horizon Crawl",
+  "background": "#07051a",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Hero word (lime)",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "glow",
+      "type": "color",
+      "label": "Horizon glow (coral)",
+      "default": "#ff7a59"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hc1",
+      "duration": 4.6
+    }
+  ]
+}

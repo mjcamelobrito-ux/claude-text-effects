@@ -1,0 +1,51 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-bold.woff2") format("woff2"); }
+    @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-extrabold.woff2") format("woff2"); }
+    #wp1 { position: absolute; inset: 0; overflow: hidden; }
+    /* the caption line is a mask: words roll up into it from below and out of it at the top */
+    #wp1 .line { position: absolute; left: 0; width: 1080px; height: 170px; overflow: hidden; }
+    #wp1 .cw { position: absolute; left: 0; top: 10px; width: 1080px; text-align: center; font: 700 132px "Inter Tight", sans-serif; letter-spacing: -0.045em;
+      line-height: 1.1; color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.35); }
+    #wp1-ln { top: 1050px; }
+    #wp1-k { color: var(--highlight, #c8ff3c); font-weight: 800; }
+    #wp1-u { position: absolute; left: 340px; top: 1195px; width: 400px; height: 60px; overflow: visible; }
+    #wp1-sub { position: absolute; left: 0; width: 1080px; top: 1260px; text-align: center; font: 700 34px "Inter Tight", sans-serif; color: #fff; }
+    #wp1-pill { position: absolute; left: 540px; top: 1320px; width: 520px; margin-left: -260px; height: 64px; border: 3px solid var(--highlight, #c8ff3c); border-radius: 40px;
+      font: 700 32px/58px "Inter Tight", sans-serif; color: #fff; text-align: center; overflow: hidden; white-space: nowrap; }
+  </style>
+  <div id="wp1" data-composition-id="wp1" data-width="1080" data-height="1920">
+    <!-- Rolling captions: one .cw per word inside the .line mask; timing in roll(start, end). -->
+    <div id="wp1-ln" class="line" data-layout-allow-overflow>
+      <div id="wp1-w1" class="cw">lorem</div>
+      <div id="wp1-w2" class="cw">ipsum</div>
+      <div id="wp1-w3" class="cw">dolorem</div>
+      <div id="wp1-k" class="cw">SIT</div>
+    </div>
+    <svg id="wp1-u" viewBox="0 0 400 60"><path id="wp1-up" d="M10 38 C 90 18, 190 50, 270 28 S 360 22, 392 34" fill="none" stroke="var(--highlight, #c8ff3c)" stroke-width="12" stroke-linecap="round"/></svg>
+    <div id="wp1-sub">in</div>
+    <div id="wp1-pill">Lorem ipsum dolor</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#wp1 .cw", { yPercent: 120 });   // every caption word starts parked below its mask
+    // ROLL: the word slides up into the caption mask (0.16 s), and slides out the top when the next one comes
+    function roll(sel, t, end) {
+      tl.fromTo(sel, { yPercent: 120 }, { yPercent: 0, duration: 0.16, ease: "power3.out" }, t);
+      if (end !== undefined) tl.to(sel, { yPercent: -120, duration: 0.14, ease: "power3.in" }, end - 0.06);
+    }
+    // DRAW: an SVG stroke draws itself on (marker underline, scribble, box)
+    function draw(sel, t, dur) {
+      const p = document.querySelector(sel), L = Math.ceil(p.getTotalLength()) + 2;   // path length is pure geometry
+      p.style.strokeDasharray = L;
+      tl.fromTo(sel, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t);
+    }
+    roll("#wp1-w1", 0.0, 0.34); roll("#wp1-w2", 0.34, 0.66); roll("#wp1-w3", 0.66, 1.0); roll("#wp1-k", 1.0, 2.5);
+    draw("#wp1-up", 1.12, 0.35);                                                  // marker underline scribbles on under the keyword
+    tl.fromTo("#wp1-sub", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.12, ease: "steps(2)" }, 1.4);
+    tl.fromTo("#wp1-pill", { clipPath: "inset(0 46% 0 46% round 40px)" }, { clipPath: "inset(0 0% 0 0% round 40px)", duration: 0.45, ease: "expo.out" }, 1.55);   // grows out from a dot
+    tl.set(["#wp1-pill", "#wp1-u"], { opacity: 0 }, 0); tl.set("#wp1-u", { opacity: 1 }, 1.12); tl.set("#wp1-pill", { opacity: 1 }, 1.55);
+    tl.set(["#wp1-u", "#wp1-sub", "#wp1-pill"], { opacity: 0 }, 2.44);
+    window.__timelines["wp1"] = tl;
+  </script>
+</template>

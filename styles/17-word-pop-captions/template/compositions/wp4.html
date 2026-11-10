@@ -1,0 +1,53 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-bold.woff2") format("woff2"); }
+    @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-extrabold.woff2") format("woff2"); }
+    #wp4 { position: absolute; inset: 0; overflow: hidden; }
+    /* the caption line is a mask: words roll up into it from below and out of it at the top */
+    #wp4 .line { position: absolute; left: 0; width: 1080px; height: 170px; overflow: hidden; }
+    #wp4 .cw { position: absolute; left: 0; top: 10px; width: 1080px; text-align: center; font: 700 132px "Inter Tight", sans-serif; letter-spacing: -0.045em;
+      line-height: 1.1; color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.35); }
+    #wp4-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 45%, #fff 0%, var(--studio, #f4efe4) 70%, #e2dccd 100%); }
+    #wp4 .big { position: absolute; left: 0; width: 1080px; text-align: center; font: 800 300px "Inter Tight", sans-serif; letter-spacing: -0.06em; line-height: .9; color: var(--accent, #2f55ff); }
+    #wp4 .big .L { display: inline-block; }
+    #wp4-b1 { top: 740px; }
+    #wp4-b2 { top: 780px; font-size: 210px; }
+    #wp4-tiny { top: 690px; height: 120px; }
+    #wp4-tiny .cw { font-size: 50px; color: var(--accent, #2f55ff); text-shadow: none; left: -260px; }
+    #wp4-cut { position: absolute; left: 240px; top: 760px; width: 600px; height: 800px; }
+    #wp4-shadow { position: absolute; left: 300px; top: 1500px; width: 480px; height: 90px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.28), transparent 70%); }
+  </style>
+  <div id="wp4" data-composition-id="wp4" data-width="1080" data-height="1920">
+    <!-- Studio scene: giant letters drop behind the subject. Swap the cut-out via cutoutSrc. -->
+    <div id="wp4-bg"></div>
+    <div id="wp4-b1" class="big" data-layout-allow-overlap data-layout-allow-overflow><span class="L">L</span><span class="L">O</span><span class="L">R</span></div>
+    <div id="wp4-tiny" class="line" data-layout-allow-overflow data-layout-allow-overlap><div id="wp4-t1" class="cw">lorem</div><div id="wp4-t2" class="cw">ipsum</div></div>
+    <div id="wp4-b2" class="big" data-layout-allow-overlap data-layout-allow-overflow><span class="L">d</span><span class="L">o</span><span class="L">l</span><span class="L">o</span><span class="L">r</span><span class="L">e</span><span class="L">m</span></div>
+    <div id="wp4-shadow"></div>
+    <!-- the cut-out sits above the giant words, so the words read as standing behind the person -->
+    <img id="wp4-cut" data-layout-allow-occlusion src="assets/subject-cutout.png" data-var-src="cutoutSrc" alt="">
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#wp4 .cw", { yPercent: 120 });   // every caption word starts parked below its mask
+    // ROLL: the word slides up into the caption mask (0.16 s), and slides out the top when the next one comes
+    function roll(sel, t, end) {
+      tl.fromTo(sel, { yPercent: 120 }, { yPercent: 0, duration: 0.16, ease: "power3.out" }, t);
+      if (end !== undefined) tl.to(sel, { yPercent: -120, duration: 0.14, ease: "power3.in" }, end - 0.06);
+    }
+    // DRAW: an SVG stroke draws itself on (marker underline, scribble, box)
+    function draw(sel, t, dur) {
+      const p = document.querySelector(sel), L = Math.ceil(p.getTotalLength()) + 2;   // path length is pure geometry
+      p.style.strokeDasharray = L;
+      tl.fromTo(sel, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t);
+    }
+    // letters fall from above the frame one after another and bounce to rest (gravity), then fall through the floor
+    function drop(sel, t) { tl.fromTo(sel + " .L", { y: -1200 }, { y: 0, duration: 0.55, stagger: 0.06, ease: "bounce.out" }, t); }
+    function sink(sel, t) { tl.to(sel + " .L", { y: 1300, duration: 0.3, stagger: 0.03, ease: "power2.in" }, t); }
+    drop("#wp4-b1", 0.0); sink("#wp4-b1", 0.95);
+    roll("#wp4-t1", 1.0, 1.35); roll("#wp4-t2", 1.35, 2.5);
+    drop("#wp4-b2", 1.2);
+    tl.fromTo("#wp4-cut", { y: 0 }, { y: -18, duration: 2.6, ease: "sine.inOut" }, 0);
+    window.__timelines["wp4"] = tl;
+  </script>
+</template>

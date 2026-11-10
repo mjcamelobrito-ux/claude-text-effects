@@ -1,0 +1,15 @@
+{
+  "id": "kinetic-collage",
+  "title": "01 Kinetic Type Collage",
+  "background": "#d8d8d5",
+  "variables": [
+    {"id": "accent", "type": "color", "label": "Accent (green)", "default": "#1f6e50"},
+    {"id": "glow", "type": "color", "label": "Glow / teal", "default": "#3fc1aa"}
+  ],
+  "scenes": [
+    {"id": "kc1", "duration": 2.2},
+    {"id": "kc2", "duration": 2.4},
+    {"id": "kc3", "duration": 2.6},
+    {"id": "kc4", "duration": 3.6}
+  ]
+}

@@ -1,0 +1,43 @@
+<template>
+  <style>
+    #ct3 { position: absolute; inset: 0; overflow: hidden; }
+    /* split layout: product UI owns the top half, the speaker stays visible below */
+    #ct3-fade { position: absolute; left: 0; right: 0; top: 0; height: 1180px; background: linear-gradient(#f4f4f6 0, #f4f4f6 82%, rgba(244,244,246,0) 100%); }
+    #ct3-card { position: absolute; left: 90px; top: 150px; width: 900px; height: 880px; border-radius: 34px; overflow: hidden; background: #fff; box-shadow: 0 30px 80px rgba(0,0,0,.25); }
+    #ct3-ui { width: 900px; height: 1100px; }
+    #ct3-badge { position: absolute; left: 900px; top: 990px; width: 120px; height: 120px; border-radius: 26px; background: var(--brand, #ff4d4d); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+    #ct3-cursor { position: absolute; left: 600px; top: 700px; width: 64px; height: 64px; }
+    #ct3-ring { position: absolute; left: 794px; top: 334px; width: 90px; height: 90px; border-radius: 50%; border: 6px solid var(--brand, #ff4d4d); }
+    .ct3-cap { position: absolute; left: 90px; right: 90px; top: 1050px; text-align: center; font: 600 46px Poppins, sans-serif; color: #fff; text-shadow: 0 2px 14px rgba(0,0,0,.8); opacity: 0; }
+    .ct3-cap b { color: var(--accent, #ffc23d); font-weight: 600; }
+  </style>
+  <div id="ct3" data-composition-id="ct3" data-width="1080" data-height="1920">
+    <div id="ct3-fade"></div>
+    <div id="ct3-card"><img id="ct3-ui" src="assets/ui-screen.png" alt="" data-layout-ignore /></div>
+    <div id="ct3-ring"></div>
+    <svg id="ct3-cursor" viewBox="0 0 64 64"><path d="M8 4 L8 52 L22 40 L32 60 L40 56 L30 37 L50 37 Z" fill="#111" stroke="#fff" stroke-width="3"/></svg>
+    <div id="ct3-badge"><svg width="64" height="64" viewBox="0 0 64 64"><path d="M14 50 L42 22" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M44 8 l3 8 8 3 -8 3 -3 8 -3-8 -8-3 8-3z" fill="#fff"/></svg></div>
+    <div id="ct3-c1" class="ct3-cap">lorem ipsum <b>dolor sit</b></div>
+    <div id="ct3-c2" class="ct3-cap">amet consec <b>tetur adipi</b></div>
+    <div id="ct3-c3" class="ct3-cap">sed do <b>eiusmod</b> tempor incididunt</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // the UI panel drops in from the top like a sheet; badge pops in the corner
+    tl.fromTo("#ct3-fade", { yPercent: -100 }, { yPercent: 0, duration: 0.35, ease: "expo.out" }, 0);
+    tl.fromTo("#ct3-card", { y: -1000, rotation: -3 }, { y: 0, rotation: 0, duration: 0.5, ease: "expo.out" }, 0.05);
+    tl.fromTo("#ct3-badge", { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.4)" }, 0.4);
+    // slow scroll of the UI = "screen recording" feel
+    tl.fromTo("#ct3-ui", { y: 0 }, { y: -160, duration: 1.4, ease: "power1.inOut" }, 0.5);
+    // cursor glides to the toggle and clicks (ring pulse + card punch-in)
+    tl.fromTo("#ct3-cursor", { x: 0, y: 200, opacity: 0 }, { x: 210, y: -350, opacity: 1, duration: 0.7, ease: "power2.inOut" }, 1.4);
+    tl.fromTo("#ct3-ring", { scale: 0.3, opacity: 0 }, { scale: 1.4, opacity: 1, duration: 0.25, ease: "power2.out" }, 2.1);
+    tl.to("#ct3-ring", { opacity: 0, duration: 0.25 }, 2.35);
+    tl.fromTo("#ct3-card", { scale: 1 }, { scale: 1.06, duration: 0.25, ease: "power2.out" }, 2.1);
+    const groups = [["#ct3-c1", 0.2, 1.3], ["#ct3-c2", 1.3, 2.3], ["#ct3-c3", 2.3, 3.55]];
+    groups.forEach(([s, a, b]) => { tl.set(s, { opacity: 1 }, a); tl.set(s, { opacity: 0 }, b); });
+    // exit: card flies back up
+    tl.to(["#ct3-card", "#ct3-fade", "#ct3-ring", "#ct3-cursor", "#ct3-badge"], { y: "-=1300", duration: 0.3, ease: "power3.in" }, 3.25);
+    window.__timelines["ct3"] = tl;
+  </script>
+</template>

@@ -1,0 +1,30 @@
+<template>
+  <style>
+    #gs2 { position: absolute; inset: 0; overflow: hidden; background: #08080b; font-family: Inter, sans-serif; }
+    #gs2-glow { position: absolute; left: -200px; top: 300px; width: 1500px; height: 1300px; background: radial-gradient(ellipse at 50% 50%, var(--alert, #ff2a3a), rgba(0,0,0,0) 60%); opacity: 0; }
+    #gs2-ribbon { position: absolute; left: -100px; top: 500px; width: 1400px; height: 120px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent); transform: rotate(-35deg); filter: blur(20px); }
+    #gs2-tile { position: absolute; left: 290px; top: 660px; width: 500px; height: 500px; border-radius: 110px; background: linear-gradient(160deg, #24242c, #0e0e13); border: 4px solid rgba(255,255,255,.18); box-shadow: 0 0 0 0 rgba(255,42,58,0); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+    #gs2-arrow { width: 210px; height: 210px; }
+    #gs2-label { font-size: 42px; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+  </style>
+  <div id="gs2" data-composition-id="gs2" data-width="1080" data-height="1920">
+    <div id="gs2-glow"></div>
+    <div id="gs2-ribbon" data-layout-ignore></div>
+    <div id="gs2-tile">
+      <svg id="gs2-arrow" viewBox="0 0 100 100"><path d="M20 50 H78 M56 26 L80 50 L56 74" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div id="gs2-label">Lorem ipsum <span id="gs2-neg" style="opacity:0">dolor</span></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#gs2-tile", { scale: 0.3, rotationY: -60, opacity: 0 }, { scale: 1, rotationY: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 0);
+    tl.fromTo("#gs2-arrow", { rotation: -45 }, { rotation: -45, duration: 0.01 }, 0);
+    tl.fromTo("#gs2-ribbon", { x: -600 }, { x: 300, duration: 1.6, ease: "none" }, 0);
+    // the turn: arrow swings down, tile goes red-hot
+    tl.to("#gs2-arrow", { rotation: 45, duration: 0.35, ease: "back.out(2)" }, 0.75);
+    tl.to("#gs2-glow", { opacity: 0.55, duration: 0.3 }, 0.75);
+    tl.to("#gs2-tile", { borderColor: "rgba(255,42,58,.9)", boxShadow: "0 0 80px 10px rgba(255,42,58,.6)", duration: 0.3 }, 0.75);
+    tl.set("#gs2-neg", { opacity: 1 }, 0.8);
+    window.__timelines["gs2"] = tl;
+  </script>
+</template>

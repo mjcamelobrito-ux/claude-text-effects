@@ -1,0 +1,30 @@
+<template>
+  <style>
+    @font-face { font-family: "Caveat"; font-weight: 600; src: url("assets/fonts/caveat.woff2") format("woff2"); }
+    #tm3 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #2f6a4c, #0d2a1d 80%); }
+    #tm3-grain { position: absolute; inset: 0; background: repeating-radial-gradient(circle at 30% 20%, rgba(255,255,255,.03) 0 2px, transparent 2px 6px); }
+    #tm3-a { position: absolute; left: 0; right: 0; top: 820px; text-align: center; font: 500 90px Poppins, sans-serif; color: #e8efe9; letter-spacing: -0.03em; }
+    #tm3-b { position: absolute; left: 0; right: 0; top: 880px; text-align: center; font-family: Caveat, cursive; font-weight: 600; font-size: 260px; color: var(--neon, #c6ff3a); text-shadow: 0 0 20px rgba(198,255,58,.9), 0 0 70px rgba(198,255,58,.5); }
+    #tm3-obj { position: absolute; left: 390px; top: 480px; width: 300px; height: 300px; }
+  </style>
+  <div id="tm3" data-composition-id="tm3" data-width="1080" data-height="1920">
+    <div id="tm3-grain" data-layout-ignore></div>
+    <img id="tm3-obj" src="assets/object-sphere.png" alt="" />
+    <div id="tm3-a">lorem ip</div>
+    <div id="tm3-b" data-layout-allow-overlap>Dolor</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#tm3-obj", { y: 300, opacity: 0, rotation: 30 }, { y: 0, opacity: 0.9, rotation: 0, duration: 0.6, ease: "expo.out" }, 0);
+    tl.to("#tm3-obj", { y: -30, duration: 1.4, ease: "sine.inOut" }, 0.6);
+    tl.fromTo("#tm3-a", { opacity: 0, y: 30 }, { opacity: 1, y: -60, duration: 0.3, ease: "power3.out" }, 0.15);
+    // neon script flickers on
+    tl.fromTo("#tm3-b", { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0.6);
+    tl.to("#tm3-b", { opacity: 0.3, duration: 0.04 }, 0.68);
+    tl.to("#tm3-b", { opacity: 1, duration: 0.04 }, 0.76);
+    tl.to("#tm3-b", { opacity: 0.5, duration: 0.04 }, 0.84);
+    tl.to("#tm3-b", { opacity: 1, duration: 0.04 }, 0.9);
+    tl.fromTo("#tm3-b", { rotation: -8 }, { rotation: -4, duration: 1.2, ease: "sine.inOut" }, 0.6);
+    window.__timelines["tm3"] = tl;
+  </script>
+</template>

@@ -1,0 +1,51 @@
+<template>
+  <style>
+    #hc1 { position: absolute; inset: 0; overflow: hidden; perspective: 900px;
+      background: linear-gradient(180deg, #07051a 0%, #1b1350 46%, var(--glow, #ff7a59) 50%, #1b1350 54%, #07051a 100%); }
+    /* the floor: a huge plane tipped back 64°, with a grid, that the text lines ride along into the distance */
+    #hc1-floor { position: absolute; left: -540px; top: 960px; width: 2160px; height: 2600px; transform-origin: 50% 0; transform-style: preserve-3d; }
+    #hc1-grid { position: absolute; inset: 0; background:
+        repeating-linear-gradient(0deg, rgba(200,255,60,.28) 0 3px, transparent 3px 140px),
+        repeating-linear-gradient(90deg, rgba(200,255,60,.28) 0 3px, transparent 3px 140px); }
+    #hc1-crawl { position: absolute; left: 540px; top: 0; width: 1080px; height: 900px; }
+    #hc1 .cl { position: absolute; left: 0; width: 1080px; text-align: center; font: 900 92px/1 Inter, sans-serif; letter-spacing: -0.03em; color: #fff; }
+    /* sky mask: the same backdrop, drawn over the floor above the horizon, so lines vanish at the horizon instead of rising into the sky */
+    #hc1-sky { position: absolute; left: 0; top: 0; width: 1080px; height: 968px; background: inherit; background-size: 1080px 1920px; }
+    #hc1-fade { position: absolute; left: 0; top: 960px; width: 1080px; height: 160px; background: linear-gradient(180deg, rgba(27,19,80,.95), transparent); }
+    /* the hero word starts lying on the floor and stands up out of it */
+    #hc1-hero { position: absolute; left: 0; top: 1080px; width: 1080px; text-align: center; font: 400 210px/1 "Archivo Black", sans-serif; letter-spacing: -0.04em;
+      color: var(--c1, #c8ff3c); text-shadow: 0 16px 40px rgba(0,0,0,.5); transform-origin: 50% 100%; }
+  </style>
+  <div id="hc1" data-composition-id="hc1" data-width="1080" data-height="1920">
+    <div id="hc1-floor" data-layout-allow-overflow>
+      <div id="hc1-grid"></div>
+      <!-- Edit the crawl lines (they scroll away into the distance) -->
+      <div id="hc1-crawl" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="cl" style="top:0px">LOREM IPSUM</div>
+        <div class="cl" style="top:175px">DOLOR SIT AMET</div>
+        <div class="cl" style="top:350px">CONSECTETUR</div>
+        <div class="cl" style="top:525px">ADIPISCING ELIT</div>
+        <div class="cl" style="top:700px">SED DO EIUSMOD</div>
+        <div class="cl" style="top:875px">TEMPOR INCIDIDUNT</div>
+      </div>
+    </div>
+    <div id="hc1-sky" data-layout-allow-occlusion></div>
+    <div id="hc1-fade"></div>
+    <!-- Edit the hero word that stands up at the end -->
+    <div id="hc1-hero">DOLOR</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.set("#hc1-floor", { rotationX: 64 }, 0);
+    // CRAWL: lines start below the frame on the floor plane and slide away toward the horizon, shrinking with perspective
+    tl.fromTo("#hc1-crawl", { y: 250 }, { y: -1500, duration: 2.8, ease: "none" }, 0);
+    tl.fromTo("#hc1-grid", { backgroundPositionY: "0px" }, { backgroundPositionY: "-1960px", duration: 4.6, ease: "none" }, 0);   // ground rushes under
+    // STAND UP: the hero word lies flat on the floor (−90° = laid back), then pivots up on its baseline with a bounce
+    tl.set("#hc1-hero", { opacity: 0 }, 0);
+    tl.fromTo("#hc1-hero", { rotationX: -88, opacity: 1, y: 140 }, { rotationX: 0, y: 0, duration: 0.7, ease: "back.out(1.7)", immediateRender: false }, 2.7);
+    tl.to("#hc1-crawl", { opacity: 0, duration: 0.35 }, 2.4);
+    tl.fromTo("#hc1-hero", { scale: 1 }, { scale: 1.08, duration: 1.0, ease: "sine.out", immediateRender: false }, 3.4);
+    tl.to("#hc1-hero", { rotationX: 90, y: -60, opacity: 0, duration: 0.3, ease: "power3.in" }, 4.3);
+    window.__timelines["hc1"] = tl;
+  </script>
+</template>

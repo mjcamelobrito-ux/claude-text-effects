@@ -1,0 +1,13 @@
+{
+  "id": "halo-orbit-text",
+  "title": "19 Halo Orbit Text",
+  "background": "#0d0a08",
+  "footage": {"src": "assets/speaker-depth.mp4", "id": "footage"},
+  "variables": [
+    {"id": "cutoutSrc", "type": "string", "label": "Subject cut-out (PNG/alpha video in assets/) for words passing behind", "default": "assets/subject-cutout-depth.png"},
+    {"id": "ink", "type": "color", "label": "Word colour", "default": "#ffffff"}
+  ],
+  "scenes": [
+    {"id": "ho1", "duration": 2.8}
+  ]
+}

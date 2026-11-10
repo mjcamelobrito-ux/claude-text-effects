@@ -1,0 +1,15 @@
+{
+  "id": "snake-text",
+  "title": "37 Snake Text",
+  "background": "#0d2a1f",
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Head word (lime)", "default": "#c8ff3c"},
+    {"id": "c2", "type": "color", "label": "Body words (white)", "default": "#ffffff"},
+    {"id": "c3", "type": "color", "label": "Accent words (pink)", "default": "#ff5fc8"},
+    {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#1f4a8a"},
+    {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#081430"}
+  ],
+  "scenes": [
+    {"id": "sn1", "duration": 6.0}
+  ]
+}

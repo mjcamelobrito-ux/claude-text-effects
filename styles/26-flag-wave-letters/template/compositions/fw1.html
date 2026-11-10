@@ -1,0 +1,41 @@
+<template>
+  <style>
+    #fw1 { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; }
+    #fw1-flag { position: absolute; left: 0; top: 1010px; width: 1080px; height: 360px; transform-style: preserve-3d; }
+    #fw1 .row { position: absolute; left: 0; width: 1080px; text-align: center; transform-style: preserve-3d; }
+    #fw1 .c { display: inline-block; font: 900 170px/175px Inter, sans-serif; letter-spacing: -0.04em; color: var(--c1, #c8ff3c);
+      text-shadow: 0 6px 20px rgba(0,0,0,.35); }
+  </style>
+  <div id="fw1" data-composition-id="fw1" data-width="1080" data-height="1920">
+    <!-- Edit the letters: one span per character (ids fw1-c0 … run across both rows; update N in the script) -->
+    <div id="fw1-flag" data-layout-allow-overlap>
+      <div class="row" style="top:0px"><span id="fw1-c0" class="c">L</span><span id="fw1-c1" class="c">O</span><span id="fw1-c2" class="c">R</span><span id="fw1-c3" class="c">E</span><span id="fw1-c4" class="c">M</span></div>
+      <div class="row" style="top:175px"><span id="fw1-c5" class="c">I</span><span id="fw1-c6" class="c">P</span><span id="fw1-c7" class="c">S</span><span id="fw1-c8" class="c">U</span><span id="fw1-c9" class="c">M</span></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // every letter rides a travelling wave like cloth: tilt (rotateX), depth (z) and lift (y) follow sine phases that
+    // run left → right. The wave is big as the flag unfurls, settles to a gentle ripple, then a gust tears letters away.
+    const N = 10, C = [...Array(N).keys()].map(i => document.getElementById("fw1-c" + i));
+    const st = { t: 0 };
+    function wave() {
+      const t = st.t;
+      const amp = t < 0.9 ? 1 - 0.75 * (t / 0.9) : t < 3.0 ? 0.25 : 0.25 + (t - 3.0) * 1.4;   // unfurl → ripple → gust
+      for (let i = 0; i < N; i++) {
+        const col = i % 5, row = Math.floor(i / 5), ph = t * 7 - col * 0.75 - row * 0.4;
+        const shown = Math.max(0, Math.min(1, (t - col * 0.07 - row * 0.12) / 0.25));     // letters appear left to right
+        const blow = t > 3.0 ? Math.max(0, t - 3.0 - col * 0.05) : 0;                        // gust takes them off, staggered
+        const rx = 38 * amp * Math.sin(ph), z = 90 * amp * Math.sin(ph + 0.9), y = 26 * amp * Math.sin(ph + 1.6) - blow * 900;
+        const x = blow * 1400, light = 52 + 18 * Math.sin(ph + 0.9) * Math.min(1, amp * 2);  // faces turned toward us are brighter
+        C[i].style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateX(${rx}deg) rotateZ(${blow * 140}deg) scale(${0.6 + 0.4 * shown})`;
+        C[i].style.opacity = shown * (blow > 0.6 ? 0 : 1);
+        C[i].style.filter = `brightness(${(light / 60).toFixed(3)})`;
+      }
+    }
+    tl.fromTo(st, { t: 0 }, { t: 3.8, duration: 3.8, ease: "none", onUpdate: wave }, 0);
+    tl.fromTo("#fw1-flag", { rotationY: -18 }, { rotationY: 10, duration: 3.8, ease: "sine.inOut" }, 0);
+    wave();
+    window.__timelines["fw1"] = tl;
+  </script>
+</template>

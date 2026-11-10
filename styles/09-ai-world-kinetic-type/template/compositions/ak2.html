@@ -1,0 +1,22 @@
+<template>
+  <style>
+    @font-face { font-family: "Abril Fatface"; src: url("assets/fonts/abril-fatface.woff2") format("woff2"); }
+    #ak2 { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; }
+    .kw { position: absolute; white-space: nowrap; font-family: "Abril Fatface", serif; }
+    /* extruded serif: stacked text-shadows fake a 3D bevel */
+    #ak2-a { left: 170px; top: 980px; font-size: 190px; color: var(--c3, #ff3b3b); text-shadow: 1px 1px 0 #b01616, 2px 2px 0 #a01212, 3px 3px 0 #900e0e, 4px 4px 0 #800a0a, 5px 5px 0 #700808, 10px 14px 30px rgba(0,0,0,.5); }
+    #ak2-b { left: 200px; top: 1170px; font-size: 130px; color: #6f8dff; text-shadow: 1px 1px 0 #3d5bd6, 2px 2px 0 #3552c4, 3px 3px 0 #2d48b2, 4px 4px 0 #253fa0, 10px 14px 30px rgba(0,0,0,.5); }
+  </style>
+  <div id="ak2" data-composition-id="ak2" data-width="1080" data-height="1920">
+    <div id="ak2-a" class="kw">LORE</div>
+    <div id="ak2-b" class="kw">IPSUMDOL</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#ak2-a", { rotationX: -90, y: 100, opacity: 0 }, { rotationX: 0, rotationY: -14, y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 0.05);
+    tl.fromTo("#ak2-b", { rotationX: 90, y: -100, opacity: 0 }, { rotationX: 0, rotationY: 16, y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 0.3);
+    tl.to(["#ak2-a", "#ak2-b"], { rotationY: 0, duration: 1, ease: "sine.inOut" }, 0.7);
+    tl.to(["#ak2-a", "#ak2-b"], { x: -1200, filter: "blur(14px)", duration: 0.2, ease: "power4.in", stagger: 0.05 }, 1.55);
+    window.__timelines["ak2"] = tl;
+  </script>
+</template>

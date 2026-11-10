@@ -1,0 +1,18 @@
+{
+  "id": "step-by-step-studio",
+  "title": "06 Step-by-Step Studio",
+  "background": "#06102a",
+  "footage": {"src": "assets/speaker-blue.mp4", "id": "footage"},
+  "variables": [
+    {"id": "stepA", "type": "color", "label": "Step title gradient start", "default": "#7fd3ff"},
+    {"id": "stepB", "type": "color", "label": "Step title gradient end", "default": "#3b6bff"},
+    {"id": "uiAccent", "type": "color", "label": "UI accent (header, buttons)", "default": "#3b5bff"}
+  ],
+  "scenes": [
+    {"id": "st1", "duration": 2.4},
+    {"id": "st2", "duration": 1.8},
+    {"id": "st3", "duration": 3.2},
+    {"id": "st4", "duration": 2.6},
+    {"id": "st5", "duration": 2.2}
+  ]
+}

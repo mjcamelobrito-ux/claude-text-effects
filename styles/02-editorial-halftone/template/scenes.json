@@ -1,0 +1,15 @@
+{
+  "id": "editorial-halftone",
+  "title": "02 Editorial Halftone",
+  "background": "#e3ded3",
+  "variables": [
+    {"id": "ink", "type": "color", "label": "Ink", "default": "#141414"},
+    {"id": "paperTone", "type": "color", "label": "Paper", "default": "#e3ded3"}
+  ],
+  "scenes": [
+    {"id": "eh1", "duration": 2.6},
+    {"id": "eh2", "duration": 2.6},
+    {"id": "eh3", "duration": 1.6},
+    {"id": "eh4", "duration": 3.2}
+  ]
+}

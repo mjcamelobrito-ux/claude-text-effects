@@ -1,0 +1,19 @@
+{
+  "id": "styles-reel",
+  "title": "13 video styles — promo reel (Maria VO)",
+  "background": "#111",
+  "variables": [
+    {
+      "id": "hi",
+      "type": "color",
+      "label": "Highlight yellow",
+      "default": "#f5e04a"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "reel",
+      "duration": 27.46
+    }
+  ]
+}

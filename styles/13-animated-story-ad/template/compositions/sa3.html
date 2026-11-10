@@ -1,0 +1,27 @@
+<template>
+  <style>
+    #sa3 { position: absolute; inset: 0; overflow: hidden; background: #3a271c; }
+    #sa3-bg { position: absolute; left: -60px; top: -60px; width: 1200px; height: 2040px; object-fit: cover; filter: blur(26px) brightness(.8); }
+    #sa3-offer { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font: 900 190px Poppins, sans-serif; letter-spacing: -0.03em; background: linear-gradient(180deg, #fff6d8 0%, var(--gold, #f3c86b) 45%, #b9842f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 0 rgba(120,80,20,.55)) drop-shadow(0 18px 30px rgba(0,0,0,.35)); }
+    #sa3-prod { position: absolute; left: 240px; top: 640px; width: 600px; height: 600px; }
+    #sa3-cta { position: absolute; left: 290px; top: 1270px; width: 500px; height: 110px; border-radius: 60px; background: var(--cta, #6b3fd4); color: #fff; font: 700 46px Poppins, sans-serif; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 30px rgba(0,0,0,.3); }
+    #sa3-brand { position: absolute; left: 0; right: 0; top: 1410px; text-align: center; font: 700 40px Poppins, sans-serif; color: #fff; letter-spacing: .04em; opacity: .9; }
+  </style>
+  <div id="sa3" data-composition-id="sa3" data-width="1080" data-height="1920">
+    <img id="sa3-bg" src="assets/shot-6.jpg" alt="" data-layout-ignore />
+    <div id="sa3-offer">$00 LOR</div>
+    <img id="sa3-prod" src="assets/object-sphere.png" alt="" />
+    <div id="sa3-cta">Lorem ip</div>
+    <div id="sa3-brand">LOREM IPSUM</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#sa3-bg", { scale: 1.1 }, { scale: 1, duration: 3.4, ease: "none" }, 0);
+    tl.fromTo("#sa3-prod", { scale: 0.6, y: 120, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.6)" }, 0.1);
+    tl.fromTo("#sa3-offer", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "expo.out" }, 0.4);
+    tl.fromTo("#sa3-cta", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.9);
+    tl.to("#sa3-cta", { scale: 1.06, duration: 0.35, ease: "sine.inOut", yoyo: true, repeat: 3 }, 1.4);
+    tl.fromTo("#sa3-brand", { opacity: 0 }, { opacity: 0.9, duration: 0.4 }, 1.1);
+    window.__timelines["sa3"] = tl;
+  </script>
+</template>

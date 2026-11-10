@@ -1,0 +1,76 @@
+<template>
+  <style>
+    #pl1 { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; perspective-origin: 540px 640px;
+      background: radial-gradient(ellipse 90% 55% at 50% 58%, var(--stageLight, #2c2a8a) 0%, var(--stageDeep, #0a0820) 100%); }
+    /* the stage: a floor at y = 0; the camera looks down at it a little */
+    #pl1-stage { position: absolute; left: 540px; top: 1120px; width: 0; height: 0; transform-style: preserve-3d; }
+    #pl1 .L { position: absolute; bottom: 0; height: 225px; transform-style: preserve-3d; transform-origin: 50% 100%; }
+    #pl1 .L span { position: absolute; left: 0; bottom: 0; width: 100%; text-align: center; font: 400 225px/225px "Archivo Black", sans-serif; }
+    /* contact shadow and a pop shockwave ring, both lying on the floor */
+    #pl1 .sh { position: absolute; top: -30px; height: 60px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.55), transparent 70%); transform: rotateX(90deg); }
+    #pl1 .rg { position: absolute; top: -120px; width: 240px; height: 240px; border-radius: 50%; border: 6px solid rgba(255,255,255,.7); transform: rotateX(90deg) scale(0); opacity: 0; }
+    #pl1-word { display: none; }
+  </style>
+  <div id="pl1" data-composition-id="pl1" data-width="1080" data-height="1920">
+    <!-- Letters are generated (generator.py) so each slab hugs its glyph and gets its own colour + darker sides -->
+    <div id="pl1-stage" data-layout-allow-overlap data-layout-allow-overflow>
+      <div id="pl1-L0" class="L" style="left:-452px;width:144px" data-layout-allow-overlap><span class="lay" data-layout-ignore style="color:#8cc300">L</span><span class="lay" data-layout-ignore style="color:#86bb00">L</span><span class="lay" data-layout-ignore style="color:#80b300">L</span><span class="lay" data-layout-ignore style="color:#7bab00">L</span><span class="lay" data-layout-ignore style="color:#75a300">L</span><span class="lay" data-layout-ignore style="color:#6f9b00">L</span><span class="lay" data-layout-ignore style="color:#6a9400">L</span><span class="lay" data-layout-ignore style="color:#648c00">L</span><span class="lay" data-layout-ignore style="color:#5e8400">L</span><span class="lay" data-layout-ignore style="color:#597c00">L</span><span class="lay" data-layout-ignore style="color:#537400">L</span><span class="lay" data-layout-ignore style="color:#4e6c00">L</span><span class="lay" data-layout-ignore style="color:#486400">L</span><span class="lay" data-layout-ignore style="color:#425c00">L</span><span class="face" style="color:#c8ff3c">L</span></div>
+      <div id="pl1-sh0" class="sh" style="left:-466px;width:173px"></div>
+      <div id="pl1-rg0" class="rg" style="left:-500px"></div>
+      <div id="pl1-L1" class="L" style="left:-300px;width:189px" data-layout-allow-overlap><span class="lay" data-layout-ignore style="color:#d9008e">O</span><span class="lay" data-layout-ignore style="color:#d00088">O</span><span class="lay" data-layout-ignore style="color:#c70082">O</span><span class="lay" data-layout-ignore style="color:#be007d">O</span><span class="lay" data-layout-ignore style="color:#b60077">O</span><span class="lay" data-layout-ignore style="color:#ad0071">O</span><span class="lay" data-layout-ignore style="color:#a4006b">O</span><span class="lay" data-layout-ignore style="color:#9b0066">O</span><span class="lay" data-layout-ignore style="color:#930060">O</span><span class="lay" data-layout-ignore style="color:#8a005a">O</span><span class="lay" data-layout-ignore style="color:#810054">O</span><span class="lay" data-layout-ignore style="color:#78004f">O</span><span class="lay" data-layout-ignore style="color:#6f0049">O</span><span class="lay" data-layout-ignore style="color:#670043">O</span><span class="face" style="color:#ff5fc8">O</span></div>
+      <div id="pl1-sh1" class="sh" style="left:-319px;width:227px"></div>
+      <div id="pl1-rg1" class="rg" style="left:-326px"></div>
+      <div id="pl1-L2" class="L" style="left:-103px;width:171px" data-layout-allow-overlap><span class="lay" data-layout-ignore style="color:#002adf">R</span><span class="lay" data-layout-ignore style="color:#0028d6">R</span><span class="lay" data-layout-ignore style="color:#0026cd">R</span><span class="lay" data-layout-ignore style="color:#0024c4">R</span><span class="lay" data-layout-ignore style="color:#0023bb">R</span><span class="lay" data-layout-ignore style="color:#0021b2">R</span><span class="lay" data-layout-ignore style="color:#001fa9">R</span><span class="lay" data-layout-ignore style="color:#001ea0">R</span><span class="lay" data-layout-ignore style="color:#001c97">R</span><span class="lay" data-layout-ignore style="color:#001a8e">R</span><span class="lay" data-layout-ignore style="color:#001985">R</span><span class="lay" data-layout-ignore style="color:#00177c">R</span><span class="lay" data-layout-ignore style="color:#001573">R</span><span class="lay" data-layout-ignore style="color:#00146a">R</span><span class="face" style="color:#6a86ff">R</span></div>
+      <div id="pl1-sh2" class="sh" style="left:-120px;width:205px"></div>
+      <div id="pl1-rg2" class="rg" style="left:-138px"></div>
+      <div id="pl1-L3" class="L" style="left:76px;width:148px" data-layout-allow-overlap><span class="lay" data-layout-ignore style="color:#d52a00">E</span><span class="lay" data-layout-ignore style="color:#cc2800">E</span><span class="lay" data-layout-ignore style="color:#c42600">E</span><span class="lay" data-layout-ignore style="color:#bb2500">E</span><span class="lay" data-layout-ignore style="color:#b22300">E</span><span class="lay" data-layout-ignore style="color:#aa2100">E</span><span class="lay" data-layout-ignore style="color:#a12000">E</span><span class="lay" data-layout-ignore style="color:#991e00">E</span><span class="lay" data-layout-ignore style="color:#901c00">E</span><span class="lay" data-layout-ignore style="color:#871b00">E</span><span class="lay" data-layout-ignore style="color:#7f1900">E</span><span class="lay" data-layout-ignore style="color:#761700">E</span><span class="lay" data-layout-ignore style="color:#6e1500">E</span><span class="lay" data-layout-ignore style="color:#651400">E</span><span class="face" style="color:#ff7a59">E</span></div>
+      <div id="pl1-sh3" class="sh" style="left:61px;width:178px"></div>
+      <div id="pl1-rg3" class="rg" style="left:30px"></div>
+      <div id="pl1-L4" class="L" style="left:232px;width:220px" data-layout-allow-overlap><span class="lay" data-layout-ignore style="color:#01adfe">M</span><span class="lay" data-layout-ignore style="color:#00a6f6">M</span><span class="lay" data-layout-ignore style="color:#009feb">M</span><span class="lay" data-layout-ignore style="color:#0098e1">M</span><span class="lay" data-layout-ignore style="color:#0091d7">M</span><span class="lay" data-layout-ignore style="color:#008acc">M</span><span class="lay" data-layout-ignore style="color:#0083c2">M</span><span class="lay" data-layout-ignore style="color:#007cb8">M</span><span class="lay" data-layout-ignore style="color:#0075ad">M</span><span class="lay" data-layout-ignore style="color:#006ea3">M</span><span class="lay" data-layout-ignore style="color:#006799">M</span><span class="lay" data-layout-ignore style="color:#00608e">M</span><span class="lay" data-layout-ignore style="color:#005984">M</span><span class="lay" data-layout-ignore style="color:#00527a">M</span><span class="face" style="color:#9fe0ff">M</span></div>
+      <div id="pl1-sh4" class="sh" style="left:210px;width:264px"></div>
+      <div id="pl1-rg4" class="rg" style="left:222px"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Each letter is a face + 14 stacked layers behind it. Per letter we animate:
+    //   rx = how far it lies back on the floor (90° flat, face up → 0° standing), y = jump height,
+    //   d = extrusion depth (0 = flat print, 1 = full block), ry = turn on its own axis.
+    const N = 5, DEP = 14, STEP = 5;
+    const L = [...Array(N).keys()].map(i => document.getElementById("pl1-L" + i));
+    const LAY = L.map(el => [...el.querySelectorAll(".lay")]);
+    const SH = L.map((e, i) => document.getElementById("pl1-sh" + i));
+    const P = L.map(() => ({ rx: 90, y: 0, d: 0, ry: 0 }));
+    function render() {
+      for (let i = 0; i < N; i++) {
+        const p = P[i];
+        L[i].style.transform = `translateY(${-p.y}px) rotateY(${p.ry}deg) rotateX(${p.rx}deg)`;
+        LAY[i].forEach((e, k) => { e.style.transform = `translateZ(${-(k + 1) * STEP * p.d}px)`; });
+        const stand = 1 - p.rx / 90;                     // shadow darkens as the letter stands, softens when it jumps
+        SH[i].style.opacity = (0.25 + 0.75 * stand) * Math.max(0.3, 1 - p.y / 300);
+      }
+    }
+    tl.set("#pl1-stage", { rotationX: -16 }, 0);
+    tl.fromTo("#pl1-stage", { scale: 0.9 }, { scale: 1, duration: 1.0, ease: "power2.out" }, 0);
+    // POP: left to right, each flat letter springs up, inflating into a block, with a little jump and a shockwave
+    P.forEach((p, i) => {
+      const t = 0.45 + i * 0.13;
+      tl.to(p, { rx: 0, duration: 0.6, ease: "back.out(2.6)", onUpdate: render }, t);
+      tl.to(p, { d: 1, duration: 0.5, ease: "power3.out", onUpdate: render }, t);
+      tl.to(p, { keyframes: [{ y: 170, duration: 0.22, ease: "power2.out" }, { y: 0, duration: 0.3, ease: "bounce.out" }], onUpdate: render }, t);
+      tl.fromTo(`#pl1-rg${i}`, { scale: 0.2, opacity: 0.9 }, { scale: 2.2, opacity: 0, duration: 0.6, ease: "power2.out" }, t + 0.05);
+      // SWAY while held, alternating directions
+      tl.to(p, { ry: i % 2 ? 9 : -9, duration: 0.7, ease: "sine.inOut", onUpdate: render, yoyo: true, repeat: 1 }, 1.4 + i * 0.05);
+      // SPIN WAVE: one full turn each, rippling across the word
+      tl.to(p, { ry: "+=360", duration: 0.65, ease: "power2.inOut", onUpdate: render }, 2.95 + i * 0.09);
+      // SINK: right to left they lie back down and deflate into flat print again
+      const s = 3.95 + (N - 1 - i) * 0.1;
+      tl.to(p, { rx: 90, d: 0, duration: 0.45, ease: "power3.in", onUpdate: render }, s);
+    });
+    tl.to("#pl1-stage", { rotationY: 14, duration: 2.6, ease: "sine.inOut" }, 1.2);       // camera eases around the word
+    tl.to("#pl1-stage", { rotationY: 0, duration: 0.6, ease: "power2.inOut" }, 3.9);
+    tl.to("#pl1-stage", { opacity: 0, duration: 0.3 }, 4.75);
+    render();
+    window.__timelines["pl1"] = tl;
+  </script>
+</template>

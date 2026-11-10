@@ -1,0 +1,30 @@
+<template>
+  <style>
+    #kc1 { position: absolute; inset: 0; overflow: hidden; background: #d8d8d5; font-family: Poppins, sans-serif; }
+    #kc1-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.55), rgba(0,0,0,.18) 80%); }
+    #kc1-band { position: absolute; left: -300px; top: 760px; width: 1700px; height: 330px; background: #121212; }
+    #kc1-band-text { position: absolute; left: 0; right: 0; top: 50%; text-align: center; color: #f2f2f2; font-weight: 700; font-size: 150px; letter-spacing: -0.04em; line-height: 1; margin-top: -78px; }
+    #kc1-word { position: absolute; left: 0; right: 0; top: 1290px; text-align: center; color: #1a1a1a; font-weight: 700; font-size: 128px; letter-spacing: -0.04em; }
+    #kc1-obj { position: absolute; left: 610px; top: 1450px; width: 340px; height: 340px; }
+  </style>
+  <div id="kc1" data-composition-id="kc1" data-width="1080" data-height="1920">
+    <div id="kc1-vignette"></div>
+    <div id="kc1-band" data-layout-allow-overflow><div id="kc1-band-text">lorem</div></div>
+    <div id="kc1-word">ipsum dolor sit</div>
+    <img id="kc1-obj" src="assets/object-sphere.png" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // diagonal band sweeps in rotated, text rides it
+    tl.fromTo("#kc1-band", { rotation: -32, x: -420, y: 0 }, { rotation: -32, x: 0, duration: 0.45, ease: "expo.out" }, 0);
+    tl.fromTo("#kc1-band-text", { x: 300, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.12);
+    tl.to("#kc1-band", { rotation: -24, duration: 1.6, ease: "none" }, 0.45);
+    // second line pops word by word feel: scale overshoot + blur in
+    tl.fromTo("#kc1-word", { scale: 1.6, opacity: 0, filter: "blur(14px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "back.out(2)" }, 0.75);
+    // object cutout slides in from off-frame with spin
+    tl.fromTo("#kc1-obj", { x: 600, rotation: 40 }, { x: 0, rotation: 0, duration: 0.55, ease: "expo.out" }, 0.95);
+    // whip-out exit
+    tl.to(["#kc1-band", "#kc1-word", "#kc1-obj"], { x: "-=1400", filter: "blur(18px)", duration: 0.22, ease: "power4.in" }, 1.95);
+    window.__timelines["kc1"] = tl;
+  </script>
+</template>

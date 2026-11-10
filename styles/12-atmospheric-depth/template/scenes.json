@@ -1,0 +1,15 @@
+{
+  "id": "atmospheric-depth",
+  "title": "12 Atmospheric Depth",
+  "background": "#ece6db",
+  "variables": [
+    {"id": "cream", "type": "color", "label": "Cream ground", "default": "#ece6db"},
+    {"id": "blossom", "type": "color", "label": "Blossom / petal red", "default": "#c8102e"}
+  ],
+  "scenes": [
+    {"id": "ad1", "duration": 2.4},
+    {"id": "ad2", "duration": 2.6},
+    {"id": "ad3", "duration": 2.4},
+    {"id": "ad4", "duration": 2.4}
+  ]
+}

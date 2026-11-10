@@ -1,0 +1,44 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-bold.woff2") format("woff2"); }
+    @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-extrabold.woff2") format("woff2"); }
+    #wp3 { position: absolute; inset: 0; overflow: hidden; }
+    /* the caption line is a mask: words roll up into it from below and out of it at the top */
+    #wp3 .line { position: absolute; left: 0; width: 1080px; height: 170px; overflow: hidden; }
+    #wp3 .cw { position: absolute; left: 0; top: 10px; width: 1080px; text-align: center; font: 700 132px "Inter Tight", sans-serif; letter-spacing: -0.045em;
+      line-height: 1.1; color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.35); }
+    #wp3 .card { position: absolute; inset: 0; }
+    #wp3-c1 { background: #000; } #wp3-c2 { background: var(--accent, #2f55ff); }
+    #wp3 .line { top: 860px; height: 240px; }
+    #wp3 .cw { font-size: 190px; }
+  </style>
+  <div id="wp3" data-composition-id="wp3" data-width="1080" data-height="1920">
+    <!-- Chapter cards: circle reveals; card colour + one word each. -->
+    <div id="wp3-c1" class="card"></div>
+    <div id="wp3-c2" class="card"></div>
+    <div id="wp3-ln" class="line" data-layout-allow-overflow>
+      <div id="wp3-w1" class="cw">lorem</div>
+      <div id="wp3-w2" class="cw">duo</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#wp3 .cw", { yPercent: 120 });   // every caption word starts parked below its mask
+    // ROLL: the word slides up into the caption mask (0.16 s), and slides out the top when the next one comes
+    function roll(sel, t, end) {
+      tl.fromTo(sel, { yPercent: 120 }, { yPercent: 0, duration: 0.16, ease: "power3.out" }, t);
+      if (end !== undefined) tl.to(sel, { yPercent: -120, duration: 0.14, ease: "power3.in" }, end - 0.06);
+    }
+    // DRAW: an SVG stroke draws itself on (marker underline, scribble, box)
+    function draw(sel, t, dur) {
+      const p = document.querySelector(sel), L = Math.ceil(p.getTotalLength()) + 2;   // path length is pure geometry
+      p.style.strokeDasharray = L;
+      tl.fromTo(sel, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t);
+    }
+    tl.fromTo("#wp3-c1", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)", duration: 0.28, ease: "power3.out" }, 0);
+    roll("#wp3-w1", 0.12, 0.72);
+    tl.fromTo("#wp3-c2", { clipPath: "circle(0% at 100% 100%)" }, { clipPath: "circle(150% at 100% 100%)", duration: 0.32, ease: "power3.inOut" }, 0.6);
+    roll("#wp3-w2", 0.78, 1.6);
+    window.__timelines["wp3"] = tl;
+  </script>
+</template>

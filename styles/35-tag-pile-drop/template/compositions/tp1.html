@@ -1,0 +1,115 @@
+<template>
+  <style>
+    #tp1 { position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(ellipse 85% 60% at 50% 50%, #ffffff 0%, var(--table, #ecebf2) 65%, #d9d7e3 100%); }
+    /* top-down view onto a table. Each tag: a wrapper at its resting spot, a soft shadow, the tag itself */
+    #tp1 .wrap { position: absolute; width: 0; height: 0; }
+    #tp1 .pill, #tp1 .badge { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap;
+      font: 800 52px/116px Inter, sans-serif; letter-spacing: -0.02em; height: 116px; padding: 0 50px; border-radius: 58px; }
+    #tp1 .badge { width: 170px; height: 170px; padding: 0; border-radius: 50%; font-size: 82px; line-height: 170px; text-align: center; }
+    #tp1 .shadow { position: absolute; left: 0; top: 0; border-radius: 60px; background: rgba(30,20,60,.22); filter: blur(12px); }
+    #tp1 .pill-s { width: 360px; height: 96px; margin: -48px 0 0 -180px; }
+    #tp1 .badge-s { width: 140px; height: 140px; margin: -70px 0 0 -70px; border-radius: 50%; }
+  </style>
+  <div id="tp1" data-composition-id="tp1" data-width="1080" data-height="1920">
+    <!-- Tags drop in order (later ones land on top). Edit the text; positions/rotations are in each wrapper (left/top/data-r).
+         Regenerate a new heap with generator.py. -->
+    <div id="tp1-table" data-layout-allow-overlap data-layout-allow-overflow>
+      <div id="tp1-w0" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:434px;top:609px;z-index:1" data-r="68.4">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p0" class="pill" data-layout-allow-occlusion style="background:#15122a;color:#ffffff">lorem ipsum</div>
+      </div>
+      <div id="tp1-w1" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:279px;top:1008px;z-index:2" data-r="-56.7">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p1" class="pill" data-layout-allow-occlusion style="background:#2f55ff;color:#ffffff">dolor sit amet</div>
+      </div>
+      <div id="tp1-w2" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:496px;top:1356px;z-index:3" data-r="-70.7">
+        <div class="shadow badge-s"></div>
+        <div id="tp1-p2" class="badge" data-layout-allow-occlusion style="background:#c8ff3c;color:#15122a">✦</div>
+      </div>
+      <div id="tp1-w3" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:563px;top:1076px;z-index:4" data-r="8.7">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p3" class="pill" data-layout-allow-occlusion style="background:#c8ff3c;color:#15122a">consectetur</div>
+      </div>
+      <div id="tp1-w4" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:315px;top:1225px;z-index:5" data-r="5.7">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p4" class="pill" data-layout-allow-occlusion style="background:#ff5fc8;color:#15122a">sed do</div>
+      </div>
+      <div id="tp1-w5" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:310px;top:791px;z-index:6" data-r="-0.2">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p5" class="pill" data-layout-allow-occlusion style="background:#15122a;color:#ffffff">tempor</div>
+      </div>
+      <div id="tp1-w6" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:803px;top:1188px;z-index:7" data-r="-5.7">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p6" class="pill" data-layout-allow-occlusion style="background:#2f55ff;color:#ffffff">magna aliqua</div>
+      </div>
+      <div id="tp1-w7" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:624px;top:505px;z-index:8" data-r="-15.2">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p7" class="pill" data-layout-allow-occlusion style="background:#ffffff;color:#15122a">ut enim</div>
+      </div>
+      <div id="tp1-w8" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:727px;top:1450px;z-index:9" data-r="11.5">
+        <div class="shadow badge-s"></div>
+        <div id="tp1-p8" class="badge" data-layout-allow-occlusion style="background:#ff5fc8;color:#15122a">✦</div>
+      </div>
+      <div id="tp1-w9" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:791px;top:966px;z-index:10" data-r="57.6">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p9" class="pill" data-layout-allow-occlusion style="background:#ff5fc8;color:#15122a">quis nostrud</div>
+      </div>
+      <div id="tp1-w10" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:638px;top:768px;z-index:11" data-r="74.3">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p10" class="pill" data-layout-allow-occlusion style="background:#15122a;color:#ffffff">ullamco</div>
+      </div>
+      <div id="tp1-w11" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:489px;top:906px;z-index:12" data-r="21.4">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p11" class="pill" data-layout-allow-occlusion style="background:#2f55ff;color:#ffffff">laboris nisi</div>
+      </div>
+      <div id="tp1-w12" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:307px;top:1443px;z-index:13" data-r="7.2">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p12" class="pill" data-layout-allow-occlusion style="background:#ffffff;color:#15122a">aliquip</div>
+      </div>
+      <div id="tp1-w13" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:744px;top:635px;z-index:14" data-r="67.4">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p13" class="pill" data-layout-allow-occlusion style="background:#c8ff3c;color:#15122a">ex ea commodo</div>
+      </div>
+      <div id="tp1-w14" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:374px;top:1131px;z-index:15" data-r="-22.0">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p14" class="pill" data-layout-allow-occlusion style="background:#ff5fc8;color:#15122a">duis aute</div>
+      </div>
+      <div id="tp1-w15" class="wrap" data-layout-allow-occlusion data-layout-allow-overlap style="left:664px;top:1391px;z-index:16" data-r="6.4">
+        <div class="shadow pill-s"></div>
+        <div id="tp1-p15" class="pill" data-layout-allow-occlusion style="background:#15122a;color:#ffffff">irure dolor</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const W = gsap.utils.toArray("#tp1 .wrap");
+    // fit each shadow to its tag once fonts are in (pills are as wide as their text)
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["tp1"] = document.fonts.load("800 52px Inter").then(() => {
+      W.forEach(w => { const p = w.querySelector(".pill"), s = w.querySelector(".pill-s"); if (p && s) { s.style.width = (p.offsetWidth - 20) + "px"; s.style.marginLeft = -(p.offsetWidth - 20) / 2 + "px"; } });
+    });
+    function rng(s) { return () => { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+    const r = rng(11);
+    // DROP: each tag falls from above the camera onto the table: it starts huge, blurred, with a far, faint shadow,
+    // and lands at rest size with a squash, its shadow tightening under it. The heap jolts on every landing.
+    W.forEach((w, i) => {
+      const tag = w.querySelector(".pill, .badge"), sh = w.querySelector(".shadow"), rot = +w.dataset.r, t = 0.15 + i * 0.17;
+      const spin = (r() - 0.5) * 90, dx = (r() - 0.5) * 160, dy = (r() - 0.5) * 160;
+      tl.set(w, { opacity: 0 }, 0); tl.set(w, { opacity: 1 }, t);
+      tl.fromTo(tag, { scale: 2.8, rotation: rot + spin, x: dx, y: dy, filter: "blur(16px)" },
+                     { scale: 1, rotation: rot, x: 0, y: 0, filter: "blur(0px)", duration: 0.34, ease: "power2.in" }, t);
+      tl.to(tag, { keyframes: [{ scale: 0.93, duration: 0.06 }, { scale: 1.02, duration: 0.08 }, { scale: 1, duration: 0.1 }] }, t + 0.34);
+      tl.fromTo(sh, { x: 70, y: 110, scale: 1.8, opacity: 0, rotation: rot }, { x: 5, y: 10, scale: 1, opacity: 1, rotation: rot, duration: 0.34, ease: "power2.in" }, t);
+      if (i) tl.to("#tp1-table", { keyframes: [{ scale: 0.994, duration: 0.05 }, { scale: 1, duration: 0.12 }] }, t + 0.34);
+    });
+    // UN-STACK: the camera lifts and the tags fly back up past the lens, top of the heap first
+    const end = 0.15 + W.length * 0.17 + 0.9;
+    W.slice().reverse().forEach((w, k) => {
+      const tag = w.querySelector(".pill, .badge"), sh = w.querySelector(".shadow"), t = end + k * 0.05;
+      tl.to(tag, { scale: 3, rotation: "+=" + ((k % 2 ? 1 : -1) * 40), filter: "blur(18px)", opacity: 0, duration: 0.4, ease: "power2.in" }, t);
+      tl.to(sh, { opacity: 0, scale: 1.8, duration: 0.3 }, t);
+    });
+    window.__timelines["tp1"] = tl;
+  </script>
+</template>

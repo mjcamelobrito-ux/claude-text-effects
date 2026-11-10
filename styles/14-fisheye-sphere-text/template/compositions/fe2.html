@@ -1,0 +1,79 @@
+<template>
+  <style>
+    #fe2 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 75% 55% at 50% 46%, var(--bgLight, #4b34f0) 0%, var(--bgDeep, #120a4a) 100%); }
+    #fe2-folds { position: absolute; left: -300px; top: -300px; width: 1680px; height: 2520px; opacity: .55;
+      background:
+        radial-gradient(ellipse 30% 60% at 22% 40%, rgba(255,255,255,.10), transparent 70%),
+        radial-gradient(ellipse 22% 70% at 70% 55%, rgba(0,0,0,.22), transparent 70%),
+        radial-gradient(ellipse 40% 25% at 55% 85%, rgba(255,255,255,.08), transparent 70%); }
+    #fe2-gl { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    .fe2-copy { display: none; }
+  </style>
+  <div id="fe2" data-composition-id="fe2" data-width="1080" data-height="1920">
+    <div id="fe2-folds" data-layout-allow-overflow></div>
+    <canvas id="fe2-gl" width="1080" height="1920"></canvas>
+    <!-- Edit the paragraph lines here; "hero" is the word drawn in the accent colour wherever it appears. -->
+    <span id="fe2-l1" class="fe2-copy">Lorem ipsum</span>
+    <span id="fe2-l2" class="fe2-copy">dolor sit</span>
+    <span id="fe2-l3" class="fe2-copy">amet elit</span>
+    <span id="fe2-hero" class="fe2-copy">sit</span>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const root = document.getElementById("fe2"), css = getComputedStyle(root);
+    const accent = (css.getPropertyValue("--accent") || "").trim() || "#c8ff3c";
+    const ink = (css.getPropertyValue("--ink") || "").trim() || "#ffffff";
+    const txt = s => document.getElementById("fe2-" + s).textContent.trim();
+    const W = 1080, H = 1920, LINES = [700, 900, 1100];        // baseline-centre y of each line
+    const plate = document.createElement("canvas"); plate.width = W; plate.height = H;
+    const cv = document.getElementById("fe2-gl"), gl = cv.getContext("webgl", { premultipliedAlpha: true, preserveDrawingBuffer: true });
+    const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+    // lens: inside radius R the plate is sampled closer to the centre (r_src = R*(r/R)^K) = magnified fisheye;
+    // outside, the paragraph shows dimmed; a thin glass rim and an inner edge shade sell the lens
+    const fs = `precision highp float;uniform sampler2D tex;uniform vec2 L;uniform float R;uniform float K;uniform float dim;
+      void main(){vec2 p=vec2(gl_FragCoord.x,${H}.-gl_FragCoord.y);vec2 d=p-L;float r=length(d);vec4 c;
+        if(r<R){float n=r/R;vec2 q=L+d/max(r,1e-3)*R*pow(n,K);c=texture2D(tex,q/vec2(${W}.,${H}.));
+          c.rgb*=mix(1.,.82,smoothstep(.75,1.,n));
+          float rim=smoothstep(.94,.985,n)*(1.-smoothstep(.985,1.,n));c+=vec4(vec3(.55),.55)*rim;}
+        else{c=texture2D(tex,p/vec2(${W}.,${H}.))*dim;float sh=1.-smoothstep(R,R+40.,r);c+=vec4(0.,0.,0.,.18)*sh;}
+        gl_FragColor=c;}`;
+    function sh(t, src) { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+    const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+    const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.LINEAR));
+    [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+    const uL = gl.getUniformLocation(pr, "L"), uR = gl.getUniformLocation(pr, "R"), uK = gl.getUniformLocation(pr, "K"), uD = gl.getUniformLocation(pr, "dim");
+    function paint() {
+      const g = plate.getContext("2d"); g.clearRect(0, 0, W, H); g.textBaseline = "middle"; g.font = "800 150px Poppins, sans-serif";
+      const hero = txt("hero").toLowerCase();
+      ["l1", "l2", "l3"].forEach((k, i) => {
+        const words = txt(k).split(/\s+/), sp = g.measureText(" ").width;
+        const total = words.reduce((a, w) => a + g.measureText(w).width, 0) + sp * (words.length - 1);
+        let x = (W - total) / 2;
+        words.forEach(w => { g.fillStyle = w.toLowerCase() === hero ? accent : ink; g.fillText(w, x, LINES[i]); x += g.measureText(w).width + sp; });
+      });
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, plate);
+    }
+    const st = { x: -260, y: 700, r: 230, k: 1.9, dim: 0.45 };
+    function render() {
+      gl.viewport(0, 0, W, H); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2f(uL, st.x, st.y); gl.uniform1f(uR, st.r); gl.uniform1f(uK, st.k); gl.uniform1f(uD, st.dim);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["fe2"] = document.fonts.load("800 150px Poppins").then(() => { paint(); render(); });
+    // reading path: the lens glides along line 1, sweeps down to line 2, rests on the hero word, then grows and clears
+    tl.fromTo(st, { x: -260, y: 700 }, { x: 900, y: 700, duration: 1.0, ease: "power2.inOut", onUpdate: render }, 0);
+    tl.to(st, { x: 330, y: 900, duration: 0.45, ease: "power3.inOut", onUpdate: render }, 1.0);
+    tl.to(st, { x: 770, duration: 0.55, ease: "back.out(1.4)", onUpdate: render }, 1.45);         // lands on the hero word
+    tl.to(st, { r: 280, duration: 0.25, ease: "back.out(2)", onUpdate: render }, 1.6);
+    tl.to(st, { x: 540, y: 1100, r: 250, duration: 0.5, ease: "power2.inOut", onUpdate: render }, 2.2);
+    tl.to(st, { r: 1300, k: 1.0, dim: 1, duration: 0.5, ease: "power2.in", onUpdate: render }, 2.75);  // lens opens over everything
+    tl.to("#fe2-gl", { opacity: 0, duration: 0.2 }, 3.2);
+    tl.fromTo("#fe2-folds", { x: 0 }, { x: -100, duration: 3.4, ease: "sine.inOut" }, 0);
+    window.__timelines["fe2"] = tl;
+  </script>
+</template>

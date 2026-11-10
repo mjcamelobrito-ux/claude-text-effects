@@ -1,0 +1,112 @@
+<template>
+  <style>
+    #sf1 { position: absolute; inset: 0; overflow: hidden; }
+    #sf1-board { position: absolute; left: 0; top: 1000px; width: 1080px; display: flex; flex-direction: column; align-items: center; gap: 18px; perspective: 900px; }
+    #sf1 .row { display: flex; gap: 8px; }
+    #sf1 .tile { position: relative; width: 104px; height: 150px; transform-style: preserve-3d; }
+    #sf1 .half, #sf1 .flap { position: absolute; left: 0; width: 104px; height: 75px; overflow: hidden; background: var(--tile, #15122a); border-radius: 8px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
+    #sf1 .top, #sf1 .fa { top: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; transform-origin: 50% 100%; }
+    #sf1 .bot, #sf1 .fb { top: 75px; border-top-left-radius: 0; border-top-right-radius: 0; transform-origin: 50% 0%; box-shadow: 0 10px 18px rgba(0,0,0,.35); }
+    #sf1 .half span, #sf1 .flap span { position: absolute; left: 0; width: 104px; height: 150px; text-align: center; font: 700 120px/150px Oswald, sans-serif; color: var(--glyph, #f4efe4); }
+    #sf1 .bot span, #sf1 .fb span { top: -75px; }
+    #sf1 .tile::after { content: ""; position: absolute; left: 0; top: 74px; width: 104px; height: 2px; background: rgba(0,0,0,.6); }
+    #sf1 .lit span { color: var(--hi, #c8ff3c); }
+  </style>
+  <div id="sf1" data-composition-id="sf1" data-width="1080" data-height="1920">
+    <!-- Edit the rows: one .tile per character; data-target is the character it lands on (a space = blank tile) -->
+    <div id="sf1-board" data-layout-allow-overlap>
+      <div id="sf1-r0" class="row">
+        <div id="sf1-t0-0" class="tile" data-target="L">
+          <div class="half top" data-layout-allow-overflow><span>L</span></div><div class="half bot" data-layout-allow-overflow><span>L</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>L</span></div><div class="flap fb" data-layout-allow-overflow><span>L</span></div>
+        </div>
+        <div id="sf1-t0-1" class="tile" data-target="O">
+          <div class="half top" data-layout-allow-overflow><span>O</span></div><div class="half bot" data-layout-allow-overflow><span>O</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>O</span></div><div class="flap fb" data-layout-allow-overflow><span>O</span></div>
+        </div>
+        <div id="sf1-t0-2" class="tile" data-target="R">
+          <div class="half top" data-layout-allow-overflow><span>R</span></div><div class="half bot" data-layout-allow-overflow><span>R</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>R</span></div><div class="flap fb" data-layout-allow-overflow><span>R</span></div>
+        </div>
+        <div id="sf1-t0-3" class="tile" data-target="E">
+          <div class="half top" data-layout-allow-overflow><span>E</span></div><div class="half bot" data-layout-allow-overflow><span>E</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>E</span></div><div class="flap fb" data-layout-allow-overflow><span>E</span></div>
+        </div>
+        <div id="sf1-t0-4" class="tile" data-target="M">
+          <div class="half top" data-layout-allow-overflow><span>M</span></div><div class="half bot" data-layout-allow-overflow><span>M</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>M</span></div><div class="flap fb" data-layout-allow-overflow><span>M</span></div>
+        </div>
+      </div>
+      <div id="sf1-r1" class="row">
+        <div id="sf1-t1-0" class="tile" data-target="I">
+          <div class="half top" data-layout-allow-overflow><span>I</span></div><div class="half bot" data-layout-allow-overflow><span>I</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>I</span></div><div class="flap fb" data-layout-allow-overflow><span>I</span></div>
+        </div>
+        <div id="sf1-t1-1" class="tile" data-target="P">
+          <div class="half top" data-layout-allow-overflow><span>P</span></div><div class="half bot" data-layout-allow-overflow><span>P</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>P</span></div><div class="flap fb" data-layout-allow-overflow><span>P</span></div>
+        </div>
+        <div id="sf1-t1-2" class="tile" data-target="S">
+          <div class="half top" data-layout-allow-overflow><span>S</span></div><div class="half bot" data-layout-allow-overflow><span>S</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>S</span></div><div class="flap fb" data-layout-allow-overflow><span>S</span></div>
+        </div>
+        <div id="sf1-t1-3" class="tile" data-target="U">
+          <div class="half top" data-layout-allow-overflow><span>U</span></div><div class="half bot" data-layout-allow-overflow><span>U</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>U</span></div><div class="flap fb" data-layout-allow-overflow><span>U</span></div>
+        </div>
+        <div id="sf1-t1-4" class="tile" data-target="M">
+          <div class="half top" data-layout-allow-overflow><span>M</span></div><div class="half bot" data-layout-allow-overflow><span>M</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>M</span></div><div class="flap fb" data-layout-allow-overflow><span>M</span></div>
+        </div>
+        <div id="sf1-t1-5" class="tile" data-target=" ">
+          <div class="half top" data-layout-allow-overflow><span> </span></div><div class="half bot" data-layout-allow-overflow><span> </span></div>
+          <div class="flap fa" data-layout-allow-overflow><span> </span></div><div class="flap fb" data-layout-allow-overflow><span> </span></div>
+        </div>
+        <div id="sf1-t1-6" class="tile" data-target="2">
+          <div class="half top" data-layout-allow-overflow><span>2</span></div><div class="half bot" data-layout-allow-overflow><span>2</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>2</span></div><div class="flap fb" data-layout-allow-overflow><span>2</span></div>
+        </div>
+        <div id="sf1-t1-7" class="tile" data-target="4">
+          <div class="half top" data-layout-allow-overflow><span>4</span></div><div class="half bot" data-layout-allow-overflow><span>4</span></div>
+          <div class="flap fa" data-layout-allow-overflow><span>4</span></div><div class="flap fb" data-layout-allow-overflow><span>4</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // each tile cycles through seeded random characters (one flip every 0.07 s) before landing on its target;
+    // tiles start in a left-to-right wave. A flip = top flap falls (0 → -90°) then bottom flap lands (90° → 0).
+    const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    function rng(s) { return () => { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+    const tiles = [...document.querySelectorAll("#sf1 .tile")].map((el, k) => {
+      const r = rng(97 + k * 31), target = el.dataset.target, n = 6 + Math.floor(r() * 6), seq = [" "];
+      for (let i = 0; i < n; i++) seq.push(POOL[Math.floor(r() * POOL.length)]);
+      seq.push(target);
+      const row = +el.id.split("-")[1].slice(1), col = +el.id.split("-")[2];
+      return { el, seq, start: 0.15 + col * 0.07 + row * 0.25, sp: [...el.querySelectorAll("span")], fa: el.querySelector(".fa"), fb: el.querySelector(".fb") };
+    });
+    const FLIP = 0.07, st = { t: 0 };
+    function render() {
+      const t = st.t;
+      for (const T of tiles) {
+        const steps = T.seq.length - 1, f = Math.max(0, Math.min(steps, (t - T.start) / FLIP)), i = Math.floor(f), p = f - i;
+        const cur = T.seq[Math.min(i, steps)], nxt = T.seq[Math.min(i + 1, steps)], done = i >= steps;
+        // spans: [top, bot, flapA, flapB]
+        T.sp[0].textContent = done ? cur : nxt;        // static top already shows the next character
+        T.sp[1].textContent = done ? cur : (p < .5 ? cur : nxt);
+        T.sp[2].textContent = cur; T.sp[3].textContent = nxt;
+        const a = done ? 0 : p < .5 ? -180 * p : -90, b = done ? 0 : p < .5 ? 90 : 90 - 180 * (p - .5);
+        T.fa.style.transform = `rotateX(${a}deg)`; T.fa.style.opacity = done || p >= .5 ? 0 : 1;
+        T.fb.style.transform = `rotateX(${b}deg)`; T.fb.style.opacity = done || p < .5 ? 0 : 1;
+        T.el.classList.toggle("lit", done && t < T.start + steps * FLIP + 0.12);   // brief highlight as it lands
+      }
+    }
+    tl.fromTo("#sf1-board", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" }, 0);
+    tl.fromTo(st, { t: 0 }, { t: 3.6, duration: 3.6, ease: "none", onUpdate: render }, 0);
+    tl.to("#sf1-board", { opacity: 0, y: -30, duration: 0.25, ease: "power2.in" }, 3.3);
+    render();
+    window.__timelines["sf1"] = tl;
+  </script>
+</template>

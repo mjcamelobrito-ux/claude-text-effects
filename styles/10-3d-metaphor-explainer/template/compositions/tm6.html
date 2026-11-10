@@ -1,0 +1,33 @@
+<template>
+  <style>
+    @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); }
+    #tm6 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #fafafa, #d2d2d2 85%); }
+    #tm6-floor { position: absolute; left: 0; right: 0; top: 1150px; bottom: 0; background: var(--green, #1f6b4e); }
+    #tm6-small { position: absolute; left: 0; right: 0; top: 560px; text-align: center; font: 700 72px Poppins, sans-serif; color: #111; letter-spacing: -0.03em; }
+    #tm6-head { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-family: Anton, sans-serif; font-size: 200px; line-height: 1; color: var(--red, #c3161c); }
+    /* column = pedestal for the "precious" object */
+    #tm6-col { position: absolute; left: 440px; top: 980px; width: 200px; height: 700px; background: repeating-linear-gradient(90deg, #f4f4f4 0 22px, #d9d9d9 22px 30px); box-shadow: inset -30px 0 40px rgba(0,0,0,.15); }
+    #tm6-cap { position: absolute; left: 410px; top: 960px; width: 260px; height: 40px; background: #eee; box-shadow: 0 8px 14px rgba(0,0,0,.15); }
+    #tm6-obj { position: absolute; left: 400px; top: 700px; width: 280px; height: 280px; }
+  </style>
+  <div id="tm6" data-composition-id="tm6" data-width="1080" data-height="1920">
+    <div id="tm6-floor"></div>
+    <div id="tm6-small">lorem ip</div>
+    <div id="tm6-head" data-layout-allow-occlusion>DOLORSITAM</div>
+    <div id="tm6-col"></div>
+    <div id="tm6-cap"></div>
+    <img id="tm6-obj" src="assets/object-sphere.png" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#tm6-floor", { yPercent: 100 }, { yPercent: 0, duration: 0.4, ease: "expo.out" }, 0);
+    tl.fromTo("#tm6-small", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.05);
+    tl.set("#tm6-small", { opacity: 0 }, 0.6);
+    tl.fromTo("#tm6-head", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power4.out" }, 0.6);
+    // pedestal rises through the word, object lands on top
+    tl.fromTo(["#tm6-col", "#tm6-cap"], { y: 900 }, { y: 0, duration: 0.5, ease: "expo.out" }, 0.75);
+    tl.fromTo("#tm6-obj", { y: -900, rotation: 60 }, { y: 0, rotation: 0, duration: 0.55, ease: "bounce.out" }, 1.0);
+    tl.to("#tm6-obj", { rotation: 12, duration: 0.8, ease: "sine.inOut" }, 1.6);
+    window.__timelines["tm6"] = tl;
+  </script>
+</template>

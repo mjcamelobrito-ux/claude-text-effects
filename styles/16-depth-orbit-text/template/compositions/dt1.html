@@ -1,0 +1,41 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    #dt1 { position: absolute; inset: 0; overflow: hidden; perspective: 1200px; color: var(--ink, #fff); }
+    #dt1 .dt-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #dt1 .dt-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #dt1 .w { position: absolute; white-space: nowrap; text-shadow: 0 8px 30px rgba(0,0,0,.35); }
+    #dt1 .sans { font-family: Inter, sans-serif; font-weight: 900; letter-spacing: -0.055em; }
+    #dt1 .sans7 { font-family: Inter, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+    #dt1 .serif { font-family: "Instrument Serif", serif; font-style: italic; letter-spacing: -0.01em; color: var(--accent, #ff7a59); }
+    #dt1-a { left: 540px; top: 600px; font-size: 84px; }
+    #dt1-b { left: 540px; top: 720px; font-size: 84px; }
+    #dt1-cm { position: absolute; left: 0; top: 260px; width: 1080px; height: 270px; overflow: hidden; }   /* mask: the word rises out of the head line */
+    #dt1-c { left: 0; width: 1080px; text-align: center; top: 40px; font-size: 220px; line-height: 1; }
+  </style>
+  <div id="dt1" data-composition-id="dt1" data-width="1080" data-height="1920">
+    <div id="dt1-back" class="dt-layer">
+      <div id="dt1-a" class="w sans7">lorem</div>
+      <div id="dt1-b" class="w sans7">ipsum</div>
+      <div id="dt1-cm" data-layout-allow-overflow><div id="dt1-c" class="w serif">dolorsit</div></div>
+    </div>
+    <!-- subject cut-out sits between the back and front text layers: this is what puts words "behind" the person -->
+    <img id="dt1-cut" class="dt-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+    <div id="dt1-front" class="dt-layer">
+
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // both small words start hidden behind the head and slide out to opposite sides (they are in the BACK layer)
+    tl.fromTo("#dt1-a", { xPercent: -50, x: 0, opacity: 1 }, { x: -330, duration: 0.6, ease: "power4.out" }, 0.05);
+    tl.fromTo("#dt1-b", { xPercent: -50, x: 0, opacity: 1 }, { x: 320, duration: 0.6, ease: "power4.out" }, 0.3);
+    // the hero serif word rises up from behind the head and settles above it
+    tl.fromTo("#dt1-c", { y: 300, opacity: 1 }, { y: 0, duration: 0.7, ease: "back.out(1.5)" }, 0.75);
+    // everything slips back behind the subject to exit
+    tl.to("#dt1-a", { x: 0, duration: 0.35, ease: "power3.in" }, 1.95);
+    tl.to("#dt1-b", { x: 0, duration: 0.35, ease: "power3.in" }, 2.0);
+    tl.to("#dt1-c", { y: 300, duration: 0.35, ease: "power3.in" }, 2.0);
+    window.__timelines["dt1"] = tl;
+  </script>
+</template>

@@ -1,0 +1,43 @@
+<template>
+  <style>
+    #kc4 { position: absolute; inset: 0; overflow: hidden; background: #121212; font-family: Poppins, sans-serif; }
+    #kc4-spot { position: absolute; left: 140px; top: 900px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(63,193,170,.35), rgba(63,193,170,0) 70%); }
+    #kc4-one { position: absolute; left: 0; right: 0; top: 520px; text-align: center; color: #eee; font-weight: 700; font-size: 70px; }
+    #kc4-day { position: absolute; left: 0; right: 0; top: 580px; text-align: center; color: #fff; font-weight: 700; font-size: 132px; letter-spacing: -0.04em; text-shadow: 0 0 40px rgba(255,255,255,.25); }
+    #kc4-master { position: absolute; left: 0; right: 0; top: 735px; text-align: center; color: #e8e8e8; font-weight: 700; font-size: 96px; letter-spacing: -0.03em; }
+    #kc4-sub { position: absolute; left: 140px; top: 1050px; width: 800px; height: 520px; }
+    #kc4-end { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-family: Oswald, sans-serif; font-weight: 400; font-size: 120px; letter-spacing: .5em; padding-left: .5em; color: var(--glow, #3fc1aa); text-shadow: 0 0 30px rgba(63,193,170,.6); }
+  </style>
+  <div id="kc4" data-composition-id="kc4" data-width="1080" data-height="1920">
+    <div id="kc4-spot"></div>
+    <div id="kc4-one">lor</div>
+    <div id="kc4-day">em ipsum</div>
+    <div id="kc4-master">dolor sit</div>
+    <svg id="kc4-sub" viewBox="0 0 800 520" aria-hidden="true">
+      <!-- silhouette illustration placeholder: swap for a vector/illustration cutout -->
+      <circle cx="400" cy="110" r="70" fill="#0b0b0b" stroke="#3fc1aa" stroke-width="4"/>
+      <path d="M250 520 L290 230 Q400 180 510 230 L550 520 Z" fill="#0b0b0b" stroke="#3fc1aa" stroke-width="4"/>
+      <path d="M400 230 L385 330 L400 420 L415 330 Z" fill="#3fc1aa"/>
+      <path d="M290 260 L140 150 M510 260 L660 150 M300 320 L120 330 M500 320 L680 330" stroke="#0b0b0b" stroke-width="34" stroke-linecap="round"/>
+      <circle cx="140" cy="150" r="18" fill="#ffe08a"/><circle cx="660" cy="150" r="18" fill="#3fc1aa"/>
+    </svg>
+    <div id="kc4-end">LOREM</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#kc4-one", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.05);
+    tl.fromTo("#kc4-day", { opacity: 0, scale: 1.4, filter: "blur(12px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "power4.out" }, 0.2);
+    tl.fromTo("#kc4-master", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, 0.5);
+    tl.fromTo("#kc4-sub", { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.55);
+    tl.fromTo("#kc4-spot", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, 0.55);
+    // everything clears, wide-tracked end word flickers on like a neon tube
+    tl.to(["#kc4-one", "#kc4-day", "#kc4-master", "#kc4-sub", "#kc4-spot"], { opacity: 0, duration: 0.15 }, 1.7);
+    tl.fromTo("#kc4-end", { opacity: 0 }, { opacity: 1, duration: 0.05 }, 1.85);
+    tl.to("#kc4-end", { opacity: 0.2, duration: 0.04 }, 1.95);
+    tl.to("#kc4-end", { opacity: 1, duration: 0.04 }, 2.02);
+    tl.to("#kc4-end", { opacity: 0.35, duration: 0.04 }, 2.1);
+    tl.to("#kc4-end", { opacity: 1, duration: 0.05 }, 2.16);
+    tl.fromTo("#kc4-end", { scale: 1 }, { scale: 1.08, duration: 0.8, ease: "none" }, 1.85);
+    window.__timelines["kc4"] = tl;
+  </script>
+</template>

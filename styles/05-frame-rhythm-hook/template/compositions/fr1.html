@@ -1,0 +1,36 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    @font-face { font-family: "Bebas Neue"; src: url("assets/fonts/bebas-neue.woff2") format("woff2"); }
+    #fr1 { position: absolute; inset: 0; overflow: hidden; }
+    /* one word on screen at a time, dead centre-low; emotional words switch to italic serif */
+    .fr1-w { position: absolute; left: 0; right: 0; top: 1060px; text-align: center; color: #fff; opacity: 0; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+    .fr1-s { font: 700 96px Poppins, sans-serif; letter-spacing: -0.03em; }
+    .fr1-i { font-family: "Instrument Serif", serif; font-style: italic; font-size: 130px; }
+    #fr1-hook { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font-family: "Bebas Neue", sans-serif; font-size: 330px; line-height: 1; color: #fff; opacity: 0; text-shadow: 0 0 30px rgba(255,255,255,.7), 0 0 90px rgba(255,255,255,.35); }
+  </style>
+  <div id="fr1" data-composition-id="fr1" data-width="1080" data-height="1920">
+    <div id="fr1-hook">LORE</div>
+    <div id="fr1-w1" class="fr1-w fr1-s">lore</div>
+    <div id="fr1-w2" class="fr1-w fr1-s">ip</div>
+    <div id="fr1-w3" class="fr1-w fr1-s">sum</div>
+    <div id="fr1-w4" class="fr1-w fr1-i">dolorem</div>
+    <div id="fr1-w5" class="fr1-w fr1-s">sit am</div>
+    <div id="fr1-w6" class="fr1-w fr1-s">et</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // word-per-beat captions: hard on / hard off (no fades), tiny scale pop
+    const words = [["#fr1-w1", 0, 0.25], ["#fr1-w2", 0.25, 0.45], ["#fr1-w3", 0.45, 0.65], ["#fr1-w4", 0.65, 1.05], ["#fr1-w5", 1.05, 1.35], ["#fr1-w6", 1.35, 2.15]];
+    words.forEach(([s, a, b]) => {
+      tl.set(s, { opacity: 1 }, a);
+      tl.fromTo(s, { scale: 1.12 }, { scale: 1, duration: 0.1, ease: "power2.out" }, a);
+      tl.set(s, { opacity: 0 }, b);
+    });
+    // the key noun flashes as a giant glowing title above the head
+    tl.set("#fr1-hook", { opacity: 1 }, 1.35);
+    tl.fromTo("#fr1-hook", { scale: 1.25 }, { scale: 1, duration: 0.2, ease: "power3.out" }, 1.35);
+    tl.set("#fr1-hook", { opacity: 0 }, 2.15);
+    window.__timelines["fr1"] = tl;
+  </script>
+</template>

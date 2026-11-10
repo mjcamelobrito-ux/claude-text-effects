@@ -1,0 +1,98 @@
+<template>
+  <style>
+    #sn1 { position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(ellipse 90% 60% at 50% 50%, var(--stageLight, #1f4a8a) 0%, var(--stageDeep, #081430) 100%); }
+    #sn1-body { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #sn1 .ch { position: absolute; left: 0; top: 0; transform-origin: 0 0; white-space: pre; font: 900 112px/1 Inter, sans-serif; letter-spacing: -0.02em;
+      text-shadow: 10px 16px 14px rgba(0,0,0,.35); }
+    #sn1-copy { display: none; }
+  </style>
+  <div id="sn1" data-composition-id="sn1" data-width="1080" data-height="1920">
+    <!-- Edit the sentence. It reads tail → head along the diagonal: the LAST word leads as the snake's head (biggest, lime); the body tapers back to the first word (the tail). -->
+    <span id="sn1-copy">LOREM IPSUM DOLOR SIT AMET CONSECTETUR</span>
+    <div id="sn1-body" data-layout-allow-overlap data-layout-allow-overflow></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // ---- the snake's path: a sine wave laid along the frame's diagonal (top-left → bottom-right) ----
+    const A = [-260, 140], B = [1340, 1820];                  // start and end of the diagonal (beyond the frame)
+    const AMP = 115, WAVE = 980;                              // how far it swings either side, and the length of one S
+    const DX = B[0] - A[0], DY = B[1] - A[1], DL = Math.hypot(DX, DY), UX = DX / DL, UY = DY / DL, NX = -UY, NY = UX;
+    const SAMPLES = 600;
+    function pathTable(phase) {                               // points along the wave + cumulative arc length
+      const pts = [], len = [0];
+      for (let k = 0; k <= SAMPLES; k++) {
+        const t = k / SAMPLES * DL, w = AMP * Math.sin(2 * Math.PI * t / WAVE - phase);
+        pts.push([A[0] + UX * t + NX * w, A[1] + UY * t + NY * w]);
+        if (k) len.push(len[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]));
+      }
+      return { pts, len, total: len[SAMPLES] };
+    }
+    function at(tab, s) {                                     // point and heading at arc length s
+      const { pts, len } = tab; let lo = 0, hi = SAMPLES;
+      while (hi - lo > 1) { const m = (lo + hi) >> 1; if (len[m] < s) lo = m; else hi = m; }
+      const f = (s - len[lo]) / Math.max(1e-6, len[hi] - len[lo]), p = pts[lo], q = pts[hi];
+      return [p[0] + (q[0] - p[0]) * f, p[1] + (q[1] - p[1]) * f, Math.atan2(q[1] - p[1], q[0] - p[0])];
+    }
+    const root = document.getElementById("sn1"), css = getComputedStyle(root);
+    const v = (n, d) => (css.getPropertyValue(n) || "").trim() || d;
+    const C1 = v("--c1", "#c8ff3c"), C2 = v("--c2", "#ffffff"), C3 = v("--c3", "#ff5fc8");
+    const body = document.getElementById("sn1-body");
+    let CH = [], LEN = 0, S_IN = 0, S_OUT = 0;               // letters [el, distance from tail, scale]; body length; visible stretch of path
+    const st = { u: 0, phase: 0 };
+    function build() {
+      body.replaceChildren(); CH = [];
+      const text = document.getElementById("sn1-copy").textContent.trim();
+      const probe = document.createElement("span"); probe.className = "ch"; probe.style.visibility = "hidden"; body.appendChild(probe);
+      const chars = [...text], n = chars.length;
+      // the tail (first letter) is 50 % size, growing to full size at the head (last letter)
+      let back = 0, word = 0;
+      const words = text.split(" ").length;
+      const scaleAt = i => 0.5 + 0.5 * Math.pow(i / (n - 1), 0.8);
+      const out = [];
+      for (let i = 0; i < n; i++) {
+        const c = chars[i]; probe.textContent = c;
+        const k = scaleAt(i), w = probe.offsetWidth * k;
+        if (c === " ") { back += w; word++; continue; }
+        const e = document.createElement("span"); e.className = "ch"; e.textContent = c;
+        e.style.color = word === words - 1 ? C1 : (word % 3 === 1 ? C3 : C2);
+        body.appendChild(e); out.push([e, back + w / 2, k]); back += w;
+      }
+      probe.remove();
+      // the visible stretch of the path (inside the frame with a margin); fit the body inside it so the whole sentence shows at once
+      const tab = pathTable(0), M = 70; S_IN = 0; S_OUT = tab.total;
+      for (let k = 0; k <= SAMPLES; k++) { const [x, y] = tab.pts[k]; if (x > M && y > M) { S_IN = tab.len[k]; break; } }
+      for (let k = SAMPLES; k >= 0; k--) { const [x, y] = tab.pts[k]; if (x < 1080 - M && y < 1920 - M) { S_OUT = tab.len[k]; break; } }
+      LEN = back; const fit = Math.min(1, (S_OUT - S_IN) * 0.94 / LEN);
+      if (fit < 1) { out.forEach(o => { o[1] *= fit; o[2] *= fit; }); LEN *= fit; }
+      CH = out; place();
+    }
+    // the reading order runs tail → head along the path, so the head (last word) leads the way;
+    // each letter sits its distance-from-the-tail behind the head's position on the path
+    function place() {
+      if (!CH.length) return;
+      // u: 0 → 1/3 enter (head comes in until the tail is just inside), 1/3 → 2/3 slow crossing (whole sentence on screen),
+      // 2/3 → 1 exit (head runs out until the tail has left)
+      const tab = pathTable(st.phase), h1 = S_IN + LEN, h2 = Math.max(h1, S_OUT), u = st.u;
+      const head = u < 1 / 3 ? h1 * (1 - Math.pow(1 - 3 * u, 2))
+                 : u < 2 / 3 ? h1 + (h2 - h1) * (3 * u - 1)
+                 : h2 + (tab.total + LEN - h2) * Math.pow(3 * u - 2, 2);
+      for (const [e, behind, k] of CH) {
+        const s = head - (LEN - behind);                      // last letter = furthest along the path = the head
+        if (s < 0 || s > tab.total) { e.style.opacity = 0; continue; }
+        const [x, y, a] = at(tab, s);
+        e.style.opacity = 1;
+        e.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${(a * 180 / Math.PI).toFixed(2)}deg) scale(${k.toFixed(3)}) translate(-50%, -62%)`;
+      }
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["sn1"] = document.fonts.load("900 112px Inter").then(build);
+    // SLITHER: the snake enters from the top-left, slows down while it crosses the middle (readable), then speeds out
+    // bottom-right. Its body always follows the same S path; the path itself ripples a little as it moves.
+    tl.fromTo(st, { u: 0 }, { u: 1 / 3, duration: 1.8, ease: "none", onUpdate: place }, 0);       // enter (eased inside place)
+    tl.to(st, { u: 2 / 3, duration: 2.4, ease: "none", onUpdate: place }, 1.8);                  // slow crossing: all readable
+    tl.to(st, { u: 1, duration: 1.8, ease: "none", onUpdate: place }, 4.2);                      // exit
+    tl.fromTo(st, { phase: 0 }, { phase: 1.6, duration: 6, ease: "none", onUpdate: place }, 0);
+    window.__timelines["sn1"] = tl;
+  </script>
+</template>

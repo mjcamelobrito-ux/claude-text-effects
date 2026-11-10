@@ -1,0 +1,56 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+    #dt3 { position: absolute; inset: 0; overflow: hidden; perspective: 1200px; color: var(--ink, #fff); }
+    #dt3 .dt-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #dt3 .dt-cut { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #dt3 .w { position: absolute; white-space: nowrap; text-shadow: 0 8px 30px rgba(0,0,0,.35); }
+    #dt3 .sans { font-family: Inter, sans-serif; font-weight: 900; letter-spacing: -0.055em; }
+    #dt3 .sans7 { font-family: Inter, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+    #dt3 .serif { font-family: "Instrument Serif", serif; font-style: italic; letter-spacing: -0.01em; color: var(--accent, #ff7a59); }
+    #dt3 .giant { left: 0; width: 1080px; text-align: center; line-height: .8; }
+    #dt3 .giant .L { display: inline-block; }
+    #dt3-g1 { top: 470px; font-size: 330px; }
+    #dt3-g2 { top: 420px; font-size: 560px; }
+    #dt3-g3 { top: 480px; font-size: 400px; }
+    #dt3-t1 { left: 0; width: 1080px; text-align: center; top: 1030px; font-size: 64px; }
+    #dt3-s1 { left: 0; width: 1080px; text-align: center; top: 1040px; font-size: 200px; line-height: 1; }
+    #dt3-s2 { left: 180px; top: 930px; font-size: 150px; line-height: 1; }
+    #dt3-s3 { left: 430px; top: 1060px; font-size: 140px; line-height: 1; }
+  </style>
+  <div id="dt3" data-composition-id="dt3" data-width="1080" data-height="1920">
+    <div id="dt3-back" class="dt-layer">
+      <div id="dt3-g1" class="w sans giant" data-layout-allow-overlap data-layout-allow-overflow><span class="L">L</span><span class="L">O</span><span class="L">R</span><span class="L">E</span><span class="L">M</span></div>
+      <div id="dt3-g2" class="w sans giant" data-layout-allow-overlap data-layout-allow-overflow><span class="L">S</span><span class="L">E</span><span class="L">D</span></div>
+      <div id="dt3-g3" class="w sans giant" data-layout-allow-overlap data-layout-allow-overflow><span class="L">I</span><span class="L">T</span><span class="L">A</span><span class="L">M</span></div>
+    </div>
+    <!-- subject cut-out sits between the back and front text layers: this is what puts words "behind" the person -->
+    <img id="dt3-cut" class="dt-cut" data-layout-allow-occlusion src="assets/subject-cutout-depth.png" data-var-src="cutoutSrc" alt="">
+    <div id="dt3-front" class="dt-layer">
+      <div id="dt3-t1" class="w sans7">lorem ipsum dolor sit</div>
+      <div id="dt3-s1" class="w serif">consectetur</div>
+      <div id="dt3-s2" class="w serif">dolore</div>
+      <div id="dt3-s3" class="w sans">magna</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // giant letters rise from below the frame one by one (behind the subject), each with a small overshoot;
+    // to change word, the letters fall away in the same order and the next word rises
+    function rise(sel, t) { tl.fromTo(sel + " .L", { y: 1500 }, { y: 0, duration: 0.42, stagger: 0.06, ease: "back.out(1.3)" }, t); }
+    function fall(sel, t) { tl.to(sel + " .L", { y: 1500, duration: 0.28, stagger: 0.04, ease: "power3.in" }, t); }
+    rise("#dt3-g1", 0.0);
+    // front line types on, character by character (stepped clip reveal)
+    tl.fromTo("#dt3-t1", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "steps(20)" }, 0.35);
+    tl.set("#dt3-t1", { opacity: 0 }, 1.15);
+    fall("#dt3-g1", 1.05); rise("#dt3-g2", 1.25);
+    tl.fromTo("#dt3-s1", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "steps(11)" }, 1.45);
+    tl.set("#dt3-s1", { opacity: 0 }, 2.2);
+    fall("#dt3-g2", 2.15); rise("#dt3-g3", 2.3);
+    // serif + heavy sans pair: one drops in from above, one rises from below, meeting in the middle
+    tl.fromTo("#dt3-s2", { y: -120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 2.5);
+    tl.fromTo("#dt3-s3", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 2.6);
+    fall("#dt3-g3", 3.1); tl.to(["#dt3-s2", "#dt3-s3"], { opacity: 0, duration: 0.12 }, 3.25);
+    window.__timelines["dt3"] = tl;
+  </script>
+</template>

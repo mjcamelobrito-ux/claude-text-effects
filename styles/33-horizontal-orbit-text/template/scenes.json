@@ -1,0 +1,14 @@
+{
+  "id": "horizontal-orbit-text",
+  "title": "33 Horizontal Orbit Text",
+  "background": "#0d0a08",
+  "footage": {"src": "assets/speaker-depth.mp4", "id": "footage"},
+  "variables": [
+    {"id": "cutoutSrc", "type": "string", "label": "Subject cut-out (the back of the ring passes behind it)", "default": "assets/subject-cutout-depth.png"},
+    {"id": "c1", "type": "color", "label": "Word colour A (lime)", "default": "#c8ff3c"},
+    {"id": "c2", "type": "color", "label": "Word colour B (white)", "default": "#ffffff"}
+  ],
+  "scenes": [
+    {"id": "ho2", "duration": 6.0}
+  ]
+}

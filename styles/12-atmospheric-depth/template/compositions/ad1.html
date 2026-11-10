@@ -1,0 +1,45 @@
+<template>
+  <style>
+    #ad1 { position: absolute; inset: 0; overflow: hidden; background: var(--cream, #ece6db); font-family: Inter, sans-serif; color: #1a1a1a; }
+    /* window-light shadow falling across the wall */
+    #ad1-shadow { position: absolute; left: -200px; top: -100px; width: 1500px; height: 2200px; background: repeating-linear-gradient(100deg, rgba(60,50,40,.10) 0 120px, rgba(0,0,0,0) 120px 300px); filter: blur(28px); }
+    #ad1-a { position: absolute; left: 140px; top: 820px; font-size: 56px; font-weight: 500; letter-spacing: -0.03em; }
+    #ad1-b { position: absolute; left: 130px; top: 870px; font-size: 150px; font-weight: 800; letter-spacing: -0.06em; }
+    #ad1-wave { position: absolute; left: 140px; top: 1080px; width: 520px; height: 80px; display: flex; align-items: center; gap: 10px; }
+    #ad1-wave i { display: block; width: 8px; height: 60px; background: #1a1a1a; border-radius: 4px; }
+    #ad1-line { position: absolute; left: 140px; top: 1119px; width: 800px; height: 2px; background: #1a1a1a; transform-origin: 0 50%; }
+    /* foreground text out of focus, sliding past the lens = depth */
+    #ad1-fg { position: absolute; left: -100px; top: 300px; font-size: 300px; font-weight: 800; letter-spacing: -0.06em; color: rgba(30,30,30,.18); filter: blur(22px); white-space: nowrap; }
+    #ad1-bg { position: absolute; left: 380px; top: 1400px; font-size: 90px; font-weight: 300; color: rgba(30,30,30,.25); filter: blur(6px); white-space: nowrap; }
+  </style>
+  <div id="ad1" data-composition-id="ad1" data-width="1080" data-height="1920">
+    <div id="ad1-shadow" data-layout-ignore></div>
+    <div id="ad1-bg" data-layout-ignore>loremips</div>
+    <div id="ad1-a">lo rem</div>
+    <div id="ad1-b">ipsumdo</div>
+    <div id="ad1-line"></div>
+    <div id="ad1-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div id="ad1-fg" data-layout-ignore>loremipsu</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // rack focus: main words resolve from blur while the foreground drifts across
+    tl.fromTo("#ad1-a", { opacity: 0, filter: "blur(16px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.05);
+    tl.fromTo("#ad1-b", { opacity: 0, filter: "blur(20px)", scale: 1.1 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.6, ease: "power2.out" }, 0.2);
+    tl.fromTo("#ad1-line", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut" }, 0.5);
+    tl.fromTo("#ad1-fg", { x: 600 }, { x: -700, duration: 2.4, ease: "none" }, 0);
+    tl.fromTo("#ad1-bg", { x: 100 }, { x: -60, duration: 2.4, ease: "none" }, 0);
+    tl.fromTo("#ad1-shadow", { x: 0 }, { x: 120, duration: 2.4, ease: "none" }, 0);
+    // waveform: deterministic pseudo-random heights per step (audio-reactive look)
+    const bars = document.querySelectorAll("#ad1-wave i");
+    for (let k = 0; k < 10; k++) {
+      bars.forEach((b, i) => {
+        const h = 0.25 + Math.abs(Math.sin(i * 1.7 + k * 2.3)) * 0.9;
+        tl.to(b, { scaleY: h, duration: 0.2, ease: "sine.inOut" }, 0.5 + k * 0.18);
+      });
+    }
+    // dissolve through blur
+    tl.to("#ad1 > *", { filter: "blur(30px)", opacity: 0, duration: 0.18, ease: "power2.in" }, 2.22);
+    window.__timelines["ad1"] = tl;
+  </script>
+</template>

@@ -1,0 +1,31 @@
+<template>
+  <style>
+    @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); }
+    #tm1 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #fafafa, #cfcfcf 85%); }
+    #tm1-orbit { position: absolute; left: 90px; top: 510px; width: 900px; height: 900px; border-radius: 50%; border: 3px solid #555; }
+    .tm1-dot { position: absolute; width: 40px; height: 40px; border-radius: 50%; background: #111; }
+    #tm1-disc { position: absolute; left: 340px; top: 760px; width: 400px; height: 400px; border-radius: 50%; background: var(--green, #1f6b4e); box-shadow: 0 30px 60px rgba(0,0,0,.25); }
+    #tm1-obj { position: absolute; left: 365px; top: 760px; width: 350px; height: 350px; }
+    #tm1-head { position: absolute; left: 0; right: 0; top: 820px; text-align: center; font-family: Anton, sans-serif; font-size: 170px; color: var(--red, #c3161c); text-shadow: 0 8px 20px rgba(0,0,0,.18); }
+  </style>
+  <div id="tm1" data-composition-id="tm1" data-width="1080" data-height="1920">
+    <div id="tm1-orbit" data-layout-allow-overflow>
+      <div class="tm1-dot" style="left:430px;top:-20px"></div><div class="tm1-dot" style="left:880px;top:430px"></div>
+      <div class="tm1-dot" style="left:430px;top:880px"></div><div class="tm1-dot" style="left:-20px;top:430px"></div>
+    </div>
+    <div id="tm1-disc"></div>
+    <img id="tm1-obj" src="assets/object-sphere.png" alt="" />
+    <div id="tm1-head" data-layout-allow-occlusion>LOREM IPSUM?</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // tilted orbit spins around the hero object (planet metaphor)
+    tl.fromTo("#tm1-orbit", { rotation: 0, scaleY: 0.45, scale: 0.6, opacity: 0 }, { rotation: 0, scaleY: 0.45, scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0);
+    tl.to("#tm1-orbit", { rotation: 140, duration: 2, ease: "none" }, 0);
+    tl.fromTo("#tm1-disc", { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 0.1);
+    tl.fromTo("#tm1-obj", { y: -500, rotation: -40 }, { y: 0, rotation: 0, duration: 0.5, ease: "bounce.out" }, 0.25);
+    tl.fromTo("#tm1-head", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power4.out" }, 0.6);
+    tl.to("#tm1 > *", { y: "-=1920", duration: 0.3, ease: "power3.in" }, 1.7);
+    window.__timelines["tm1"] = tl;
+  </script>
+</template>

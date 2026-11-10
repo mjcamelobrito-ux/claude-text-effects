@@ -1,0 +1,33 @@
+<template>
+  <style>
+    #sa1 { position: absolute; inset: 0; overflow: hidden; background: #2a1a12; }
+    /* each shot: one AI-generated story frame/clip, held ~1.6 s with a slow Ken Burns move */
+    .sa-shot { position: absolute; inset: 0; opacity: 0; overflow: hidden; }
+    .sa-shot img { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+    #sa1-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(255,214,150,.25), rgba(0,0,0,.35) 85%); pointer-events: none; }
+    #sa1-sub { position: absolute; left: 90px; right: 90px; top: 1180px; text-align: center; font: 600 46px Poppins, sans-serif; color: #fff; text-shadow: 0 3px 16px rgba(0,0,0,.7); opacity: 0; }
+  </style>
+  <div id="sa1" data-composition-id="sa1" data-width="1080" data-height="1920">
+    <div id="sa1-s1" class="sa-shot"><img src="assets/shot-1.jpg" alt="" /></div>
+    <div id="sa1-s2" class="sa-shot"><img src="assets/shot-2.jpg" alt="" /></div>
+    <div id="sa1-s3" class="sa-shot"><img src="assets/shot-3.jpg" alt="" /></div>
+    <div id="sa1-glow"></div>
+    <div id="sa1-sub">Lorem ipsum dolor sit amet consect</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // shot list: [id, start, length, move]  move = push-in | pull-out | pan
+    const shots = [["#sa1-s1", 0, 1.6, "in"], ["#sa1-s2", 1.6, 1.6, "pan"], ["#sa1-s3", 3.2, 1.6, "out"]];
+    shots.forEach(([s, a, d, m]) => {
+      tl.set(s, { opacity: 1 }, a);
+      if (m === "in") tl.fromTo(s + " img", { scale: 1 }, { scale: 1.1, duration: d, ease: "none" }, a);
+      if (m === "out") tl.fromTo(s + " img", { scale: 1.12 }, { scale: 1, duration: d, ease: "none" }, a);
+      if (m === "pan") tl.fromTo(s + " img", { scale: 1.1, x: -40 }, { scale: 1.1, x: 40, duration: d, ease: "none" }, a);
+      tl.set(s, { opacity: 0 }, a + d);
+    });
+    // soft dissolve into shot 3 (emotional beat) instead of a hard cut
+    tl.fromTo("#sa1-s3", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "sine.inOut" }, 3.05);
+    tl.set("#sa1-sub", { opacity: 1 }, 0.4); tl.set("#sa1-sub", { opacity: 0 }, 1.5);
+    window.__timelines["sa1"] = tl;
+  </script>
+</template>
