@@ -5,21 +5,45 @@
       background: radial-gradient(ellipse 70% 45% at 50% 50%, #3a1460 0%, #160a2e 55%, var(--c4, #0e0b1f) 100%); perspective: 1800px; }
     #s28 .wrap { position: absolute; inset: 0; transform-style: preserve-3d; }
     #s28 svg { position: absolute; left: 0; top: 0; overflow: visible; }
-    #s28 text { font-family: Montserrat, Inter, sans-serif; font-weight: 900; font-style: italic; font-size: 210px; text-anchor: middle; letter-spacing: -4px; }
+    #s28 text { font-family: Montserrat, Inter, sans-serif; font-weight: 900; font-style: italic; font-size: 210px; text-anchor: middle; letter-spacing: 2px; }
   </style>
   <div id="s28" data-composition-id="s28" data-width="1080" data-height="1920">
     <div class="wrap" data-layout-allow-overlap>
       <svg width="1080" height="1920" viewBox="0 0 1080 1920">
         <defs>
           <linearGradient id="s28-g" gradientUnits="userSpaceOnUse" x1="120" y1="0" x2="960" y2="0">
-            <stop offset="0" stop-color="var(--c1, #ff5fc8)" style="stop-color: var(--c1, #ff5fc8)"/>
-            <stop offset=".5" stop-color="#2f55ff" style="stop-color: var(--c2, #2f55ff)"/>
-            <stop offset="1" stop-color="#9fe0ff" style="stop-color: var(--c3, #9fe0ff)"/>
+            <stop offset="0" style="stop-color: var(--c1, #ff5fc8)"/>
+            <stop offset=".5" style="stop-color: var(--c2, #2f55ff)"/>
+            <stop offset="1" style="stop-color: var(--c3, #9fe0ff)"/>
           </linearGradient>
-          <filter id="s28-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <!-- clean outline: grow the filled glyphs, then cut the glyphs out, so overlapping contours inside letters never show -->
+          <filter id="s28-front" x="-10%" y="-30%" width="120%" height="160%">
+            <feMorphology in="SourceGraphic" operator="dilate" radius="5" result="d"/>
+            <feMorphology in="SourceGraphic" operator="dilate" radius="1" result="d1"/>
+            <feComposite in="d" in2="d1" operator="out" result="tube"/>
+            <feGaussianBlur in="tube" stdDeviation="14" result="glow"/>
+            <feGaussianBlur in="tube" stdDeviation="4" result="glow2"/>
+            <feMorphology in="SourceGraphic" operator="dilate" radius="3.4" result="c1"/>
+            <feMorphology in="SourceGraphic" operator="dilate" radius="2.2" result="c2"/>
+            <feComposite in="c1" in2="c2" operator="out" result="coreA"/>
+            <feFlood flood-color="#ffffff" flood-opacity=".9"/><feComposite in2="coreA" operator="in" result="core"/>
+            <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .07 0" result="inner"/>
+            <feMerge><feMergeNode in="glow"/><feMergeNode in="glow"/><feMergeNode in="inner"/><feMergeNode in="glow2"/><feMergeNode in="tube"/><feMergeNode in="core"/></feMerge>
+          </filter>
+          <filter id="s28-back" x="-10%" y="-30%" width="120%" height="160%">
+            <feMorphology in="SourceGraphic" operator="dilate" radius="3" result="d"/>
+            <feMorphology in="SourceGraphic" operator="dilate" radius="1" result="d1"/>
+            <feComposite in="d" in2="d1" operator="out" result="ring"/>
+            <feGaussianBlur in="ring" stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="ring"/></feMerge>
+          </filter>
         </defs>
-        <g id="s28-layers" filter="url(#s28-glow)"></g>
+        <mask id="s28-m" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+          <rect x="0" y="0" width="1080" height="1920" fill="#fff"/>
+          <g id="s28-mtext"></g>
+        </mask>
+        <g id="s28-depth" mask="url(#s28-m)"></g>
+        <g id="s28-layers"></g>
       </svg>
     </div>
   </div>
@@ -27,32 +51,39 @@
     const tl = gsap.timeline({ paused: true });
     // Neon outline text extruded into depth: N outline copies stepped back in space, stroked with one moving gradient.
     // DRAW (outlines trace on) -> EXTRUDE (copies fan out, direction swings like a 3D turn) -> COLLAPSE.
-    const N = 11, LINES = ["LOREM", "IPSUM"]   /* the two lines */, LH = 220, Y0 = 960 - (LINES.length - 1) * LH / 2 + 75;
+    const LINES = ["LOREM", "IPSUM"];   // the lines of text
+    const N = 9, LH = 220, Y0 = 960 - (LINES.length - 1) * LH / 2 + 75;
     const g = document.getElementById("s28-layers"), grad = document.getElementById("s28-g"), wrap = document.querySelector("#s28 .wrap");
     const NS = "http://www.w3.org/2000/svg", layers = [];
+    // layer 0 = the front neon tube; layers 1..N-1 = thinner outlines stepped back in space (the depth)
     for (let k = N - 1; k >= 0; k--) {
-      const lg = document.createElementNS(NS, "g");
+      const lg = document.createElementNS(NS, "g"); lg.setAttribute("filter", k ? "url(#s28-back)" : "url(#s28-front)");
       LINES.forEach((l, i) => { const t = document.createElementNS(NS, "text"); t.setAttribute("x", 540); t.setAttribute("y", Y0 + i * LH); t.textContent = l;
-        t.setAttribute("fill", k === 0 ? "#fff0fa" : "none"); t.setAttribute("stroke", "url(#s28-g)"); t.setAttribute("stroke-width", k === 0 ? 6 : 3);
-        t.setAttribute("stroke-dasharray", "3200"); if (k) t.setAttribute("data-layout-ignore", ""); lg.appendChild(t); });
-      g.appendChild(lg); layers[k] = lg;
+        t.setAttribute("fill", "url(#s28-g)"); t.setAttribute("data-layout-ignore", ""); lg.appendChild(t); });
+      (k ? document.getElementById("s28-depth") : g).appendChild(lg); layers[k] = lg;
     }
+    // the depth outlines are hidden inside the front letters, so the hollow tubes stay readable
+    LINES.forEach((l, i) => { const t = document.createElementNS(NS, "text"); t.setAttribute("x", 540); t.setAttribute("y", Y0 + i * LH); t.textContent = l;
+      t.setAttribute("fill", "#000"); t.setAttribute("stroke", "#000"); t.setAttribute("stroke-width", "8"); t.setAttribute("data-layout-ignore", ""); document.getElementById("s28-mtext").appendChild(t); });
     const st = { t: 0 }, clamp = x => Math.max(0, Math.min(1, x)), ease = x => 1 - Math.pow(1 - x, 3), inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    // neon switching on: a few stutters, then steady (and a tiny hum flicker later)
+    const FLICK = [[0.15, 0.6], [0.22, 0], [0.3, 0.9], [0.36, 0.15], [0.44, 1], [0.52, 0.35], [0.58, 1]];
+    function neon(t) { if (t < FLICK[0][0]) return 0; let v = 0; for (const [tt, o] of FLICK) if (t >= tt) v = o;
+      if (t > 3.3 && t < 3.42) v = 0.55; return v; }
     function render() {
       const t = st.t;
       const out = inOut(clamp((t - 5.1) / 0.8));
-      const spread = ease(clamp((t - 1.1) / 1.0)) * (1 - out);
-      const dir = -0.9 + 1.8 * inOut(clamp((t - 1.6) / 3.2));          // extrusion direction swings left -> right
+      const spread = ease(clamp((t - 0.9) / 1.1)) * (1 - out);
+      const dir = -0.9 + 1.8 * inOut(clamp((t - 1.4) / 3.4));          // the depth swings from left to right, like a slow 3D turn
+      const on = neon(t) * (1 - out);
       layers.forEach((lg, k) => {
-        const p = clamp((t - 0.05 - k * 0.04) / 1.1), dash = 3200 * (1 - ease(p));
-        lg.querySelectorAll("text").forEach(tx => tx.setAttribute("stroke-dashoffset", dash.toFixed(1)));
-        const dx = k * 7 * spread * Math.sin(dir), dy = k * 6 * spread;
+        const dx = k * 9 * spread * Math.sin(dir), dy = k * 7 * spread;
         lg.setAttribute("transform", `translate(${dx.toFixed(2)} ${dy.toFixed(2)})`);
-        lg.setAttribute("opacity", ((k === 0 ? 1 : (1 - k / (N + 2)) * (0.25 + 0.75 * spread)) * (1 - out * (k ? 1 : 0.85))).toFixed(3));
+        lg.setAttribute("opacity", (k === 0 ? on : on * (1 - k / (N + 1)) * spread * 0.85).toFixed(3));
       });
       const ang = 30 * Math.sin(t * 1.2);
       grad.setAttribute("gradientTransform", `rotate(${ang.toFixed(2)} 540 960) translate(${(Math.sin(t * 0.9) * 180).toFixed(1)} 0)`);
-      wrap.style.transform = `rotateY(${(dir * 14 * spread).toFixed(2)}deg) rotateX(${(6 * spread).toFixed(2)}deg) scale(${(0.92 + 0.08 * ease(clamp(t / 1.4)) + 0.15 * out).toFixed(4)})`;
+      wrap.style.transform = `rotateY(${(dir * 12 * spread).toFixed(2)}deg) rotateX(${(5 * spread).toFixed(2)}deg) scale(${(0.94 + 0.06 * ease(clamp(t / 1.4)) + 0.12 * out).toFixed(4)})`;
     }
     window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
     window.__hf.buildReady["s28"] = document.fonts.load("italic 900 200px Montserrat").catch(() => {}).then(render);

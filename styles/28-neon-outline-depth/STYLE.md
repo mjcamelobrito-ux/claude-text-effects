@@ -7,10 +7,10 @@
 ![preview](poster.jpg)  ·  [preview.mp4](preview.mp4)
 
 ## Look
-Two lines of heavy italic outline type stroked with one flowing pink-cobalt-sky gradient and a neon glow; 11 outline copies stepped back in space form the 3D depth.
+Two lines of hollow neon tubes (heavy italic Montserrat): a clean gradient outline (pink → cobalt → sky) with a white-hot core and a soft glow. Eight thinner outlines stepped back in space form the 3D depth, hidden inside the front letters so the tubes stay readable.
 
 ## Motion language
-The outlines trace themselves on, then fan out into depth while the extrusion direction swings left to right like a slow 3D turn; the gradient drifts through the strokes; finally the copies collapse.
+The neon switches on with a few stutters, then the depth outlines fan out behind it while the extrusion direction swings left to right like a slow 3D turn. The gradient drifts through the tubes, with one small flicker mid-hold; finally the depth collapses and the sign fades.
 
 ## Scene recipe
 | Scene file | What it does |
@@ -18,7 +18,7 @@ The outlines trace themselves on, then fan out into depth while the extrusion di
 | `compositions/s28.html` | Logo reveals and channel names. |
 
 ## What to swap
-Lines: `LINES` in the script. Depth: `N`. Colours: `c1`–`c3` (gradient), `c4` (stage).
+Lines: `LINES` in the script. Depth: `N`. Tube thickness: the `dilate` radii in the `#s28-front` filter. Switch-on stutters: `FLICK`. Colours: `c1`–`c3` (gradient), `c4` (stage).
 
 ## Build / render
 ```bash
@@ -27,3 +27,6 @@ python3 ../../../tools/build_index.py .
 npx hyperframes check
 npx hyperframes render -o out.mp4
 ```
+
+## How it works
+The outline is not a stroke (strokes show the font's overlapping contours inside letters). Instead an SVG filter grows the filled glyphs with `feMorphology` and cuts the original glyphs out, giving one clean ring per letter, then adds blur glows and a thin white core. The depth layers use a thinner version of the same filter and sit under a mask that hides them inside the front letters.
