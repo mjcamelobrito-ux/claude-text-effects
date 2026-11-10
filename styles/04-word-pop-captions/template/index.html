@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "footageSrc", "type": "string", "label": "Talking-head footage (path in assets/)", "default": "assets/speaker-warm.mp4"}, {"id": "highlight", "type": "color", "label": "Highlight (lime)", "default": "#c8ff3c"}, {"id": "accent", "type": "color", "label": "Accent (cobalt): cards, selected word, studio words", "default": "#2f55ff"}, {"id": "studio", "type": "color", "label": "Studio background", "default": "#f4efe4"}, {"id": "cutoutSrc", "type": "string", "label": "Subject cut-out for the studio scene", "default": "assets/subject-cutout.png"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>04 Word-Pop Captions</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #111; }
+      #bg { position: absolute; inset: 0; background: #111; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="11.4" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <video id="footage" class="clip" src="assets/speaker-warm.mp4" data-var-src="footageSrc" muted playsinline
+        data-start="0" data-duration="11.4" data-track-index="1"
+        style="position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1"></video>
+      <div id="wp1" data-composition-id="wp1" data-composition-src="compositions/wp1.html"
+        data-start="0" data-duration="2.6" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+      <div id="wp2" data-composition-id="wp2" data-composition-src="compositions/wp2.html"
+        data-start="2.6" data-duration="2.2" data-track-index="3" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:11"></div>
+      <div id="wp3" data-composition-id="wp3" data-composition-src="compositions/wp3.html"
+        data-start="4.8" data-duration="1.6" data-track-index="4" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:12"></div>
+      <div id="wp4" data-composition-id="wp4" data-composition-src="compositions/wp4.html"
+        data-start="6.4" data-duration="2.6" data-track-index="5" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:13"></div>
+      <div id="wp5" data-composition-id="wp5" data-composition-src="compositions/wp5.html"
+        data-start="9" data-duration="2.4" data-track-index="6" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:14"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

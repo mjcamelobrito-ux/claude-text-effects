@@ -1,7 +1,7 @@
 {
   "name": "video-style-templates",
   "version": "0.2.0",
-  "description": "40 vertical (9:16) video editing styles reverse-engineered from reference reels, as editable HyperFrames templates you can apply with /video-style.",
+  "description": "27 vertical (9:16) kinetic text-effect styles, as editable HyperFrames templates you can apply with /video-style.",
   "author": { "name": "Maria" },
   "keywords": ["video", "editing", "templates", "hyperframes", "reels", "motion-graphics"]
 }

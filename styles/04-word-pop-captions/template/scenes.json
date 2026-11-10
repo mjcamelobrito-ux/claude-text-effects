@@ -1,0 +1,57 @@
+{
+  "id": "word-pop-captions",
+  "title": "04 Word-Pop Captions",
+  "background": "#111",
+  "footage": {
+    "src": "assets/speaker-warm.mp4",
+    "id": "footage"
+  },
+  "variables": [
+    {
+      "id": "highlight",
+      "type": "color",
+      "label": "Highlight (lime)",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "accent",
+      "type": "color",
+      "label": "Accent (cobalt): cards, selected word, studio words",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "studio",
+      "type": "color",
+      "label": "Studio background",
+      "default": "#f4efe4"
+    },
+    {
+      "id": "cutoutSrc",
+      "type": "string",
+      "label": "Subject cut-out for the studio scene",
+      "default": "assets/subject-cutout.png"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "wp1",
+      "duration": 2.6
+    },
+    {
+      "id": "wp2",
+      "duration": 2.2
+    },
+    {
+      "id": "wp3",
+      "duration": 1.6
+    },
+    {
+      "id": "wp4",
+      "duration": 2.6
+    },
+    {
+      "id": "wp5",
+      "duration": 2.4
+    }
+  ]
+}

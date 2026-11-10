@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "ink", "type": "color", "label": "Word colour (cobalt)", "default": "#2f55ff"}, {"id": "accent", "type": "color", "label": "Serif word colour (magenta)", "default": "#c8127f"}, {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#ff8a6a"}, {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#b8341e"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>12 Page Flip Words</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #b8341e; }
+      #bg { position: absolute; inset: 0; background: #b8341e; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="4.4" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="pf1" data-composition-id="pf1" data-composition-src="compositions/pf1.html"
+        data-start="0" data-duration="4.4" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

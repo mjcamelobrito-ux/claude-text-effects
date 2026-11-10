@@ -1,0 +1,37 @@
+{
+  "id": "page-flip-words",
+  "title": "12 Page Flip Words",
+  "background": "#b8341e",
+  "variables": [
+    {
+      "id": "ink",
+      "type": "color",
+      "label": "Word colour (cobalt)",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "accent",
+      "type": "color",
+      "label": "Serif word colour (magenta)",
+      "default": "#c8127f"
+    },
+    {
+      "id": "stageLight",
+      "type": "color",
+      "label": "Stage centre",
+      "default": "#ff8a6a"
+    },
+    {
+      "id": "stageDeep",
+      "type": "color",
+      "label": "Stage edge",
+      "default": "#b8341e"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "pf1",
+      "duration": 4.4
+    }
+  ]
+}

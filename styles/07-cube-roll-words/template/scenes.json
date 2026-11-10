@@ -1,0 +1,35 @@
+{
+  "id": "cube-roll-words",
+  "title": "07 Cube Roll Words",
+  "background": "#111",
+  "footage": {
+    "src": "assets/speaker-warm.mp4",
+    "id": "footage"
+  },
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Face 1 (lime)",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Face 2 (cobalt)",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "c3",
+      "type": "color",
+      "label": "Face 3 (pink)",
+      "default": "#ff5fc8"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "cr1",
+      "duration": 4.5
+    }
+  ]
+}

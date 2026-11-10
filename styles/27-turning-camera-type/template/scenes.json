@@ -1,0 +1,15 @@
+{
+  "id": "turning-camera-type",
+  "title": "27 Turning Camera Type",
+  "background": "#f4efe4",
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Words (navy)", "default": "#0e0b1f"},
+    {"id": "c2", "type": "color", "label": "Accent words (cobalt)", "default": "#2f55ff"},
+    {"id": "c3", "type": "color", "label": "Second accent (pink)", "default": "#e0219b"},
+    {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#fbf8f1"},
+    {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#e6dfcf"}
+  ],
+  "scenes": [
+    {"id": "tc1", "duration": 7.5}
+  ]
+}

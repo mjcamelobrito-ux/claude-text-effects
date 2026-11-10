@@ -1,0 +1,15 @@
+{
+  "id": "fisheye-sphere-text",
+  "title": "01 Fisheye Sphere Text",
+  "background": "#1d1270",
+  "variables": [
+    {"id": "accent", "type": "color", "label": "Hero word colour (lime)", "default": "#c8ff3c"},
+    {"id": "ink", "type": "color", "label": "Other words colour", "default": "#ffffff"},
+    {"id": "bgLight", "type": "color", "label": "Background centre", "default": "#4b34f0"},
+    {"id": "bgDeep", "type": "color", "label": "Background edge", "default": "#120a4a"}
+  ],
+  "scenes": [
+    {"id": "fe1", "duration": 7.2},
+    {"id": "fe2", "duration": 3.4}
+  ]
+}

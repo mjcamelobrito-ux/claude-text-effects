@@ -1,0 +1,35 @@
+{
+  "id": "split-flap-board",
+  "title": "10 Split-Flap Board",
+  "background": "#111",
+  "footage": {
+    "src": "assets/speaker-warm.mp4",
+    "id": "footage"
+  },
+  "variables": [
+    {
+      "id": "tile",
+      "type": "color",
+      "label": "Tile colour",
+      "default": "#15122a"
+    },
+    {
+      "id": "glyph",
+      "type": "color",
+      "label": "Letter colour",
+      "default": "#f4efe4"
+    },
+    {
+      "id": "hi",
+      "type": "color",
+      "label": "Landing flash",
+      "default": "#c8ff3c"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "sf1",
+      "duration": 3.6
+    }
+  ]
+}
