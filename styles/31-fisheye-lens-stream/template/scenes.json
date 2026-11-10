@@ -1,0 +1,25 @@
+{
+  "id": "fisheye-lens-stream",
+  "title": "31 Fisheye Lens Stream",
+  "background": "#0b1a6e",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ffffff"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#0b1a6e"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s31",
+      "duration": 6
+    }
+  ]
+}

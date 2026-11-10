@@ -1,0 +1,42 @@
+<template>
+  <style>
+    #s49 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 60% 40% at 70% 60%, #4b2a9a 0%, #1a0f3d 55%, var(--c4, #07051a) 100%); }
+    #s49 .bk { position: absolute; border-radius: 50%; filter: blur(30px); }
+    #s49 .cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+    #s49 .tx { position: absolute; left: 0; top: 920px; width: 1080px; text-align: center; white-space: nowrap; font: 800 80px/1 Inter, sans-serif; color: #fff; letter-spacing: -0.02em; }
+    #s49 .tx b { color: var(--c2, #c8ff3c); font-weight: 900; }
+    #s49 .shard { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: #fff; clip-path: polygon(0 0, 0 0, 0 0); }
+  </style>
+  <div id="s49" data-composition-id="s49" data-width="1080" data-height="1920">
+    <div class="bk" style="left:640px;top:1000px;width:380px;height:380px;background:#7a4bff;opacity:.45"></div>
+    <div class="bk" style="left:80px;top:500px;width:260px;height:260px;background:#ff5fc8;opacity:.25"></div>
+    <div class="cam">
+      <div class="tx">lorem <b>ipsum</b></div>
+      <div class="tx">dolor sit <b>amet</b></div>
+      <div class="tx">consectetur</div>
+    </div>
+    <div class="shard"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Small, clean title on a deep bokeh stage. On each beat a white shard slices across the frame, the camera punches into
+    // an extreme close-up that drifts across the letters, then snaps back out to reveal the next line.
+    const T = [...document.querySelectorAll("#s49 .tx")], cam = "#s49 .cam", shard = "#s49 .shard", BEAT = 1.95;
+    gsap.set(T, { opacity: 0 });
+    const st = { a: 0 };
+    const set = (a, dir) => { const k = a; document.querySelector(shard).style.clipPath = dir > 0
+      ? `polygon(${-30 + 160 * k}% 0%, ${-10 + 160 * k}% 0%, ${-60 + 160 * k}% 100%)` : `polygon(${130 - 160 * k}% 0%, ${110 - 160 * k}% 100%, ${160 - 160 * k}% 100%)`; };
+    T.forEach((t, i) => {
+      const t0 = 0.1 + i * BEAT, dir = i % 2 ? -1 : 1;
+      tl.set(T, { opacity: 0 }, t0); tl.set(t, { opacity: 1 }, t0);
+      tl.fromTo(t, { y: 40, filter: "blur(8px)" }, { y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, t0);
+      tl.fromTo(st, { a: 0 }, { a: 1, duration: 0.35, ease: "power2.inOut", onUpdate: () => set(st.a, dir) }, t0 + 0.6);
+      tl.set(cam, { scale: 5.2, x: dir * 900, y: -60 }, t0 + 0.78);
+      tl.to(cam, { x: -dir * 900, duration: 0.8, ease: "power1.inOut" }, t0 + 0.78);
+      tl.set(cam, { scale: 1, x: 0, y: 0 }, t0 + 1.58);
+      tl.fromTo(t, { scale: 1.15 }, { scale: 1, duration: 0.3, ease: "power3.out" }, t0 + 1.58);
+    });
+    tl.to(T[T.length - 1], { opacity: 0, y: -30, duration: 0.4, ease: "power2.in" }, 5.6);
+    window.__timelines["s49"] = tl;
+  </script>
+</template>

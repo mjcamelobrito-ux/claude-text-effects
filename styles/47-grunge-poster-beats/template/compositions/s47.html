@@ -1,0 +1,47 @@
+<template>
+  <style>
+    @font-face { font-family: "Anton"; font-weight: 400; font-style: normal; src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2"); }
+    #s47 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 70% 50% at 50% 50%, #8a0f12 0%, #4a0508 60%, var(--c4, #1c0203) 100%); perspective: 1200px; }
+    #s47 svg.grid { position: absolute; left: 0; top: 0; opacity: .35; }
+    #s47 .grp { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #s47 .w { position: absolute; white-space: nowrap; line-height: .9; font-family: Anton, sans-serif; text-transform: uppercase;
+      filter: url(#s47-rough); }
+    #s47 .y { color: var(--c1, #ffd23a); }
+    #s47 .wt { color: #f4efe4; }
+  </style>
+  <div id="s47" data-composition-id="s47" data-width="1080" data-height="1920">
+    <svg width="0" height="0" style="position:absolute"><filter id="s47-rough"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.5 1.55" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter></svg>
+    <svg class="grid" width="1080" height="1920" viewBox="0 0 1080 1920"><g id="s47-gl" fill="none" stroke="#ff4a4a" stroke-width="2"></g></svg>
+    <!-- groups of words (one per beat). Each word: data-x/data-y (px), data-s (size), class y = yellow / wt = white, data-r = tilt -->
+    <div class="grp" data-layout-allow-overlap><div class="w wt" data-x="420" data-y="820" data-s="200" data-r="-6">lorem</div><div class="w y" data-x="600" data-y="1060" data-s="320" data-r="-6">ipsum</div></div>
+    <div class="grp" data-layout-allow-overlap><div class="w wt" data-x="330" data-y="700" data-s="140" data-r="4">dolor</div><div class="w y" data-x="560" data-y="930" data-s="380" data-r="4">sit</div><div class="w wt" data-x="700" data-y="1180" data-s="130" data-r="4">amet</div></div>
+    <div class="grp" data-layout-allow-overlap><div class="w y" data-x="540" data-y="860" data-s="300" data-r="-3">elit</div><div class="w wt" data-x="420" data-y="1080" data-s="150" data-r="-3">sed do</div><div class="w wt" data-x="690" data-y="1230" data-s="110" data-r="-3">tempor</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Gritty lyric poster: on each beat a group of distressed condensed words slams in at a tilt (each from a different side,
+    // with a hard settle and a camera shake), the red globe-grid behind rotates, and a whip-pan carries us to the next group.
+    const NS = "http://www.w3.org/2000/svg", gl = document.getElementById("s47-gl");
+    for (let i = -6; i <= 6; i++) { const e = document.createElementNS(NS, "ellipse"); e.setAttribute("cx", 540); e.setAttribute("cy", 960); e.setAttribute("rx", Math.abs(i) * 95 + 1); e.setAttribute("ry", 900); gl.appendChild(e); }
+    for (let i = -8; i <= 8; i++) { const l = document.createElementNS(NS, "path"); const y = 960 + i * 115; l.setAttribute("d", `M -100 ${y} Q 540 ${y + i * 18} 1180 ${y}`); gl.appendChild(l); }
+    tl.fromTo(gl, { x: 0 }, { x: -190, duration: 6, ease: "none" }, 0);
+    const G = [...document.querySelectorAll("#s47 .grp")], BEAT = 1.85;
+    G.forEach((g, gi) => {
+      const ws = [...g.querySelectorAll(".w")];
+      ws.forEach(w => { gsap.set(w, { xPercent: -50, yPercent: -50 }); w.style.left = w.dataset.x + "px"; w.style.top = w.dataset.y + "px"; w.style.fontSize = w.dataset.s + "px"; });
+      gsap.set(g, { opacity: 0 });
+      const t = 0.1 + gi * BEAT;
+      tl.set(g, { opacity: 1 }, t);
+      ws.forEach((w, i) => {
+        const from = [{ x: -700, rotationY: 60 }, { x: 700, rotationY: -60 }, { y: -900, rotationX: -60 }][(i + gi) % 3];
+        tl.fromTo(w, { ...from, scale: 1.6, opacity: 0, rotation: +w.dataset.r }, { x: 0, y: 0, rotationX: 0, rotationY: 0, scale: 1, opacity: 1, rotation: +w.dataset.r, duration: 0.32, ease: "power4.out" }, t + i * 0.18);
+      });
+      tl.fromTo(g, { x: -14, y: 10 }, { x: 0, y: 0, duration: 0.25, ease: "elastic.out(1.2, 0.25)" }, t + 0.32);
+      tl.to(g, { scale: 1.06, duration: BEAT - 0.3, ease: "none" }, t + 0.3);
+      if (gi < G.length - 1) tl.to(g, { x: -1200, filter: "blur(18px)", duration: 0.22, ease: "power3.in" }, t + BEAT - 0.18);
+      else tl.to(g, { opacity: 0, scale: 1.3, duration: 0.4, ease: "power2.in" }, 5.6);
+    });
+    window.__timelines["s47"] = tl;
+  </script>
+</template>

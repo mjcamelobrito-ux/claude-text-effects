@@ -1,6 +1,6 @@
 # claude-text-effects
 
-27 vertical (9:16) kinetic text effects, inspired by reference reels and tutorials and rebuilt as editable [HyperFrames](https://hyperframes.heygen.com) templates (HTML + GSAP → MP4). Packaged as a Claude Code plugin: apply a style with `/video-style <style> <brief>`. Each style's shortcut is in the table below; the number works too (`/video-style 24`).
+50 vertical (9:16) kinetic text effects, inspired by reference reels and tutorials and rebuilt as editable [HyperFrames](https://hyperframes.heygen.com) templates (HTML + GSAP → MP4). Packaged as a Claude Code plugin: apply a style with `/video-style <style> <brief>`. Each style's shortcut is in the table below; the number works too (`/video-style 24`).
 
 ![overview](overview.jpg)
 
@@ -33,6 +33,29 @@
 | 25 | [Contour Rings Text](styles/25-contour-rings-text/STYLE.md) | `/video-style contour-rings-text` | Lines of text nesting round the speaker's head like contour lines | ✔ |
 | 26 | [Camera Lockup Type](styles/26-camera-lockup-type/STYLE.md) | `/video-style camera-lockup-type` | Words flip in to build a justified block while the camera frames each one | — |
 | 27 | [Turning Camera Type](styles/27-turning-camera-type/STYLE.md) | `/video-style turning-camera-type` | A flush word puzzle with sideways words; the camera turns 90° to read each one | — |
+| 28 | [Neon Outline Depth](styles/28-neon-outline-depth/STYLE.md) | `/video-style neon-outline-depth` | Neon outline type that extrudes into depth | — |
+| 29 | [Wall Projection Words](styles/29-wall-projection-words/STYLE.md) | `/video-style wall-projection-words` | Words slam onto a tilted wall one beat at a time | — |
+| 30 | [Zoom-Through Clusters](styles/30-zoom-through-clusters/STYLE.md) | `/video-style zoom-through-clusters` | Clusters of mixed-size words, and the camera dives into one word to reach the next cluster | — |
+| 31 | [Fisheye Lens Stream](styles/31-fisheye-lens-stream/STYLE.md) | `/video-style fisheye-lens-stream` | Two lines stream through a glass-ball lens that magnifies the letters passing the centre | — |
+| 32 | [Ball Burst Letters](styles/32-ball-burst-letters/STYLE.md) | `/video-style ball-burst-letters` | A bouncing ball bursts into the word, then swallows it again | — |
+| 33 | [Boxed Dot Stop](styles/33-boxed-dot-stop/STYLE.md) | `/video-style boxed-dot-stop` | A glowing dot draws the frame, then becomes the full stop the word slides out of | — |
+| 34 | [Glow Search Bar](styles/34-glow-search-bar/STYLE.md) | `/video-style glow-search-bar` | A glowing pill grows into a search bar and the query types itself | — |
+| 35 | [Comet Rail Reveal](styles/35-comet-rail-reveal/STYLE.md) | `/video-style comet-rail-reveal` | A comet streaks under each line and reveals it, leaving a glowing rail | — |
+| 36 | [Rail Shot Letters](styles/36-rail-shot-letters/STYLE.md) | `/video-style rail-shot-letters` | Letters shoot along vertical rails into line, leaving coloured speed bars | — |
+| 37 | [Key Hop Extrude](styles/37-key-hop-extrude/STYLE.md) | `/video-style key-hop-extrude` | Chunky extruded letters stand up and hop like piano keys | — |
+| 38 | [Gradient Bloom Words](styles/38-gradient-bloom-words/STYLE.md) | `/video-style gradient-bloom-words` | Each word blooms in from blur in its own flowing gradient with a matching glow | — |
+| 39 | [Slice Glitch Reveal](styles/39-slice-glitch-reveal/STYLE.md) | `/video-style slice-glitch-reveal` | The words are cut into thin slices that drop into place with streaks and a red ghost | — |
+| 40 | [Neon Capsule Word](styles/40-neon-capsule-word/STYLE.md) | `/video-style neon-capsule-word` | A red neon capsule tumbles in and becomes one letter, the rest of the word shoves out of it | — |
+| 41 | [Sticker Lyric Beats](styles/41-sticker-lyric-beats/STYLE.md) | `/video-style sticker-lyric-beats` | One word per beat with a new colour and a big graphic shape | — |
+| 42 | [Tumble Flip Letters](styles/42-tumble-flip-letters/STYLE.md) | `/video-style tumble-flip-letters` | Letters tumble in 3D space and flip into line to spell each word | — |
+| 43 | [Vortex Ring Fly-Through](styles/43-vortex-ring-flythrough/STYLE.md) | `/video-style vortex-ring-flythrough` | A vortex of spinning text rings, the camera flies through to the title | — |
+| 44 | [Golden Signature](styles/44-golden-signature/STYLE.md) | `/video-style golden-signature` | Gold script writes itself behind a glowing spark | — |
+| 45 | [Horizon Arc Glow](styles/45-horizon-arc-glow/STYLE.md) | `/video-style horizon-arc-glow` | A glowing gradient horizon rises and the name fades up under it | — |
+| 46 | [Retro Sticker Bounce](styles/46-retro-sticker-bounce/STYLE.md) | `/video-style retro-sticker-bounce` | Yellow sticker letters with a thick outline bounce in over a wavy pop-art pattern | — |
+| 47 | [Grunge Poster Beats](styles/47-grunge-poster-beats/STYLE.md) | `/video-style grunge-poster-beats` | Distressed condensed words slam in at a tilt over a red globe grid | — |
+| 48 | [Ribbon Ride Words](styles/48-ribbon-ride-words/STYLE.md) | `/video-style ribbon-ride-words` | Fat ribbons sweep across on an S-curve and each word rides its ribbon | — |
+| 49 | [Shard Punch Zoom](styles/49-shard-punch-zoom/STYLE.md) | `/video-style shard-punch-zoom` | A white shard slices across and the camera punches into an extreme close-up | — |
+| 50 | [Slanted Word Pile](styles/50-slanted-word-pile/STYLE.md) | `/video-style slanted-word-pile` | Words in mixed fonts drop in and stack into a slanted wall of type | — |
 
 Each style folder has `STYLE.md` (the spec), `template/` (the HyperFrames project), `preview.mp4` and `poster.jpg`.
 

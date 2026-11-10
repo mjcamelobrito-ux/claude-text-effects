@@ -1,0 +1,50 @@
+<template>
+  <style>
+    #s34 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 80% 50% at 50% 50%, #3a0f6b 0%, #1a0838 60%, var(--c4, #0e0b1f) 100%); }
+    #s34 .stage { position: absolute; left: 540px; top: 960px; width: 0; height: 0; }
+    #s34 svg { position: absolute; left: -540px; top: -960px; overflow: visible; }
+    #s34 .txt { position: absolute; left: -400px; top: -62px; height: 124px; white-space: pre; font: 600 96px/124px Inter, sans-serif; color: #fff; letter-spacing: -0.02em; }
+    #s34 .car { display: inline-block; width: 6px; height: 96px; margin-left: 6px; vertical-align: -14px; background: #fff; }
+    #s34 .ic { position: absolute; left: -500px; top: -40px; width: 80px; height: 80px; opacity: 0; }
+  </style>
+  <div id="s34" data-composition-id="s34" data-width="1080" data-height="1920">
+    <div class="stage" data-layout-allow-overflow>
+      <svg width="1080" height="1920" viewBox="0 0 1080 1920">
+        <defs>
+          <linearGradient id="s34-g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1080" y2="0">
+            <stop offset="0" style="stop-color: var(--c1, #ff5fc8)"/><stop offset=".55" style="stop-color: var(--c2, #ff7a59)"/><stop offset="1" style="stop-color: var(--c3, #ffd84a)"/>
+          </linearGradient>
+          <filter id="s34-glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect id="s34-pill" x="60" y="870" width="960" height="180" rx="90" fill="rgba(255,255,255,.04)" stroke="url(#s34-g)" stroke-width="8" filter="url(#s34-glow)"/>
+      </svg>
+      <svg class="ic" viewBox="0 0 80 80"><circle cx="34" cy="34" r="22" fill="none" stroke="#fff" stroke-width="7"/><path d="M51 51l18 18" stroke="#fff" stroke-width="7" stroke-linecap="round"/></svg>
+      <div class="txt"><span></span><b class="car"></b></div>
+    </div>
+    <div id="s34-q" style="display:none">lorem ipsum dolor</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A glowing gradient pill grows from a dot into a search bar, the query types in with a caret, then the whole bar
+    // shrinks back to a compact search field (magnifier slides in) - and sweeps off.
+    const Q = document.getElementById("s34-q").textContent, span = document.querySelector("#s34 .txt span"), car = document.querySelector("#s34 .car");
+    const pill = document.getElementById("s34-pill"), st = { w: 0, n: 0, blink: 0 };
+    const clamp = x => Math.max(0, Math.min(1, x));
+    function render() {
+      const w = 180 + (960 - 180) * st.w;
+      pill.setAttribute("x", (540 - w / 2).toFixed(1)); pill.setAttribute("width", w.toFixed(1));
+      span.textContent = Q.slice(0, Math.round(st.n));
+      car.style.opacity = (st.n > 0 && st.n < Q.length) || Math.floor(st.blink * 3) % 2 === 0 ? 1 : 0;
+    }
+    tl.fromTo(pill, { scale: 0, transformOrigin: "540px 960px", opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }, 0.1);
+    tl.fromTo(st, { w: 0 }, { w: 1, duration: 0.6, ease: "expo.inOut", onUpdate: render }, 0.55);
+    tl.fromTo(st, { n: 0 }, { n: Q.length, duration: 1.4, ease: "none", onUpdate: render }, 1.25);
+    tl.fromTo(st, { blink: 0 }, { blink: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    tl.fromTo("#s34 .txt", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 1.15);
+    tl.to("#s34 .stage", { scale: 0.55, y: -340, duration: 0.7, ease: "power3.inOut" }, 3.35);
+    tl.fromTo("#s34 .txt", { x: 0 }, { x: 70, duration: 0.7, ease: "power3.inOut" }, 3.35);
+    tl.to("#s34 .ic", { opacity: 1, x: 40, duration: 0.5, ease: "power3.out" }, 3.75);
+    tl.to("#s34 .stage", { x: 1200, duration: 0.55, ease: "power3.in" }, 5.3);
+    window.__timelines["s34"] = tl;
+  </script>
+</template>

@@ -1,0 +1,57 @@
+<template>
+  <style>
+    #s42 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 80% 55% at 50% 50%, #142a55 0%, #0a1430 60%, var(--c4, #050a1a) 100%); perspective: 1200px; }
+    #s42 .l { position: absolute; left: 0; top: 0; font: 900 170px/1 Inter, sans-serif; color: var(--c1, #ffffff); transform-style: preserve-3d; backface-visibility: visible; }
+    #s42 .l.k { color: var(--c2, #c8ff3c); }
+  </style>
+  <div id="s42" data-composition-id="s42" data-width="1080" data-height="1920">
+    <div id="s42-copy" style="display:none"><p>LOREM</p><p>IPSUM</p><p>DOLOR</p></div>
+    <div id="s42-st" data-layout-allow-overlap data-layout-allow-overflow></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Letters float scattered in 3D, tumbling on their own axes. On each beat they flip and fly into line to spell a word,
+    // hold, then burst back out into the scatter and re-form the next word - always tumbling, never still for long.
+    const WORDS = [...document.querySelectorAll("#s42-copy p")].map(p => p.textContent), st = document.getElementById("s42-st");
+    let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const S = { t: 0 }, clamp = x => Math.max(0, Math.min(1, x)), io = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const STEP = 1.9, FORM = 0.6, HOLD = 0.75;
+    let LET = [];
+    function build() {
+      const probe = document.createElement("span"); probe.className = "l"; st.appendChild(probe);
+      const n = Math.max(...WORDS.map(w => w.length));
+      const slots = WORDS.map(w => { const ws = [...w].map(c => { probe.textContent = c; return probe.offsetWidth; }); let x = 540 - ws.reduce((a, b) => a + b, 0) / 2;
+        return [...w].map((c, i) => { const r = { c, x, w: ws[i] }; x += ws[i]; return r; }); });
+      probe.remove();
+      for (let i = 0; i < n; i++) {
+        const e = document.createElement("span"); e.className = "l"; st.appendChild(e);
+        LET.push({ e, sx: 120 + rnd() * 840, sy: 520 + rnd() * 880, sz: -300 + rnd() * 500, ax: rnd() * 360, ay: rnd() * 360, vx: 60 + rnd() * 90, vy: 40 + rnd() * 80, i });
+      }
+      LET.forEach(L => L.slots = slots.map(s => s[L.i] || null));
+      render();
+    }
+    function render() {
+      const t = S.t;
+      const k = Math.min(WORDS.length - 1, Math.floor(Math.max(0, t - 0.3) / STEP)), u = t - 0.3 - k * STEP;
+      const pin = io(clamp(u / FORM)), pout = io(clamp((u - FORM - HOLD) / 0.5));
+      const f = k === WORDS.length - 1 ? pin * (1 - io(clamp((t - 5.3) / 0.5))) : pin * (1 - pout);
+      LET.forEach(L => {
+        const sl = L.slots[k];
+        const drift = 30 * Math.sin(t * 0.9 + L.i), fx = L.sx + drift, fy = L.sy + 25 * Math.cos(t * 0.7 + L.i * 1.7);
+        const rx = L.ax + L.vx * t, ry = L.ay + L.vy * t;
+        const g = sl ? f : 0;
+        const tx = sl ? sl.x : fx, ty = sl ? 880 : fy;
+        const X = fx + (tx - fx) * g, Y = fy + (ty - fy) * g, Z = L.sz * (1 - g);
+        const RX = rx * (1 - g) + Math.round(rx / 360) * 360 * g, RY = ry * (1 - g) + Math.round(ry / 360) * 360 * g;
+        L.e.textContent = sl ? sl.c : (L.slots.find(s => s) || {}).c || "";
+        L.e.className = "l" + (sl && L.i === 0 ? " k" : "");
+        L.e.style.transform = `translate3d(${X.toFixed(1)}px, ${Y.toFixed(1)}px, ${Z.toFixed(1)}px) rotateX(${RX.toFixed(1)}deg) rotateY(${RY.toFixed(1)}deg)`;
+        L.e.style.opacity = (sl ? 1 : 1 - g) * clamp(t / 0.3);
+      });
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s42"] = document.fonts.load("900 170px Inter").then(build);
+    tl.fromTo(S, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    window.__timelines["s42"] = tl;
+  </script>
+</template>

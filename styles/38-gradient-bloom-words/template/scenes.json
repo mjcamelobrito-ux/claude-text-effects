@@ -1,0 +1,19 @@
+{
+  "id": "gradient-bloom-words",
+  "title": "38 Gradient Bloom Words",
+  "background": "#08030c",
+  "variables": [
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#08030c"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s38",
+      "duration": 6
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<template>
+  <style>
+    @font-face { font-family: "Luckiest Guy"; font-weight: 400; font-style: normal; src: url("assets/fonts/luckiest-guy-latin-400-normal.woff2") format("woff2"); }
+    #s41 { position: absolute; inset: 0; overflow: hidden; }
+    #s41 .bt { position: absolute; inset: 0; opacity: 0; }
+    #s41 .shape { position: absolute; left: 540px; top: 960px; }
+    #s41 .wd { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #s41 .l { position: absolute; left: 0; top: 0; font: 400 230px/1 "Luckiest Guy", sans-serif; white-space: pre; transform-origin: 50% 80%; }
+  </style>
+  <div id="s41" data-composition-id="s41" data-width="1080" data-height="1920">
+    <!-- one beat per word: background colour, shape behind (burst | blob | spark), letter colour, word -->
+    <div class="bt" data-layout-allow-overlap data-layout-allow-overflow data-bg="#c8ff3c" data-shape="blob" data-sc="#0e0b1f" data-tc="#2f55ff">LOREM</div>
+    <div class="bt" data-layout-allow-overlap data-layout-allow-overflow data-bg="#2f55ff" data-shape="burst" data-sc="#f4efe4" data-tc="#c8ff3c">IPSUM</div>
+    <div class="bt" data-layout-allow-overlap data-layout-allow-overflow data-bg="#ffd6ec" data-shape="spark" data-sc="#ff5fc8" data-tc="#0e0b1f">DOLOR</div>
+    <div class="bt" data-layout-allow-overlap data-layout-allow-overflow data-bg="#0e0b1f" data-shape="burst" data-sc="#ff7a59" data-tc="#f4efe4">AMET</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Lyric-video stickers: every beat cuts to a new colour with a big graphic shape (starburst, blob, spark) and the word's
+    // letters pop onto an arc one by one, wobble on the beat, then the next beat cuts in.
+    const BEAT = 1.42, NS = "http://www.w3.org/2000/svg";
+    function shapeSvg(kind, col) {
+      const s = document.createElementNS(NS, "svg"); s.setAttribute("width", 1400); s.setAttribute("height", 1400); s.setAttribute("viewBox", "-700 -700 1400 1400");
+      s.style.cssText = "position:absolute;left:-700px;top:-700px;overflow:visible";
+      const p = document.createElementNS(NS, "path"); let d = "";
+      if (kind === "burst") { const n = 18; for (let i = 0; i < n * 2; i++) { const r = i % 2 ? 330 : 520, a = i / (n * 2) * Math.PI * 2; d += (i ? "L" : "M") + (r * Math.cos(a)).toFixed(1) + " " + (r * Math.sin(a)).toFixed(1); } d += "Z"; }
+      else if (kind === "spark") { d = "M0 -560 C 60 -120 120 -60 560 0 C 120 60 60 120 0 560 C -60 120 -120 60 -560 0 C -120 -60 -60 -120 0 -560Z"; }
+      else { d = "M -480 -40 C -470 -330 -120 -460 160 -400 C 450 -340 560 -100 500 150 C 440 400 140 470 -140 420 C -420 370 -490 210 -480 -40Z"; }
+      p.setAttribute("d", d); p.setAttribute("fill", col); s.appendChild(p); return s;
+    }
+    function build() {
+      document.querySelectorAll("#s41 .bt").forEach((b, i) => {
+        const txt = b.textContent; b.textContent = ""; b.style.background = b.dataset.bg;
+        const sh = document.createElement("div"); sh.className = "shape"; sh.appendChild(shapeSvg(b.dataset.shape, b.dataset.sc)); b.appendChild(sh);
+        const wd = document.createElement("div"); wd.className = "wd"; b.appendChild(wd);
+        const probe = document.createElement("span"); probe.className = "l"; wd.appendChild(probe);
+        const ws = [...txt].map(c => { probe.textContent = c; return probe.offsetWidth; }); probe.remove();
+        const tot = ws.reduce((a, c) => a + c, 0), R = 900; let s = -tot / 2; const ls = [];
+        [...txt].forEach((c, j) => { const w = ws[j], th = (s + w / 2) / R; s += w;
+          const e = document.createElement("span"); e.className = "l"; e.textContent = c; e.style.color = b.dataset.tc;
+          e.style.textShadow = "0 10px 0 rgba(0,0,0,.18)";
+          const x = 540 + R * Math.sin(th) - w / 2, y = 960 + R - R * Math.cos(th) - 160 + (i % 2 ? -1 : 1) * 0;
+          gsap.set(e, { x, y, rotation: th * 180 / Math.PI * (i % 2 ? -1 : 1) }); if (i % 2) gsap.set(e, { y: 960 - (R - R * Math.cos(th)) - 60 });
+          wd.appendChild(e); ls.push(e); });
+        const t = 0.05 + i * BEAT;
+        tl.set(b, { opacity: 1 }, t); if (i) tl.set(document.querySelectorAll("#s41 .bt")[i - 1], { opacity: 0 }, t);
+        tl.fromTo(sh, { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.8)" }, t);
+        tl.to(sh, { rotation: 25, duration: BEAT, ease: "none" }, t + 0.45);
+        tl.fromTo(ls, { scale: 0, yPercent: 40 }, { scale: 1, yPercent: 0, duration: 0.35, ease: "back.out(2.4)", stagger: 0.07 }, t + 0.1);
+        tl.to(ls, { scaleY: 1.12, scaleX: 0.92, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.inOut", stagger: 0.04 }, t + 0.85);
+      });
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s41"] = document.fonts.load('400 230px "Luckiest Guy"').catch(() => {}).then(build);
+    window.__timelines["s41"] = tl;
+  </script>
+</template>

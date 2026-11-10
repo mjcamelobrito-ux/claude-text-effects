@@ -1,0 +1,31 @@
+{
+  "id": "comet-rail-reveal",
+  "title": "35 Comet Rail Reveal",
+  "background": "#050824",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ff5fc8"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#9fe0ff"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#050824"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s35",
+      "duration": 6
+    }
+  ]
+}

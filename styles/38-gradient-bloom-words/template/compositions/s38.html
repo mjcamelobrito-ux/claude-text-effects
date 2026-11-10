@@ -1,0 +1,35 @@
+<template>
+  <style>
+    #s38 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 70% 45% at 50% 50%, #3b0b4a 0%, #18061f 60%, var(--c4, #08030c) 100%); }
+    #s38 .wd { position: absolute; left: 0; top: 880px; width: 1080px; text-align: center; white-space: nowrap; font: 800 170px/1 Inter, sans-serif; letter-spacing: -0.03em; }
+    #s38 .ch { display: inline-block; background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; }
+  </style>
+  <div id="s38" data-composition-id="s38" data-width="1080" data-height="1920">
+    <!-- one word per beat; data-g = its gradient (CSS colours, comma separated) -->
+    <div class="wd" data-g="#ffffff,#9fe0ff,#2f55ff">lorem</div>
+    <div class="wd" data-g="#9fe0ff,#2f55ff,#c8ff3c">ipsum</div>
+    <div class="wd" data-g="#ffd84a,#ff7a59,#ff5fc8">dolor</div>
+    <div class="wd" data-g="#ff5fc8,#8a5bff,#9fe0ff">sit</div>
+    <div class="wd" data-g="#c8ff3c,#ffffff,#ff5fc8">amet</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // One word at a time, centred: letters bloom in from blur in a soft wave while a gradient flows through them and
+    // the word glows in its own colour; it then dissolves to the right as the next word blooms.
+    const words = [...document.querySelectorAll("#s38 .wd")], STEP = 1.12;
+    words.forEach(w => { const g = w.dataset.g.split(","); const txt = w.textContent; w.textContent = "";
+      [...txt].forEach(c => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c;
+        s.style.backgroundImage = `linear-gradient(90deg, ${g[0]}, ${g[1]}, ${g[2]}, ${g[1]}, ${g[0]})`;
+        w.appendChild(s); }); w.style.filter = `drop-shadow(0 0 26px ${g[1]})`; });
+    gsap.set("#s38 .ch", { opacity: 0 });
+    words.forEach((w, i) => {
+      const cs = w.querySelectorAll(".ch"), t = 0.15 + i * STEP;
+      tl.fromTo(cs, { opacity: 0, y: 30, scale: 1.4, filter: "blur(18px)" },
+        { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out", stagger: 0.045 }, t);
+      tl.fromTo(cs, { backgroundPosition: "0% 0%" }, { backgroundPosition: "100% 0%", duration: STEP + 0.3, ease: "none" }, t);
+      if (i < words.length - 1) tl.to(cs, { opacity: 0, x: 40, duration: 0.3, ease: "power2.in", stagger: 0.03 }, t + STEP - 0.3);
+      else tl.to(cs, { opacity: 0, scale: 0.8, duration: 0.4, ease: "power2.in", stagger: 0.03 }, 5.5);
+    });
+    window.__timelines["s38"] = tl;
+  </script>
+</template>

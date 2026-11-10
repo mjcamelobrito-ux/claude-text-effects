@@ -1,0 +1,62 @@
+<template>
+  <style>
+    @font-face { font-family: "Montserrat"; font-weight: 900; font-style: italic; src: url("assets/fonts/montserrat-latin-900-italic.woff2") format("woff2"); }
+    #s28 { position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(ellipse 70% 45% at 50% 50%, #3a1460 0%, #160a2e 55%, var(--c4, #0e0b1f) 100%); perspective: 1800px; }
+    #s28 .wrap { position: absolute; inset: 0; transform-style: preserve-3d; }
+    #s28 svg { position: absolute; left: 0; top: 0; overflow: visible; }
+    #s28 text { font-family: Montserrat, Inter, sans-serif; font-weight: 900; font-style: italic; font-size: 210px; text-anchor: middle; letter-spacing: -4px; }
+  </style>
+  <div id="s28" data-composition-id="s28" data-width="1080" data-height="1920">
+    <div class="wrap" data-layout-allow-overlap>
+      <svg width="1080" height="1920" viewBox="0 0 1080 1920">
+        <defs>
+          <linearGradient id="s28-g" gradientUnits="userSpaceOnUse" x1="120" y1="0" x2="960" y2="0">
+            <stop offset="0" stop-color="var(--c1, #ff5fc8)" style="stop-color: var(--c1, #ff5fc8)"/>
+            <stop offset=".5" stop-color="#2f55ff" style="stop-color: var(--c2, #2f55ff)"/>
+            <stop offset="1" stop-color="#9fe0ff" style="stop-color: var(--c3, #9fe0ff)"/>
+          </linearGradient>
+          <filter id="s28-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g id="s28-layers" filter="url(#s28-glow)"></g>
+      </svg>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Neon outline text extruded into depth: N outline copies stepped back in space, stroked with one moving gradient.
+    // DRAW (outlines trace on) -> EXTRUDE (copies fan out, direction swings like a 3D turn) -> COLLAPSE.
+    const N = 11, LINES = ["LOREM", "IPSUM"]   /* the two lines */, LH = 220, Y0 = 960 - (LINES.length - 1) * LH / 2 + 75;
+    const g = document.getElementById("s28-layers"), grad = document.getElementById("s28-g"), wrap = document.querySelector("#s28 .wrap");
+    const NS = "http://www.w3.org/2000/svg", layers = [];
+    for (let k = N - 1; k >= 0; k--) {
+      const lg = document.createElementNS(NS, "g");
+      LINES.forEach((l, i) => { const t = document.createElementNS(NS, "text"); t.setAttribute("x", 540); t.setAttribute("y", Y0 + i * LH); t.textContent = l;
+        t.setAttribute("fill", k === 0 ? "#fff0fa" : "none"); t.setAttribute("stroke", "url(#s28-g)"); t.setAttribute("stroke-width", k === 0 ? 6 : 3);
+        t.setAttribute("stroke-dasharray", "3200"); if (k) t.setAttribute("data-layout-ignore", ""); lg.appendChild(t); });
+      g.appendChild(lg); layers[k] = lg;
+    }
+    const st = { t: 0 }, clamp = x => Math.max(0, Math.min(1, x)), ease = x => 1 - Math.pow(1 - x, 3), inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    function render() {
+      const t = st.t;
+      const out = inOut(clamp((t - 5.1) / 0.8));
+      const spread = ease(clamp((t - 1.1) / 1.0)) * (1 - out);
+      const dir = -0.9 + 1.8 * inOut(clamp((t - 1.6) / 3.2));          // extrusion direction swings left -> right
+      layers.forEach((lg, k) => {
+        const p = clamp((t - 0.05 - k * 0.04) / 1.1), dash = 3200 * (1 - ease(p));
+        lg.querySelectorAll("text").forEach(tx => tx.setAttribute("stroke-dashoffset", dash.toFixed(1)));
+        const dx = k * 7 * spread * Math.sin(dir), dy = k * 6 * spread;
+        lg.setAttribute("transform", `translate(${dx.toFixed(2)} ${dy.toFixed(2)})`);
+        lg.setAttribute("opacity", ((k === 0 ? 1 : (1 - k / (N + 2)) * (0.25 + 0.75 * spread)) * (1 - out * (k ? 1 : 0.85))).toFixed(3));
+      });
+      const ang = 30 * Math.sin(t * 1.2);
+      grad.setAttribute("gradientTransform", `rotate(${ang.toFixed(2)} 540 960) translate(${(Math.sin(t * 0.9) * 180).toFixed(1)} 0)`);
+      wrap.style.transform = `rotateY(${(dir * 14 * spread).toFixed(2)}deg) rotateX(${(6 * spread).toFixed(2)}deg) scale(${(0.92 + 0.08 * ease(clamp(t / 1.4)) + 0.15 * out).toFixed(4)})`;
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s28"] = document.fonts.load("italic 900 200px Montserrat").catch(() => {}).then(render);
+    tl.fromTo(st, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    window.__timelines["s28"] = tl;
+  </script>
+</template>

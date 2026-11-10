@@ -1,0 +1,31 @@
+{
+  "id": "slice-glitch-reveal",
+  "title": "39 Slice Glitch Reveal",
+  "background": "#f4efe4",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#ff3b5c"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s39",
+      "duration": 6
+    }
+  ]
+}

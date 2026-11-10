@@ -359,5 +359,291 @@
       "stageLight",
       "stageDeep"
     ]
+  },
+  {
+    "slug": "28-neon-outline-depth",
+    "name": "Neon Outline Depth",
+    "bestFor": "Logo reveals and channel names: neon outline type that extrudes into depth.",
+    "reference": "Inspired by a 3D glow outline text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c3",
+      "c4"
+    ]
+  },
+  {
+    "slug": "29-wall-projection-words",
+    "name": "Wall Projection Words",
+    "bestFor": "Quotes and voice-over lines: words slam onto a tilted wall one beat at a time.",
+    "reference": "Inspired by a kinetic typography tutorial (words on a white wall)",
+    "footage": false,
+    "duration": 6.3,
+    "variables": [
+      "c1",
+      "c2",
+      "c3",
+      "c4"
+    ]
+  },
+  {
+    "slug": "30-zoom-through-clusters",
+    "name": "Zoom-Through Clusters",
+    "bestFor": "Fast-paced statements: clusters of mixed-size words, and the camera dives into one word to reach the next cluster.",
+    "reference": "Inspired by a kinetic typography tutorial (dark word clusters)",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2"
+    ]
+  },
+  {
+    "slug": "31-fisheye-lens-stream",
+    "name": "Fisheye Lens Stream",
+    "bestFor": "Taglines and lists: two lines stream through a glass-ball lens that magnifies the letters passing the centre.",
+    "reference": "Inspired by a viral fish-eye text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c4"
+    ]
+  },
+  {
+    "slug": "32-ball-burst-letters",
+    "name": "Ball Burst Letters",
+    "bestFor": "Playful product names: a bouncing ball bursts into the word, then swallows it again.",
+    "reference": "Inspired by a ball text animation tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "33-boxed-dot-stop",
+    "name": "Boxed Dot Stop",
+    "bestFor": "Short names and one-word hooks in a card: a glowing dot draws the frame, then becomes the full stop the word slides out of.",
+    "reference": "Inspired by a boxed text motion-graphics tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "34-glow-search-bar",
+    "name": "Glow Search Bar",
+    "bestFor": "Questions and search-style hooks: a glowing pill grows into a search bar and the query types itself.",
+    "reference": "Inspired by a gradient search-box typing tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c3",
+      "c4"
+    ]
+  },
+  {
+    "slug": "35-comet-rail-reveal",
+    "name": "Comet Rail Reveal",
+    "bestFor": "Two-line statements: a comet streaks under each line and reveals it, leaving a glowing rail.",
+    "reference": "Inspired by a gradient light-streak text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "36-rail-shot-letters",
+    "name": "Rail Shot Letters",
+    "bestFor": "Brand words and short names: letters shoot along vertical rails into line, leaving coloured speed bars.",
+    "reference": "Inspired by a text slide animation tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c4"
+    ]
+  },
+  {
+    "slug": "37-key-hop-extrude",
+    "name": "Key Hop Extrude",
+    "bestFor": "Bold one-word titles: chunky extruded letters stand up and hop like piano keys.",
+    "reference": "Inspired by a 3D text pop-up tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c2"
+    ]
+  },
+  {
+    "slug": "38-gradient-bloom-words",
+    "name": "Gradient Bloom Words",
+    "bestFor": "Word-by-word reveals: each word blooms in from blur in its own flowing gradient with a matching glow.",
+    "reference": "Inspired by a colorful gradient text fade tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c4"
+    ]
+  },
+  {
+    "slug": "39-slice-glitch-reveal",
+    "name": "Slice Glitch Reveal",
+    "bestFor": "Title cards: the words are cut into thin slices that drop into place with streaks and a red ghost.",
+    "reference": "Inspired by a minimal line text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "40-neon-capsule-word",
+    "name": "Neon Capsule Word",
+    "bestFor": "Logos and names with an O: a red neon capsule tumbles in and becomes one letter, the rest of the word shoves out of it.",
+    "reference": "Inspired by a minimal text animation tutorial (red capsule)",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "41-sticker-lyric-beats",
+    "name": "Sticker Lyric Beats",
+    "bestFor": "Lyric videos and punchy lists: one word per beat with a new colour and a big graphic shape.",
+    "reference": "Inspired by a colorful lyrics typography tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": []
+  },
+  {
+    "slug": "42-tumble-flip-letters",
+    "name": "Tumble Flip Letters",
+    "bestFor": "Word sequences: letters tumble in 3D space and flip into line to spell each word.",
+    "reference": "Inspired by a 3D text flip tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "43-vortex-ring-flythrough",
+    "name": "Vortex Ring Fly-Through",
+    "bestFor": "Openers: a vortex of spinning text rings, the camera flies through to the title.",
+    "reference": "Inspired by a cinematic camera text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "44-golden-signature",
+    "name": "Golden Signature",
+    "bestFor": "Elegant names and signatures: gold script writes itself behind a glowing spark.",
+    "reference": "Inspired by a cinematic script-title text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c4"
+    ]
+  },
+  {
+    "slug": "45-horizon-arc-glow",
+    "name": "Horizon Arc Glow",
+    "bestFor": "Brand reveals: a glowing gradient horizon rises and the name fades up under it.",
+    "reference": "Inspired by a gradient arc (planet horizon) text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2",
+      "c3",
+      "c4"
+    ]
+  },
+  {
+    "slug": "46-retro-sticker-bounce",
+    "name": "Retro Sticker Bounce",
+    "bestFor": "Bold titles and show names: yellow sticker letters with a thick outline bounce in over a wavy pop-art pattern.",
+    "reference": "Inspired by a 3D retro text tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c2"
+    ]
+  },
+  {
+    "slug": "47-grunge-poster-beats",
+    "name": "Grunge Poster Beats",
+    "bestFor": "Lyrics and hype lines: distressed condensed words slam in at a tilt over a red globe grid.",
+    "reference": "Inspired by a typography poster edit",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c4"
+    ]
+  },
+  {
+    "slug": "48-ribbon-ride-words",
+    "name": "Ribbon Ride Words",
+    "bestFor": "Sequences of three words: fat ribbons sweep across on an S-curve and each word rides its ribbon.",
+    "reference": "Inspired by a line text animation tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c1",
+      "c4"
+    ]
+  },
+  {
+    "slug": "49-shard-punch-zoom",
+    "name": "Shard Punch Zoom",
+    "bestFor": "Clean titles with punch: a white shard slices across and the camera punches into an extreme close-up.",
+    "reference": "Inspired by a text pop-up animation tutorial",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c2",
+      "c4"
+    ]
+  },
+  {
+    "slug": "50-slanted-word-pile",
+    "name": "Slanted Word Pile",
+    "bestFor": "Long lists and statements: words in mixed fonts drop in and stack into a slanted wall of type.",
+    "reference": "Inspired by a kinetic typography tutorial (word pile)",
+    "footage": false,
+    "duration": 6,
+    "variables": [
+      "c2",
+      "c3",
+      "c4"
+    ]
   }
 ]

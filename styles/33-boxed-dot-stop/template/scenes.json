@@ -1,0 +1,31 @@
+{
+  "id": "boxed-dot-stop",
+  "title": "33 Boxed Dot Stop",
+  "background": "#f4efe4",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s33",
+      "duration": 6
+    }
+  ]
+}

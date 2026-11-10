@@ -1,0 +1,47 @@
+<template>
+  <style>
+    #s33 { position: absolute; inset: 0; overflow: hidden; background-color: var(--c4, #f4efe4);
+      background-image: linear-gradient(rgba(47,85,255,.10) 2px, transparent 2px), linear-gradient(90deg, rgba(47,85,255,.10) 2px, transparent 2px); background-size: 60px 60px; }
+    #s33 svg { position: absolute; left: 0; top: 0; }
+    #s33 .card { position: absolute; left: 110px; top: 700px; width: 860px; height: 520px; border-radius: 48px; background: var(--c1, #0e0b1f); box-shadow: 0 30px 60px rgba(14,11,31,.25); }
+    #s33 .wd { position: absolute; left: 0; top: 0; width: 860px; height: 520px; display: flex; align-items: center; justify-content: center; }
+    #s33 .wd span { font: 900 150px/1 Inter, sans-serif; color: var(--c4, #f4efe4); letter-spacing: -0.03em; display: inline-block; }
+    #s33 .clip { overflow: hidden; display: inline-block; }
+    #s33 .dot { position: absolute; left: 0; top: 0; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: var(--c2, #2f55ff);
+      box-shadow: 0 0 24px 6px rgba(47,85,255,.65); }
+  </style>
+  <div id="s33" data-composition-id="s33" data-width="1080" data-height="1920">
+    <div class="card"><div class="wd"><span class="clip"><span>LOREM</span></span></div><div class="wd"><span class="clip"><span>IPSUM</span></span></div></div>
+    <svg width="1080" height="1920" data-layout-allow-occlusion><rect id="s33-frame" x="96" y="686" width="888" height="548" rx="60" fill="none" stroke="#2f55ff" stroke-width="6"/></svg>
+    <div class="dot" data-layout-allow-occlusion></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A glowing dot traces the card's frame, flies to the centre and becomes the full stop: the word slides out of it
+    // to the left. Then the word slides back into the dot and the dot shoots off before the next word.
+    const fr = document.getElementById("s33-frame"), Lf = fr.getTotalLength(), dot = document.querySelector("#s33 .dot");
+    fr.style.strokeDasharray = Lf;
+    const wds = [...document.querySelectorAll("#s33 .wd")], st = { p: 0 };
+    function build() {
+    tl.fromTo(".card", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.5)" }, 0);
+    tl.fromTo(fr, { strokeDashoffset: Lf }, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, 0.1);
+    tl.fromTo(st, { p: 0 }, { p: 1, duration: 0.9, ease: "power2.inOut", onUpdate: () => { const q = fr.getPointAtLength(st.p * Lf); gsap.set(dot, { x: q.x, y: q.y }); } }, 0.1);
+    gsap.set(dot, { x: fr.getPointAtLength(0).x, y: fr.getPointAtLength(0).y });
+    wds.forEach((w, i) => {
+      const t = 1.0 + i * 2.4, inner = w.querySelector(".clip span"), clip = w.querySelector(".clip"), R = 540 + clip.offsetWidth / 2 + 24;
+      gsap.set(inner, { xPercent: 105 });
+      tl.to(dot, { x: R, y: 960 + 48, duration: 0.35, ease: "power3.inOut" }, t);
+      tl.to(dot, { scale: 1.6, duration: 0.1, yoyo: true, repeat: 1 }, t + 0.35);
+      tl.fromTo(inner, { xPercent: 105 }, { xPercent: 0, duration: 0.6, ease: "power4.out" }, t + 0.4);
+            tl.to(inner, { xPercent: 105, duration: 0.4, ease: "power3.in" }, t + 1.9);
+            if (i < wds.length - 1) tl.to(dot, { x: 540 - 380, y: 960 - 240, duration: 0.3, ease: "power2.inOut" }, t + 2.3);
+    });
+    tl.to(dot, { y: 2100, duration: 0.4, ease: "power3.in" }, 5.75);
+    tl.to(fr, { strokeDashoffset: -Lf, duration: 0.6, ease: "power2.in" }, 5.6);
+    tl.to(".card", { scale: 0.9, opacity: 0, duration: 0.4, ease: "power2.in" }, 5.85);
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s33"] = document.fonts.load("900 150px Inter").then(build);
+    window.__timelines["s33"] = tl;
+  </script>
+</template>

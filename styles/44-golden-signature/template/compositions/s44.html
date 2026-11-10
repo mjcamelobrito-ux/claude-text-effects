@@ -1,0 +1,65 @@
+<template>
+  <style>
+    @font-face { font-family: "Yellowtail"; font-weight: 400; font-style: normal; src: url("assets/fonts/yellowtail-latin-400-normal.woff2") format("woff2"); }
+    #s44 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 70% 40% at 50% 52%, #2a1d08 0%, #0b0803 60%, var(--c4, #050402) 100%); }
+    #s44 svg { position: absolute; left: 0; top: 0; overflow: visible; }
+    #s44 text { font-family: Yellowtail, cursive; font-size: 196px; text-anchor: middle; }
+  </style>
+  <div id="s44" data-composition-id="s44" data-width="1080" data-height="1920">
+    <svg width="1080" height="1920" viewBox="0 0 1080 1920" data-layout-allow-overlap data-layout-allow-overflow>
+      <defs>
+        <linearGradient id="s44-g" gradientUnits="userSpaceOnUse" x1="80" y1="820" x2="1000" y2="1100">
+          <stop offset="0" stop-color="#8a5a12"/><stop offset=".35" stop-color="#ffe7a3"/><stop offset=".5" stop-color="#d9a441"/>
+          <stop offset=".7" stop-color="#fff4cf"/><stop offset="1" stop-color="#9c6a1c"/>
+        </linearGradient>
+        <filter id="s44-gl" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="s44-sp" x="-300%" y="-300%" width="700%" height="700%"><feGaussianBlur stdDeviation="10"/></filter>
+      </defs>
+      <g transform="rotate(-8 540 980)" filter="url(#s44-gl)">
+        <text id="s44-fill" x="540" y="1040" fill="url(#s44-g)" opacity="0">Lorem Ipsum</text>
+        <text id="s44-line" data-layout-ignore x="540" y="1040" fill="none" stroke="url(#s44-g)" stroke-width="3.5" stroke-linecap="round">Lorem Ipsum</text>
+      </g>
+      <g id="s44-parts"></g>
+      <circle id="s44-halo" r="46" fill="#ffd77a" filter="url(#s44-sp)" opacity="0"/>
+      <path id="s44-star" d="M0 -38 L5 -5 L38 0 L5 5 L0 38 L-5 5 L-38 0 L-5 -5Z" fill="#fff8e0" opacity="0"/>
+    </svg>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A golden signature writes itself: the outline is traced by a glowing spark that sheds embers,
+    // the gold fill then pours in, and a light glint sweeps across the lettering.
+    const line = document.getElementById("s44-line"), fill = document.getElementById("s44-fill"), halo = document.getElementById("s44-halo"), star = document.getElementById("s44-star");
+    const parts = document.getElementById("s44-parts"), grad = document.getElementById("s44-g"), NS = "http://www.w3.org/2000/svg";
+    const T0 = 0.3, DUR = 2.6, NP = 46, DASH = 9000; let BB = null; const P = [];
+    let seed = 9; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const st = { t: 0 }, clamp = x => Math.max(0, Math.min(1, x));
+    function tip(p) {   // approximate pen position: sweeps left -> right along the baseline, wobbling over the letters
+      const x = BB.x + p * BB.width, y = BB.y + BB.height * 0.55 + Math.sin(p * 46) * BB.height * 0.28;
+      const a = -8 * Math.PI / 180, cx = 540, cy = 980; return [cx + (x - cx) * Math.cos(a) - (y - cy) * Math.sin(a), cy + (x - cx) * Math.sin(a) + (y - cy) * Math.cos(a)];
+    }
+    function build() {
+      BB = line.getBBox(); line.setAttribute("stroke-dasharray", DASH);
+      for (let j = 0; j < NP; j++) { const c = document.createElementNS(NS, "circle"); c.setAttribute("r", (2 + rnd() * 4).toFixed(1)); c.setAttribute("fill", rnd() < .5 ? "#ffe7a3" : "#ffb84a");
+        parts.appendChild(c); P.push({ c, t0: T0 + j / NP * DUR, vx: -40 + rnd() * 80, vy: 40 + rnd() * 120 }); }
+      render();
+    }
+    function render() {
+      if (!BB) return;
+      const t = st.t, p = clamp((t - T0) / DUR);
+      line.setAttribute("stroke-dashoffset", (DASH * (1 - p)).toFixed(1));
+      const fo = clamp((t - T0 - DUR + 0.2) / 0.7), out = clamp((t - 5.2) / 0.7);
+      fill.setAttribute("opacity", (fo * (1 - out)).toFixed(3)); line.setAttribute("opacity", (1 - out).toFixed(3));
+      const [x, y] = tip(p), on = t > T0 && p < 1 ? 1 : 0;
+      halo.setAttribute("cx", x); halo.setAttribute("cy", y); halo.setAttribute("opacity", on * 0.9);
+      star.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(t * 220).toFixed(1)}) scale(${(0.8 + 0.3 * Math.sin(t * 30)).toFixed(2)})`); star.setAttribute("opacity", on);
+      P.forEach(o => { const a = t - o.t0; if (a < 0 || a > 1.4) { o.c.setAttribute("opacity", 0); return; }
+        const [px, py] = tip((o.t0 - T0) / DUR); o.c.setAttribute("cx", (px + o.vx * a).toFixed(1)); o.c.setAttribute("cy", (py + o.vy * a + 60 * a * a).toFixed(1)); o.c.setAttribute("opacity", (1 - a / 1.4).toFixed(2)); });
+      const sweep = -700 + 1400 * clamp((t - 3.4) / 1.2);
+      grad.setAttribute("gradientTransform", `translate(${sweep.toFixed(1)} 0)`);
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s44"] = document.fonts.load("400 250px Yellowtail").catch(() => {}).then(build);
+    tl.fromTo(st, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    window.__timelines["s44"] = tl;
+  </script>
+</template>

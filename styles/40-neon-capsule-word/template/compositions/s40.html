@@ -1,0 +1,50 @@
+<template>
+  <style>
+    #s40 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 80% 55% at 50% 50%, #ffffff 0%, var(--c4, #ece6d8) 100%); perspective: 1600px; }
+    #s40 .row { position: absolute; left: 0; top: 860px; width: 1080px; height: 200px; }
+    #s40 .l { position: absolute; top: 0; font: 900 190px/200px Inter, sans-serif; color: var(--c1, #0e0b1f); letter-spacing: -0.02em;
+      text-shadow: 14px 22px 26px rgba(14,11,31,.18); }
+    #s40 .cap { position: absolute; top: 28px; height: 150px; border: 24px solid var(--c2, #ff2d3d); border-radius: 999px; box-sizing: border-box;
+      box-shadow: 0 0 34px rgba(255,45,61,.55), inset 0 0 22px rgba(255,45,61,.45); }
+    #s40 .mask { position: absolute; top: -20px; height: 240px; overflow: hidden; }
+  </style>
+  <div id="s40" data-composition-id="s40" data-width="1080" data-height="1920">
+    <!-- the word, with ONE letter replaced by the glowing capsule: put that letter in data-cap -->
+    <div class="row" data-word="LOREM" data-cap="1" data-layout-allow-overlap data-layout-allow-overflow></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A red neon capsule tumbles in and lands as one letter of the word; the rest of the word slides out of it in
+    // both directions (a fast, blurred shove with long soft shadows). Then everything slides back in and the capsule spins away.
+    const row = document.querySelector("#s40 .row"), W = row.dataset.word, CI = +row.dataset.cap;
+    function build() {
+      const probe = document.createElement("span"); probe.className = "l"; row.appendChild(probe);
+      const ws = [...W].map((c, i) => { probe.textContent = c; return i === CI ? 120 : probe.offsetWidth; }); probe.remove();
+      const total = ws.reduce((a, b) => a + b, 0) + 24; let x = 540 - total / 2; const xs = ws.map(w => { const r = x; x += w + (w === 120 ? 12 : 0); return r; });
+      const cap = document.createElement("div"); cap.className = "cap"; cap.style.left = (xs[CI] + 6) + "px"; cap.style.width = "108px";
+      const capX = xs[CI] + 60;
+      const left = document.createElement("div"), right = document.createElement("div");
+      left.className = right.className = "mask"; left.style.left = "0px"; left.style.width = (xs[CI] + 20) + "px"; right.style.left = (xs[CI] + 100) + "px"; right.style.width = (1080 - xs[CI] - 100) + "px";
+      const ls = [];
+      [...W].forEach((c, i) => { if (i === CI) return; const e = document.createElement("span"); e.className = "l"; e.textContent = c;
+        const host = i < CI ? left : right; e.style.left = (xs[i] - parseFloat(host.style.left)) + "px"; e.style.top = "20px"; host.appendChild(e); ls.push({ e, dir: i < CI ? 1 : -1, d: Math.abs(capX - (xs[i] + ws[i] / 2)) }); });
+      row.append(left, right, cap);
+      ls.forEach(o => gsap.set(o.e, { x: o.dir * (o.d + 60) }));
+      const sx = 540 - capX;
+      tl.fromTo(cap, { x: sx, y: -900, rotationY: 0, rotationZ: -90, scale: 2.2 }, { y: 0, rotationY: 720, rotationZ: 0, duration: 1.0, ease: "power3.out" }, 0.1);
+      tl.to(cap, { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 0.9);
+      tl.to(cap, { x: 0, duration: 0.45, ease: "power3.inOut" }, 1.25);
+      ls.forEach((o, k) => {
+        tl.fromTo(o.e, { x: o.dir * (o.d + 60), filter: "blur(14px)", skewX: -o.dir * 18 }, { x: 0, filter: "blur(0px)", skewX: 0, duration: 0.55, ease: "expo.out" }, 1.65 + k * 0.03);
+        tl.to(o.e, { x: o.dir * (o.d + 60), filter: "blur(14px)", skewX: -o.dir * 18, duration: 0.4, ease: "expo.in" }, 4.3 + k * 0.03);
+      });
+      tl.to(cap, { scaleX: 1.25, scaleY: 0.8, duration: 0.1, yoyo: true, repeat: 1 }, 1.62);
+      tl.to(cap, { rotationY: 1080, duration: 1.0, ease: "power2.inOut" }, 2.7);
+      tl.to(cap, { x: sx, duration: 0.4, ease: "power3.inOut" }, 4.75);
+      tl.to(cap, { y: -1100, rotationZ: 90, scale: 1.8, duration: 0.6, ease: "power3.in" }, 5.25);
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s40"] = document.fonts.load("900 190px Inter").then(build);
+    window.__timelines["s40"] = tl;
+  </script>
+</template>

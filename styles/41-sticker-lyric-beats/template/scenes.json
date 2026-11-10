@@ -1,0 +1,12 @@
+{
+  "id": "sticker-lyric-beats",
+  "title": "41 Sticker Lyric Beats",
+  "background": "#c8ff3c",
+  "variables": [],
+  "scenes": [
+    {
+      "id": "s41",
+      "duration": 6
+    }
+  ]
+}

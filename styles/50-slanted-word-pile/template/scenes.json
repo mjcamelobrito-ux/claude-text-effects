@@ -1,0 +1,31 @@
+{
+  "id": "slanted-word-pile",
+  "title": "50 Slanted Word Pile",
+  "background": "#e6e6e3",
+  "variables": [
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "c3",
+      "type": "color",
+      "label": "Second accent",
+      "default": "#e0219b"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#e6e6e3"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s50",
+      "duration": 6
+    }
+  ]
+}

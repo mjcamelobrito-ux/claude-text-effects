@@ -1,0 +1,37 @@
+{
+  "id": "wall-projection-words",
+  "title": "29 Wall Projection Words",
+  "background": "#ff5fc8",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "c3",
+      "type": "color",
+      "label": "Second accent",
+      "default": "#ff5fc8"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s29",
+      "duration": 6.3
+    }
+  ]
+}

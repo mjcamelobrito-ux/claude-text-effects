@@ -1,0 +1,58 @@
+<template>
+  <style>
+    #s36 { position: absolute; inset: 0; overflow: hidden; background: var(--c4, #f4efe4); }
+    #s36 .w { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #s36 .bar { position: absolute; width: 0; border-radius: 6px; }
+    #s36 .l { position: absolute; font: 900 170px/1 Inter, sans-serif; color: var(--c1, #0e0b1f); letter-spacing: -0.02em; }
+  </style>
+  <div id="s36" data-composition-id="s36" data-width="1080" data-height="1920">
+    <div class="w" data-layout-allow-overlap>LOREM</div>
+    <div class="w" data-layout-allow-overlap>IPSUM</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Each letter waits at a random height, then shoots along its own vertical rail into line - leaving a coloured
+    // speed bar that shrinks behind it. The word holds, then the letters scatter along their rails, swapping to the next word.
+    const COLS = ["#2f55ff", "#ff7a59", "#ff5fc8", "#c8ff3c"], Y = 880, CYC = 2.85;
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const st = { t: 0 }, LS = [];
+    const clamp = x => Math.max(0, Math.min(1, x)), eo = x => 1 - Math.pow(1 - x, 4), ei = x => x * x * x;
+    function build() {
+      document.querySelectorAll("#s36 .w").forEach((w, wi) => {
+        const txt = w.textContent; w.textContent = "";
+        const probe = document.createElement("span"); probe.className = "l"; w.appendChild(probe);
+        const ws = [...txt].map(c => { probe.textContent = c; return probe.offsetWidth; }); probe.remove();
+        let x = 540 - ws.reduce((a, b) => a + b, 0) / 2;
+        [...txt].forEach((c, i) => {
+          const bar = document.createElement("div"); bar.className = "bar"; bar.style.background = COLS[(i + wi) % COLS.length]; w.appendChild(bar);
+          const e = document.createElement("span"); e.className = "l"; e.textContent = c; w.appendChild(e);
+          const from = (rnd() < .5 ? -1 : 1) * (280 + rnd() * 520);
+          LS.push({ e, bar, x, w: ws[i], from, to: -from * (0.6 + rnd() * 0.5), t0: 0.15 + wi * CYC + i * 0.07, wi });
+          x += ws[i];
+        });
+      });
+      render();
+    }
+    function render() {
+      const t = st.t;
+      LS.forEach(o => {
+        const pin = clamp((t - o.t0) / 0.55), pout = clamp((t - (o.t0 + 2.0)) / 0.45);
+        const show = t >= o.t0 - 0.35 && pout < 1;
+        let y = Y + o.from * (1 - eo(pin)) + o.to * ei(pout);
+        o.e.style.transform = `translate(${o.x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+        o.e.style.opacity = show ? (t < o.t0 ? clamp((t - o.t0 + 0.35) / 0.25) : 1) : 0;
+        // speed bar spans from where the letter was a moment ago to where it is now
+        const lag = 0.12, pinL = clamp((t - lag - o.t0) / 0.55), poutL = clamp((t - lag - (o.t0 + 2.0)) / 0.45);
+        const yl = Y + o.from * (1 - eo(pinL)) + o.to * ei(poutL);
+        const top = Math.min(y, yl) + 20, h = Math.abs(y - yl);
+        o.bar.style.transform = `translate(${(o.x + o.w * 0.2).toFixed(1)}px, ${top.toFixed(1)}px)`;
+        o.bar.style.width = (o.w * 0.6).toFixed(1) + "px"; o.bar.style.height = h.toFixed(1) + "px";
+        o.bar.style.opacity = show && h > 2 ? 1 : 0;
+      });
+    }
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["s36"] = document.fonts.load("900 170px Inter").then(build);
+    tl.fromTo(st, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    window.__timelines["s36"] = tl;
+  </script>
+</template>

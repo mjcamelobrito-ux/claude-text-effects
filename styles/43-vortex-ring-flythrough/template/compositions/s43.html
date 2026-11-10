@@ -1,0 +1,57 @@
+<template>
+  <style>
+    #s43 { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 80% 55% at 50% 50%, #ffffff 0%, var(--c4, #dcdcdc) 100%); perspective: 1400px; }
+    #s43 .cam { position: absolute; left: 540px; top: 960px; width: 0; height: 0; transform-style: preserve-3d; }
+    #s43 .ring { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+    #s43 svg { position: absolute; overflow: visible; }
+    #s43 text { font-family: Inter, sans-serif; font-weight: 900; fill: var(--c1, #0e0b1f); letter-spacing: 2px; }
+    #s43 .title { position: absolute; left: 0; top: 900px; width: 1080px; text-align: center; font: 900 120px/1 Inter, sans-serif; color: var(--c1, #0e0b1f); letter-spacing: -0.03em; opacity: 0; }
+    #s43 .title b { color: var(--c2, #2f55ff); }
+  </style>
+  <div id="s43" data-composition-id="s43" data-width="1080" data-height="1920">
+    <!-- rings innermost first: radius, font size, text (repeats round the ring) -->
+    <div id="s43-copy" style="display:none">
+      <p data-r="120" data-s="34">LOREM · IPSUM · DOLOR · </p>
+      <p data-r="230" data-s="56">SIT AMET · CONSECTETUR · </p>
+      <p data-r="380" data-s="84">ADIPISCING · ELIT · </p>
+      <p data-r="580" data-s="120">SED DO · EIUSMOD · </p>
+      <p data-r="840" data-s="170">TEMPOR · </p>
+    </div>
+    <div class="cam" data-layout-allow-overlap data-layout-allow-overflow></div>
+    <div class="title">lorem <b>ipsum</b></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A vortex of text rings, tilted in 3D and spinning in alternate directions. The camera flies forward through them -
+    // each ring swells past the lens and fades - and the title is waiting in the calm at the centre.
+    const NS = "http://www.w3.org/2000/svg", cam = document.querySelector("#s43 .cam");
+    const RINGS = [];
+    [...document.querySelectorAll("#s43-copy p")].forEach((p, i) => {
+      const r = +p.dataset.r, fs = +p.dataset.s, ring = document.createElement("div"); ring.className = "ring";
+      const svg = document.createElementNS(NS, "svg"); svg.setAttribute("width", 2 * r + 400); svg.setAttribute("height", 2 * r + 400);
+      svg.setAttribute("viewBox", `${-r - 200} ${-r - 200} ${2 * r + 400} ${2 * r + 400}`); svg.style.left = (-r - 200) + "px"; svg.style.top = (-r - 200) + "px";
+      const id = "s43-c" + i, path = document.createElementNS(NS, "path");
+      path.setAttribute("id", id); path.setAttribute("d", `M ${-r} 0 A ${r} ${r} 0 1 1 ${r} 0 A ${r} ${r} 0 1 1 ${-r} 0`); path.setAttribute("fill", "none");
+      const txt = document.createElementNS(NS, "text"); txt.setAttribute("font-size", fs);
+      const tp = document.createElementNS(NS, "textPath"); tp.setAttribute("href", "#" + id);
+      const circ = 2 * Math.PI * r, unit = p.textContent.length * fs * 0.62, reps = Math.max(1, Math.round(circ / unit));
+      tp.textContent = p.textContent.repeat(reps); tp.setAttribute("textLength", (circ - 4).toFixed(0)); tp.setAttribute("lengthAdjust", "spacing");
+      txt.appendChild(tp); svg.append(path, txt); ring.appendChild(svg); cam.appendChild(ring); RINGS.push({ ring, i, z: -i * 260 });
+    });
+    const st = { t: 0, fly: 0 }, clamp = x => Math.max(0, Math.min(1, x));
+    function render() {
+      RINGS.forEach(R => {
+        const z = R.z + st.fly * 2600, spin = (R.i % 2 ? 1 : -1) * st.t * (40 - R.i * 5);
+        R.ring.style.transform = `translateZ(${z.toFixed(1)}px) rotateZ(${spin.toFixed(2)}deg)`;
+        R.ring.style.opacity = (clamp((st.t - 0.1 - R.i * 0.12) / 0.4) * (1 - clamp((z - 600) / 500))).toFixed(3);
+      });
+      cam.style.transform = `rotateX(${(38 - 30 * st.fly).toFixed(2)}deg) rotateZ(${(-10 + 10 * st.fly).toFixed(2)}deg)`;
+    }
+    tl.fromTo(st, { t: 0 }, { t: 6, duration: 6, ease: "none", onUpdate: render }, 0);
+    tl.fromTo(st, { fly: 0 }, { fly: 1, duration: 2.6, ease: "power2.in", onUpdate: render }, 1.6);
+    tl.fromTo("#s43 .title", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 3.95);
+    tl.to("#s43 .title", { opacity: 0, scale: 1.3, duration: 0.4, ease: "power2.in" }, 5.5);
+    window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady || {}; window.__hf.buildReady["s43"] = document.fonts.load("900 60px Inter").then(render);
+    window.__timelines["s43"] = tl;
+  </script>
+</template>

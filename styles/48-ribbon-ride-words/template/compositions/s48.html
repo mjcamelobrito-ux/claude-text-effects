@@ -1,0 +1,41 @@
+<template>
+  <style>
+    #s48 { position: absolute; inset: 0; overflow: hidden; background: var(--c4, #f4efe4); }
+    #s48 svg { position: absolute; left: 0; top: 0; overflow: visible; }
+    #s48 text { font-family: Inter, sans-serif; font-weight: 900; font-size: 190px; letter-spacing: -4px; }
+    #s48 .fin { position: absolute; left: 0; top: 920px; width: 1080px; text-align: center; font: 800 64px/1 Inter, sans-serif; color: var(--c1, #0e0b1f); letter-spacing: -0.02em; height: 70px; overflow: hidden; }
+    #s48 .fin span { display: inline-block; }
+  </style>
+  <div id="s48" data-composition-id="s48" data-width="1080" data-height="1920">
+    <svg width="1080" height="1920" viewBox="0 0 1080 1920" data-layout-allow-overlap data-layout-allow-overflow>
+      <defs><path id="s48-p" d="M -300 1500 C 200 1500 300 700 700 700 C 1000 700 1100 1000 1500 900"/></defs>
+      <g id="s48-bands"></g>
+    </svg>
+    <!-- one band per word: band colour, text colour -->
+    <div id="s48-copy" style="display:none"><p data-b="#2f55ff" data-t="#f4efe4">lorem</p><p data-b="#c8ff3c" data-t="#0e0b1f">ipsum</p><p data-b="#ff5fc8" data-t="#0e0b1f">dolor</p></div>
+    <div class="fin"><span>lorem ipsum dolor</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A fat ribbon sweeps across the screen on an S-curve, and a word rides along it, bending with the band.
+    // Each new ribbon (new colour, new word) is laid over the last; finally the ribbons peel away to a small title.
+    const NS = "http://www.w3.org/2000/svg", bands = document.getElementById("s48-bands"), P = document.getElementById("s48-p"), L = P.getTotalLength();
+    const BEAT = 1.45;
+    [...document.querySelectorAll("#s48-copy p")].forEach((p, i) => {
+      const g = document.createElementNS(NS, "g");
+      const band = document.createElementNS(NS, "use"); band.setAttribute("href", "#s48-p"); band.setAttribute("fill", "none"); band.setAttribute("stroke", p.dataset.b); band.setAttribute("stroke-width", "300");
+      band.style.strokeDasharray = L; band.style.strokeDashoffset = L;
+      const txt = document.createElementNS(NS, "text"); txt.setAttribute("fill", p.dataset.t); txt.setAttribute("dy", "62"); txt.setAttribute("data-layout-ignore", "");
+      const tp = document.createElementNS(NS, "textPath"); tp.setAttribute("href", "#s48-p"); tp.setAttribute("startOffset", "0"); tp.textContent = p.textContent; txt.appendChild(tp);
+      g.append(band, txt); bands.appendChild(g);
+      const t = 0.1 + i * BEAT, st = { o: -500 };
+      tl.to(band, { strokeDashoffset: 0, duration: 0.7, ease: "power3.inOut" }, t);
+      tl.fromTo(st, { o: -600 }, { o: L * 0.5 - 250, duration: 0.9, ease: "power3.out", onUpdate: () => tp.setAttribute("startOffset", st.o.toFixed(1)) }, t + 0.15);
+      tl.to(st, { o: L * 0.52 - 250, duration: BEAT - 0.9, ease: "none", onUpdate: () => tp.setAttribute("startOffset", st.o.toFixed(1)) }, t + 1.05);
+      tl.to(band, { strokeDashoffset: -L, duration: 0.7, ease: "power3.inOut" }, 4.45 + i * 0.12);
+      tl.to(txt, { opacity: 0, duration: 0.3 }, 4.45 + i * 0.12);
+    });
+    tl.fromTo("#s48 .fin span", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 5.0);
+    window.__timelines["s48"] = tl;
+  </script>
+</template>

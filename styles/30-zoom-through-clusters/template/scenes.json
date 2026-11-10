@@ -1,0 +1,25 @@
+{
+  "id": "zoom-through-clusters",
+  "title": "30 Zoom-Through Clusters",
+  "background": "#06110f",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ffffff"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#c8ff3c"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s30",
+      "duration": 6
+    }
+  ]
+}

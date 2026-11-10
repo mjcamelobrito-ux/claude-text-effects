@@ -1,0 +1,19 @@
+{
+  "id": "golden-signature",
+  "title": "44 Golden Signature",
+  "background": "#050402",
+  "variables": [
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#050402"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s44",
+      "duration": 6
+    }
+  ]
+}

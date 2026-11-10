@@ -1,0 +1,25 @@
+{
+  "id": "ribbon-ride-words",
+  "title": "48 Ribbon Ride Words",
+  "background": "#f4efe4",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s48",
+      "duration": 6
+    }
+  ]
+}
