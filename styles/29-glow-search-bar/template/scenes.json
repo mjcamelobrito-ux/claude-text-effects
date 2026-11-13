@@ -1,0 +1,37 @@
+{
+  "id": "glow-search-bar",
+  "title": "29 Glow Search Bar",
+  "background": "#0e0b1f",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ff5fc8"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#ff7a59"
+    },
+    {
+      "id": "c3",
+      "type": "color",
+      "label": "Second accent",
+      "default": "#ffd84a"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#0e0b1f"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s34",
+      "duration": 6
+    }
+  ]
+}

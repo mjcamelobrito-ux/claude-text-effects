@@ -1,0 +1,31 @@
+{
+  "id": "tumble-flip-letters",
+  "title": "34 Tumble Flip Letters",
+  "background": "#050a1a",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ffffff"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#050a1a"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s42",
+      "duration": 6
+    }
+  ]
+}

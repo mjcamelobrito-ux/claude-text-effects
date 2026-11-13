@@ -1,0 +1,25 @@
+{
+  "id": "grunge-poster-beats",
+  "title": "38 Grunge Poster Beats",
+  "background": "#1c0203",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#ffd23a"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#1c0203"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s47",
+      "duration": 6
+    }
+  ]
+}

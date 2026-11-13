@@ -1,0 +1,25 @@
+{
+  "id": "shard-punch-zoom",
+  "title": "40 Shard Punch Zoom",
+  "background": "#07051a",
+  "variables": [
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#07051a"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s49",
+      "duration": 6
+    }
+  ]
+}

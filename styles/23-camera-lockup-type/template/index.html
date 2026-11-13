@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "c1", "type": "color", "label": "Block words (cream)", "default": "#f4efe4"}, {"id": "c2", "type": "color", "label": "Accent words (lime)", "default": "#c8ff3c"}, {"id": "c3", "type": "color", "label": "Serif rows (pink)", "default": "#ff5fc8"}, {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#2a2160"}, {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#0e0b1f"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>23 Camera Lockup Type</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0e0b1f; }
+      #bg { position: absolute; inset: 0; background: #0e0b1f; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="6" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="lk1" data-composition-id="lk1" data-composition-src="compositions/lk1.html"
+        data-start="0" data-duration="6" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

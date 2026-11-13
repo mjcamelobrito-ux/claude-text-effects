@@ -1,0 +1,15 @@
+{
+  "id": "cube-unfold-text",
+  "title": "12 Cube Unfold Text",
+  "background": "#0e0b1f",
+  "variables": [
+    {"id": "c1", "type": "color", "label": "Centre face (lime)", "default": "#c8ff3c"},
+    {"id": "c2", "type": "color", "label": "Faces A (cobalt)", "default": "#2f55ff"},
+    {"id": "c3", "type": "color", "label": "Faces B (pink)", "default": "#ff5fc8"},
+    {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#2a1f6e"},
+    {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#07051a"}
+  ],
+  "scenes": [
+    {"id": "cu1", "duration": 4.6}
+  ]
+}

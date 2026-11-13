@@ -1,0 +1,37 @@
+{
+  "id": "paper-roll-unfold",
+  "title": "20 Paper Roll Unfold",
+  "background": "#d9d2f0",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Ink 1 (cobalt)",
+      "default": "#2f55ff"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Ink 2 (pink)",
+      "default": "#e0219b"
+    },
+    {
+      "id": "stageLight",
+      "type": "color",
+      "label": "Stage centre",
+      "default": "#efeafc"
+    },
+    {
+      "id": "stageDeep",
+      "type": "color",
+      "label": "Stage edge",
+      "default": "#b9aee3"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "pr1",
+      "duration": 5.4
+    }
+  ]
+}

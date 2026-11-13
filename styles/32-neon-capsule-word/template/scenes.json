@@ -1,0 +1,31 @@
+{
+  "id": "neon-capsule-word",
+  "title": "32 Neon Capsule Word",
+  "background": "#ece6d8",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Accent colour",
+      "default": "#ff2d3d"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#ece6d8"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s40",
+      "duration": 6
+    }
+  ]
+}

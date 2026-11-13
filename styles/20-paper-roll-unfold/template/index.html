@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait" data-composition-variables='[{"id": "c1", "type": "color", "label": "Ink 1 (cobalt)", "default": "#2f55ff"}, {"id": "c2", "type": "color", "label": "Ink 2 (pink)", "default": "#e0219b"}, {"id": "stageLight", "type": "color", "label": "Stage centre", "default": "#efeafc"}, {"id": "stageDeep", "type": "color", "label": "Stage edge", "default": "#b9aee3"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>20 Paper Roll Unfold</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #d9d2f0; }
+      #bg { position: absolute; inset: 0; background: #d9d2f0; z-index: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="5.4" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="pr1" data-composition-id="pr1" data-composition-src="compositions/pr1.html"
+        data-start="0" data-duration="5.4" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1920" style="z-index:10"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

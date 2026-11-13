@@ -1,0 +1,43 @@
+{
+  "id": "bend-text-3d",
+  "title": "16 Bend Text 3D",
+  "background": "#0b0828",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Line 1 (lime)",
+      "default": "#c8ff3c"
+    },
+    {
+      "id": "c2",
+      "type": "color",
+      "label": "Line 2 (white)",
+      "default": "#ffffff"
+    },
+    {
+      "id": "c3",
+      "type": "color",
+      "label": "Line 3 serif (pink)",
+      "default": "#ff5fc8"
+    },
+    {
+      "id": "stageLight",
+      "type": "color",
+      "label": "Stage centre",
+      "default": "#3a2cf0"
+    },
+    {
+      "id": "stageDeep",
+      "type": "color",
+      "label": "Stage edge",
+      "default": "#0b0828"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "bt1",
+      "duration": 5.0
+    }
+  ]
+}

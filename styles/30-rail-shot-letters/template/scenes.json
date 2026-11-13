@@ -1,0 +1,25 @@
+{
+  "id": "rail-shot-letters",
+  "title": "30 Rail Shot Letters",
+  "background": "#f4efe4",
+  "variables": [
+    {
+      "id": "c1",
+      "type": "color",
+      "label": "Main colour",
+      "default": "#0e0b1f"
+    },
+    {
+      "id": "c4",
+      "type": "color",
+      "label": "Stage colour",
+      "default": "#f4efe4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s36",
+      "duration": 6
+    }
+  ]
+}
